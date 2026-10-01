@@ -1,0 +1,21 @@
+.opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-4);
+}
+
+.divisor {
+  height: 1px;
+  margin-block: calc(var(--espaco-1) * -1);
+  background-color: var(--borda);
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  margin-top: calc(var(--espaco-2) * -1);
+}
+
+.lista > * + * {
+  border-top: 1px solid var(--borda);
+}

@@ -3,7 +3,7 @@
   grid-template-areas:
     'visor opcoes'
     'historico opcoes';
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   grid-template-rows: auto 1fr;
   gap: var(--espaco-5);
   align-items: start;
@@ -12,7 +12,6 @@
 .visor {
   position: relative;
   grid-area: visor;
-  gap: var(--espaco-5);
   padding: var(--espaco-6);
   overflow: hidden;
   isolation: isolate;
@@ -29,102 +28,12 @@
   pointer-events: none;
 }
 
-.topoVisor {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--espaco-3);
-}
-
-.areaSenha {
-  display: flex;
-  align-items: center;
-  min-height: 5.5rem;
-  padding: var(--espaco-5) var(--espaco-5);
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-md);
-  background-color: var(--superficie-suave);
-  animation: revelarSenha var(--duracao-lenta) var(--curva-saida);
-}
-
-.descricaoTipo {
-  color: var(--texto-secundario);
-  font-size: var(--tamanho-sm);
-}
-
-.acoesVisor {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--espaco-3);
-}
-
-.avisoPrevia {
-  color: var(--texto-terciario);
-  font-size: var(--tamanho-sm);
-}
-
 .opcoes {
   grid-area: opcoes;
 }
 
-.listaOpcoes {
-  display: flex;
-  flex-direction: column;
-}
-
-.opcao {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--espaco-4);
-  min-height: 3.25rem;
-  padding-block: var(--espaco-3);
-  border-top: 1px solid var(--borda);
-}
-
-.opcao:first-child {
-  border-top: none;
-}
-
-.opcaoDeslizante {
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--espaco-3);
-}
-
-.rotuloOpcao {
-  color: var(--texto-secundario);
-  font-size: var(--tamanho-sm);
-  font-weight: var(--peso-medio);
-}
-
-.trilho {
-  margin-bottom: var(--espaco-1);
-}
-
 .historico {
   grid-area: historico;
-}
-
-.historicoVazio {
-  display: flex;
-  align-items: center;
-  gap: var(--espaco-2);
-  max-width: none;
-  margin-top: calc(var(--espaco-1) * -1);
-  padding: var(--espaco-3) var(--espaco-4);
-  border: 1px dashed var(--borda-forte);
-  border-radius: var(--raio-md);
-  color: var(--texto-terciario);
-  font-size: var(--tamanho-sm);
-}
-
-@keyframes revelarSenha {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
 }
 
 @media (max-width: 1023px) {
@@ -141,14 +50,5 @@
 @media (max-width: 767px) {
   .visor {
     padding: var(--espaco-4);
-  }
-
-  .areaSenha {
-    min-height: 4.5rem;
-    padding: var(--espaco-4);
-  }
-
-  .acoesVisor > * {
-    flex: 1 1 10rem;
   }
 }

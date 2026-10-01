@@ -1,44 +1,86 @@
-import { useSearchParams } from 'react-router-dom';
-import { Copy, History, RefreshCw } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { HistoricoSessao } from '@/componentes/gerador/HistoricoSessao';
+import { OpcoesFrase, OpcoesPinNumerico, OpcoesSenhaAleatoria } from '@/componentes/gerador/OpcoesGerador';
+import type { AvisoVisor } from '@/componentes/gerador/VisorGerador';
+import { VisorGerador } from '@/componentes/gerador/VisorGerador';
 import { CabecalhoPagina } from '@/componentes/layout/CabecalhoPagina';
-import { LegendaCaracteres, VisorSenha } from '@/componentes/senha/VisorSenha';
-import { Abas, Botao, CabecalhoPainel, Esqueleto, idAba, idPainelAbas, Painel, Selo } from '@/componentes/ui';
+import { Abas, CabecalhoPainel, idAba, idPainelAbas, Painel } from '@/componentes/ui';
 import type { OpcaoAba } from '@/componentes/ui';
-import type { OpcaoPrevista } from '@/configuracoes/geracao';
-import { TAMANHO_HISTORICO_SESSAO, tiposGeracao } from '@/configuracoes/geracao';
+import { descreverFinalidade } from '@/configuracoes/finalidades';
+import { AVISO_PIN, OPCOES_FRASE_PADRAO, tiposGeracao } from '@/configuracoes/geracao';
+import type { EstadoFinalidade } from '@/ganchos/useGerador';
+import { useGerador } from '@/ganchos/useGerador';
 import { useTituloDocumento } from '@/ganchos/useTituloDocumento';
+import type { ForcaCalculada, OpcoesFraseSenha, OpcoesSenha, TipoGeracao } from '@/modelos/senha';
+import { useAreaTransferencia } from '@/provedores/ProvedorAreaTransferencia';
 import { useHistoricoSessao } from '@/provedores/ProvedorHistoricoSessao';
-import { parametros } from '@/rotas/caminhos';
-import { juntarClasses } from '@/utilitarios/juntarClasses';
+import { useSenhaParaAnalise } from '@/provedores/ProvedorSenhaParaAnalise';
+import { caminhos, parametros } from '@/rotas/caminhos';
 import estilos from './PaginaGerador.module.css';
 
 const ID_ABAS = 'tipo-geracao';
-const ID_AVISO_PREVIA = 'aviso-previa-gerador';
+const TAMANHO_MAXIMO_WPA2 = 63;
+const NIVEL_MINIMO_ACEITAVEL = 3;
 
 const [tipoPadrao] = tiposGeracao;
 
 const opcoesAbas: OpcaoAba<string>[] = tiposGeracao.map(({ parametro, rotulo }) => ({ valor: parametro, rotulo }));
 
-function LinhaOpcaoPrevista({ rotulo, controle }: OpcaoPrevista) {
-  return (
-    <li className={juntarClasses(estilos.opcao, controle === 'deslizante' && estilos.opcaoDeslizante)}>
-      <span className={estilos.rotuloOpcao}>{rotulo}</span>
-      {controle === 'deslizante' ? <Esqueleto altura="6px" arredondado animado={false} className={estilos.trilho} /> : null}
-      {controle === 'interruptor' ? <Esqueleto largura="36px" altura="20px" arredondado animado={false} /> : null}
-      {controle === 'selecao' ? <Esqueleto largura="96px" altura="28px" animado={false} /> : null}
-    </li>
-  );
+function avisoDoVisor(
+  tipo: TipoGeracao,
+  finalidade: EstadoFinalidade,
+  opcoesSenha: OpcoesSenha,
+  opcoesFrase: OpcoesFraseSenha,
+  forca: ForcaCalculada,
+): AvisoVisor | null {
+  if (tipo === 'PIN') return { tom: 'info', texto: AVISO_PIN };
+
+  if (tipo === 'FRASE_SENHA') {
+    if (opcoesFrase.quantidadePalavras < OPCOES_FRASE_PADRAO.quantidadePalavras) {
+      return {
+        tom: 'aviso',
+        texto: `Com menos de ${OPCOES_FRASE_PADRAO.quantidadePalavras} palavras a frase fica mais fácil de adivinhar.`,
+      };
+    }
+    return null;
+  }
+
+  const { rotulo, tamanhoMinimoRecomendado, finalidade: tipoFinalidade } = descreverFinalidade(finalidade.base);
+  if (opcoesSenha.tamanho < tamanhoMinimoRecomendado) {
+    return {
+      tom: 'aviso',
+      texto: `Abaixo do recomendado para ${rotulo}: use pelo menos ${tamanhoMinimoRecomendado} caracteres.`,
+    };
+  }
+  if (tipoFinalidade === 'WIFI' && opcoesSenha.tamanho > TAMANHO_MAXIMO_WPA2) {
+    return { tom: 'aviso', texto: `Redes Wi-Fi com WPA2 aceitam no máximo ${TAMANHO_MAXIMO_WPA2} caracteres.` };
+  }
+  if (forca.nivel < NIVEL_MINIMO_ACEITAVEL) {
+    return { tom: 'aviso', texto: 'Senha fraca: aumente o tamanho ou ligue mais tipos de caractere.' };
+  }
+  return null;
 }
 
 export default function PaginaGerador() {
   useTituloDocumento('Gerar senha');
   const [busca, definirBusca] = useSearchParams();
-  const { senhas } = useHistoricoSessao();
+  const navegar = useNavigate();
+  const gerador = useGerador();
+  const { estado: estadoCopia, copiar, limparAgora } = useAreaTransferencia();
+  const { senhas, registrar, remover, limpar } = useHistoricoSessao();
+  const { encaminhar } = useSenhaParaAnalise();
+  const [visivel, setVisivel] = useState(true);
+  const [anuncio, setAnuncio] = useState('');
+  const [valorCopiado, setValorCopiado] = useState<string | null>(null);
 
   const parametroAtual = busca.get(parametros.tipoGeracao);
-  const tipo = tiposGeracao.find((item) => item.parametro === parametroAtual) ?? tipoPadrao;
-
-  if (!tipo) return null;
+  const descricaoTipo = tiposGeracao.find((item) => item.parametro === parametroAtual) ?? tipoPadrao;
+  const parametroTipo = descricaoTipo?.parametro ?? 'senha';
+  const tipo = descricaoTipo?.tipo ?? 'SENHA';
+  const valor = gerador.valores[tipo];
+  const forca = gerador.forcas[tipo];
+  const { gerarNovamente } = gerador;
 
   const mudarTipo = (parametro: string) => {
     definirBusca(
@@ -52,6 +94,37 @@ export default function PaginaGerador() {
     );
   };
 
+  const gerarOutra = useCallback(() => {
+    registrar(valor, tipo);
+    gerarNovamente(tipo);
+    setAnuncio((atual) => (atual === 'Nova senha gerada.' ? 'Outra senha gerada.' : 'Nova senha gerada.'));
+  }, [gerarNovamente, registrar, tipo, valor]);
+
+  const copiarAtual = async () => {
+    const copiou = await copiar(valor);
+    if (!copiou) return;
+    setValorCopiado(valor);
+    registrar(valor, tipo);
+  };
+
+  const analisarAtual = () => {
+    encaminhar(valor);
+    navegar(caminhos.analisar);
+  };
+
+  useEffect(() => {
+    const aoTeclar = (evento: KeyboardEvent) => {
+      if ((evento.ctrlKey || evento.metaKey) && evento.key === 'Enter') {
+        evento.preventDefault();
+        gerarOutra();
+      }
+    };
+    window.addEventListener('keydown', aoTeclar);
+    return () => window.removeEventListener('keydown', aoTeclar);
+  }, [gerarOutra]);
+
+  const aviso = avisoDoVisor(tipo, gerador.finalidade, gerador.opcoesSenha, gerador.opcoesFrase, forca);
+
   return (
     <>
       <CabecalhoPagina
@@ -59,67 +132,62 @@ export default function PaginaGerador() {
         titulo="Gerar senha"
         descricao="Escolha o tipo e ajuste as opções. Tudo é criado no seu navegador, com aleatoriedade criptográfica."
         acoes={
-          <Abas idBase={ID_ABAS} rotulo="Tipo de senha" opcoes={opcoesAbas} valor={tipo.parametro} aoMudar={mudarTipo} />
+          <Abas idBase={ID_ABAS} rotulo="Tipo de senha" opcoes={opcoesAbas} valor={parametroTipo} aoMudar={mudarTipo} />
         }
       />
 
-      <div
-        role="tabpanel"
-        id={idPainelAbas(ID_ABAS)}
-        aria-labelledby={idAba(ID_ABAS, tipo.parametro)}
-        className={estilos.grade}
-      >
-        <Painel className={estilos.visor} aria-label={`Prévia: ${tipo.rotulo}`}>
-          <div className={estilos.topoVisor}>
-            <Selo tom="destaque">Prévia</Selo>
-            <LegendaCaracteres />
-          </div>
-
-          <div className={estilos.areaSenha} key={tipo.parametro}>
-            <VisorSenha valor={tipo.exemplo} quebraLivre={tipo.tipo !== 'FRASE_SENHA'} />
-          </div>
-
-          <p className={estilos.descricaoTipo}>{tipo.descricao}</p>
-
-          <div className={estilos.acoesVisor}>
-            <Botao icone={Copy} tamanho="lg" disabled aria-describedby={ID_AVISO_PREVIA}>
-              Copiar
-            </Botao>
-            <Botao icone={RefreshCw} variante="secundario" tamanho="lg" disabled aria-describedby={ID_AVISO_PREVIA}>
-              Gerar outra
-            </Botao>
-          </div>
-
-          <p id={ID_AVISO_PREVIA} className={estilos.avisoPrevia}>
-            Esta é uma prévia visual. A geração entra na próxima fase.
-          </p>
+      <div role="tabpanel" id={idPainelAbas(ID_ABAS)} aria-labelledby={idAba(ID_ABAS, parametroTipo)} className={estilos.grade}>
+        <Painel className={estilos.visor} aria-label="Senha gerada">
+          <VisorGerador
+            valor={valor}
+            visivel={visivel}
+            forca={forca}
+            descricaoTipo={descricaoTipo?.descricao ?? ''}
+            quebraLivre={tipo !== 'FRASE_SENHA'}
+            mostrarLegenda={tipo !== 'PIN'}
+            aviso={aviso}
+            estadoCopia={estadoCopia}
+            copiadaAgora={estadoCopia.fase === 'COPIADA' && valorCopiado === valor}
+            aoLimparAgora={limparAgora}
+            aoAlternarVisivel={() => setVisivel(!visivel)}
+            aoCopiar={() => void copiarAtual()}
+            aoGerar={gerarOutra}
+            aoAnalisar={analisarAtual}
+          />
         </Painel>
 
         <Painel className={estilos.opcoes} aria-labelledby="titulo-opcoes">
-          <CabecalhoPainel
-            titulo={<span id="titulo-opcoes">Opções</span>}
-            descricao={`O que vai dar para ajustar em ${tipo.rotulo.toLowerCase()}.`}
-          />
-          <ul className={estilos.listaOpcoes}>
-            {tipo.opcoesPrevistas.map((opcao) => (
-              <LinhaOpcaoPrevista key={opcao.rotulo} {...opcao} />
-            ))}
-          </ul>
+          <CabecalhoPainel titulo={<span id="titulo-opcoes">Opções</span>} />
+          {tipo === 'SENHA' ? (
+            <OpcoesSenhaAleatoria
+              finalidade={gerador.finalidade}
+              opcoes={gerador.opcoesSenha}
+              aoEscolherFinalidade={gerador.escolherFinalidade}
+              aoAjustar={gerador.ajustarSenha}
+            />
+          ) : null}
+          {tipo === 'FRASE_SENHA' ? <OpcoesFrase opcoes={gerador.opcoesFrase} aoAjustar={gerador.ajustarFrase} /> : null}
+          {tipo === 'PIN' ? <OpcoesPinNumerico opcoes={gerador.opcoesPin} aoAjustar={gerador.ajustarPin} /> : null}
         </Painel>
 
-        <Painel className={estilos.historico} aria-labelledby="titulo-historico">
-          <CabecalhoPainel
-            titulo={<span id="titulo-historico">Nesta sessão</span>}
-            descricao={`As últimas ${TAMANHO_HISTORICO_SESSAO} senhas geradas ficam aqui até você fechar ou recarregar a aba. Nada é gravado.`}
+        <div className={estilos.historico}>
+          <HistoricoSessao
+            senhas={senhas}
+            visivel={visivel}
+            aoCopiar={(senha) => {
+              void copiar(senha.valor).then((copiou) => {
+                if (copiou) setValorCopiado(senha.valor);
+              });
+            }}
+            aoRemover={remover}
+            aoLimpar={limpar}
           />
-          {senhas.length === 0 ? (
-            <p className={estilos.historicoVazio}>
-              <History size={16} strokeWidth={2} aria-hidden="true" />
-              Nenhuma senha gerada ainda.
-            </p>
-          ) : null}
-        </Painel>
+        </div>
       </div>
+
+      <p className="visualmente-oculto" aria-live="polite">
+        {anuncio}
+      </p>
     </>
   );
 }

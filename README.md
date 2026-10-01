@@ -32,10 +32,9 @@
 
 ## 📌 Status do Projeto
 
-**Fase 1 — Base do projeto: concluída.** Estrutura, identidade visual, tema claro e escuro, header,
-barra de abas no celular, tela de boas-vindas e as páginas do Gerador, do Analisador e de
-Configurações preparadas para receber as funcionalidades. A geração e a análise entram nas fases 2
-e 3. Decisões e escopo de cada fase em [`REQUISITOS.md`](REQUISITOS.md).
+**Fase 2 — Gerador: concluída.** Senha, frase-senha e PIN gerados no navegador, com finalidades,
+força e limpeza da área de transferência. A análise de senhas entra na fase 3. Decisões e escopo
+de cada fase em [`REQUISITOS.md`](REQUISITOS.md).
 
 <br>
 
@@ -43,19 +42,29 @@ e 3. Decisões e escopo de cada fase em [`REQUISITOS.md`](REQUISITOS.md).
 
 🔹 **Prontas**
 
-* **Gerador:** abas Senha, Frase-senha e PIN (com o tipo na URL, `?tipo=frase`), visor com prévia, opções previstas e histórico da sessão.
+* **Gerador de senha:** sorteio com `crypto.getRandomValues`, sem viés; tamanho de 8 a 64; maiúsculas, minúsculas, números e símbolos; exclusão de caracteres ambíguos.
 
-* **Analisador:** campo de senha com mostrar e ocultar, medidor de força em 5 níveis, métricas previstas e o painel opcional de vazamentos.
+* **Geração inteligente:** finalidades Uso geral, Banco, E-mail, Trabalho, Games e Wi-Fi, cada uma com a configuração recomendada, uma dica e um aviso quando a configuração fica abaixo do recomendado.
+
+* **Frase-senha e PIN:** frase com 4 a 10 palavras de uma lista própria em português, separador e número opcional; PIN de 4 a 12 dígitos, sem sequências nem repetições óbvias.
+
+* **Visor:** senha com cores por tipo de caractere, mostrar e ocultar, força em 5 níveis, entropia e tempo estimado para quebrar.
+
+* **Copiar com limpeza:** a área de transferência é limpa 30 s depois (ou no próximo clique, quando o navegador exige um gesto), com "Limpar agora".
+
+* **Histórico da sessão:** as últimas 10 senhas copiadas ou trocadas, só em memória, com copiar, remover e limpar.
+
+* **Analisar esta senha:** abre o Analisador já preenchido, sem passar a senha pela URL.
+
+* **Analisador (estrutura):** campo de senha com mostrar e ocultar, medidor de força, métricas previstas e o painel opcional de vazamentos.
 
 * **Configurações:** tema claro, escuro ou automático; seção Privacidade com o que acontece com as senhas; versão e data de lançamento.
 
-* **Tela de boas-vindas** uma vez por sessão, com a marca e o nome deslizando até o menu na entrada do app, e página de não encontrada.
+* **Tela de boas-vindas** uma vez por sessão, com a marca deslizando até o menu na entrada do app, e página de não encontrada.
 
 * **Vitrine** de tokens e componentes em `/componentes`, só em desenvolvimento.
 
 🔹 **Próximas fases**
-
-* **Geração** com `crypto.getRandomValues`, cópia com limpeza da área de transferência e histórico das últimas 10 senhas, só em memória.
 
 * **Análise** de força, entropia, tempo estimado para quebrar, padrões e sugestões, e verificação de vazamento por k-anonimato.
 
@@ -204,19 +213,21 @@ $ docker compose -f docker-compose-aegisweb.yml up -d
 src
 ├── componentes
 │   ├── boasVindas      # Tela de boas-vindas e transição para o app
+│   ├── gerador         # Visor, finalidades, opções e histórico da sessão
 │   ├── comum           # MarcaAegis
 │   ├── configuracoes   # Seções Aparência, Privacidade e Sobre
 │   ├── layout          # MenuLateral, Cabecalho, BarraAbas, BotaoTema, CabecalhoPagina
 │   ├── senha           # VisorSenha e MedidorForca
 │   └── ui              # Design system: botões, painéis, abas, campo de senha, estados
-├── configuracoes       # Ambiente, aplicação, navegação, tipos de geração e níveis de força
+├── configuracoes       # Ambiente, aplicação, navegação, finalidades, tipos de geração e níveis de força
+├── dados               # Lista de palavras da frase-senha
 ├── estilos             # tokens.css, temas.css e global.css
 ├── ganchos             # Título do documento, armazenamento local, movimento reduzido
 ├── layouts             # LayoutAplicacao
 ├── modelos             # Tipos do domínio de senhas
 ├── paginas             # Uma página por rota
-├── provedores          # Tema e histórico da sessão
-├── regras              # Regras puras, com testes
+├── provedores          # Tema, área de transferência, histórico da sessão e encaminhamento à análise
+├── regras              # Sorteio, geradores, força e caracteres, com testes
 ├── rotas               # Caminhos e tabela de rotas
 └── utilitarios         # Formatação, título e classes
 ```
@@ -224,8 +235,6 @@ src
 <br>
 
 ## 🗺️ Próximas Etapas
-
-* 🔑 **Fase 2 — Gerador:** geração das três modalidades, opções, cópia e histórico da sessão.
 
 * 🔍 **Fase 3 — Analisador:** avaliação de força, padrões, sugestões e verificação de vazamento.
 

@@ -4,6 +4,10 @@ export type ClasseCaractere = 'LETRA' | 'NUMERO' | 'SIMBOLO' | 'ESPACO';
 
 export type NivelForca = 1 | 2 | 3 | 4 | 5;
 
+export type Finalidade = 'GERAL' | 'BANCO' | 'EMAIL' | 'TRABALHO' | 'GAMES' | 'WIFI';
+
+export type SeparadorFrase = '-' | '.' | '_' | ' ';
+
 export interface OpcoesSenha {
   tamanho: number;
   usarMaiusculas: boolean;
@@ -15,7 +19,7 @@ export interface OpcoesSenha {
 
 export interface OpcoesFraseSenha {
   quantidadePalavras: number;
-  separador: string;
+  separador: SeparadorFrase;
   iniciaisMaiusculas: boolean;
   incluirNumero: boolean;
 }
@@ -29,6 +33,12 @@ export interface SenhaGerada {
   valor: string;
   tipo: TipoGeracao;
   geradaEm: string;
+}
+
+export interface ForcaCalculada {
+  nivel: NivelForca;
+  entropiaBits: number;
+  tempoEstimadoQuebra: string;
 }
 
 export interface PadraoEncontrado {

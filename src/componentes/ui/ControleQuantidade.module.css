@@ -1,0 +1,115 @@
+.controle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+}
+
+.rotulo {
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-medio);
+}
+
+.campoNumero {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.numero {
+  width: 3.5rem;
+  height: var(--altura-controle-sm);
+  padding-inline: var(--espaco-2);
+  border: 1px solid var(--borda-controle);
+  border-radius: var(--raio-sm);
+  background-color: var(--superficie);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.numero:focus-visible {
+  outline: none;
+  border-color: var(--destaque);
+  box-shadow: var(--anel-foco);
+}
+
+.unidade {
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+}
+
+.deslizante {
+  --trilho: 6px;
+  --polegar: 20px;
+
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.deslizante::-webkit-slider-runnable-track {
+  height: var(--trilho);
+  border-radius: var(--raio-pilula);
+  background: linear-gradient(
+    to right,
+    var(--destaque) 0 var(--progresso),
+    var(--forca-vazia) var(--progresso) 100%
+  );
+}
+
+.deslizante::-moz-range-track {
+  height: var(--trilho);
+  border-radius: var(--raio-pilula);
+  background: var(--forca-vazia);
+}
+
+.deslizante::-moz-range-progress {
+  height: var(--trilho);
+  border-radius: var(--raio-pilula);
+  background: var(--destaque);
+}
+
+.deslizante::-webkit-slider-thumb {
+  width: var(--polegar);
+  height: var(--polegar);
+  margin-top: calc((var(--trilho) - var(--polegar)) / 2);
+  border: 2px solid var(--destaque);
+  border-radius: 50%;
+  background-color: var(--superficie);
+  box-shadow: var(--sombra-cartao);
+  appearance: none;
+  transition: transform var(--duracao-rapida) var(--curva-saida);
+}
+
+.deslizante::-moz-range-thumb {
+  width: var(--polegar);
+  height: var(--polegar);
+  border: 2px solid var(--destaque);
+  border-radius: 50%;
+  background-color: var(--superficie);
+}
+
+.deslizante:focus-visible {
+  outline: none;
+}
+
+.deslizante:focus-visible::-webkit-slider-thumb {
+  box-shadow: var(--anel-foco);
+}
+
+.deslizante:focus-visible::-moz-range-thumb {
+  box-shadow: var(--anel-foco);
+}
+
+.deslizante:active::-webkit-slider-thumb {
+  transform: scale(1.12);
+}

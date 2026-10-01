@@ -20,9 +20,12 @@ Vitest. Same stack and folder conventions as `D:\Projetos\OrbitWeb`.
 | `src/componentes/layout/` | `MenuLateral` (sidebar, from 768px), `Cabecalho` (top bar with the content corner), `BarraAbas` (mobile only) |
 | `src/componentes/ui/` | Design system; export everything through `index.ts` |
 | `src/componentes/senha/` | `VisorSenha` (per-character-class coloring) and `MedidorForca` |
-| `src/configuracoes/` | `ambiente`, `aplicacao`, `navegacao`, `geracao` (types of generation), `forca` (5 strength levels) |
-| `src/regras/` | Pure logic with `*.test.ts` next to it |
-| `src/provedores/` | `ProvedorTema`, `ProvedorHistoricoSessao` (in-memory only) |
+| `src/componentes/gerador/` | Generator UI: `VisorGerador`, `EscolhaFinalidade`, `OpcoesGerador`, `HistoricoSessao` |
+| `src/ganchos/useGerador.ts` | All generator state: options per type, purpose, generated values and strength |
+| `src/dados/palavras.ts` | Passphrase word list (1,008 words, a-z, 4-8 letters; a test enforces it) |
+| `src/configuracoes/` | `ambiente`, `aplicacao`, `navegacao`, `geracao` (types, defaults), `finalidades` (purpose presets, tips, minimum lengths), `forca` (5 strength levels) |
+| `src/regras/` | Pure logic with tests: `aleatorio` (unbiased crypto sampling), `geradorSenha`, `fraseSenha`, `pin`, `forca`, `caracteres` |
+| `src/provedores/` | `ProvedorTema`, `ProvedorAreaTransferencia` (copy + 30 s clear, app-level so it survives navigation), `ProvedorHistoricoSessao` and `ProvedorSenhaParaAnalise` (both in-memory only) |
 | `src/rotas/caminhos.ts` | Every route and query param name |
 | `docker/` | nginx config, security headers snippet, entrypoint that writes `config.js` |
 
@@ -53,6 +56,9 @@ No linter or formatter is configured. Before calling a task done, run `npm run t
 * No inline scripts: the CSP is `script-src 'self'`. The pre-render theme script lives in `public/tema-inicial.js` for that reason.
 
 ## Gotchas
+* Chrome only lets a page write to the clipboard right after a click or key press. A timer-only `writeText` stays pending forever, so `ProvedorAreaTransferencia` races every write against a 2 s timeout and, when there is no user activation at 30 s, clears on the next `pointerdown`/`keydown` in the app. Do not "simplify" this back to a plain timer.
+* Never call `navigator.clipboard.readText()` while testing: it opens a permission prompt that blocks every later clipboard write in that tab. Verify clearing by pasting with `Ctrl+V` into the Analisador field instead.
+* Generated passwords must never reach the URL, `localStorage`, `sessionStorage` or `history.state`; pass them between pages through `ProvedorSenhaParaAnalise`.
 * Chrome windows narrower than 500px are not possible; check 320 and 375 widths by loading the app in iframes.
 * The welcome screen shows once per browser session (`aegis:boas-vindas-vista` in `sessionStorage`); a new tab shows it again.
 * `/componentes` exists only in development (`ambiente.desenvolvimento`).

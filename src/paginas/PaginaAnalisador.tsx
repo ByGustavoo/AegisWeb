@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GlobeLock, ScanSearch } from 'lucide-react';
 import { CabecalhoPagina } from '@/componentes/layout/CabecalhoPagina';
 import { MedidorForca } from '@/componentes/senha/MedidorForca';
 import { CabecalhoPainel, CampoSenha, EstadoMensagem, Painel, Selo } from '@/componentes/ui';
 import { useTituloDocumento } from '@/ganchos/useTituloDocumento';
+import { useSenhaParaAnalise } from '@/provedores/ProvedorSenhaParaAnalise';
 import estilos from './PaginaAnalisador.module.css';
 
 const metricasPrevistas = [
@@ -15,6 +16,13 @@ const metricasPrevistas = [
 export default function PaginaAnalisador() {
   useTituloDocumento('Analisar senha');
   const [senha, setSenha] = useState('');
+  const { retirar } = useSenhaParaAnalise();
+
+  useEffect(() => {
+    const encaminhada = retirar();
+    if (encaminhada) setSenha(encaminhada);
+  }, [retirar]);
+
   const preenchida = senha.length > 0;
 
   return (

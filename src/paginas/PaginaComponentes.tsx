@@ -4,7 +4,19 @@ import { Copy, RefreshCw, Trash2 } from 'lucide-react';
 import { CabecalhoPagina } from '@/componentes/layout/CabecalhoPagina';
 import { MedidorForca } from '@/componentes/senha/MedidorForca';
 import { LegendaCaracteres, VisorSenha } from '@/componentes/senha/VisorSenha';
-import { Abas, Botao, BotaoIcone, CabecalhoPainel, CampoSenha, Esqueleto, Painel, Selo } from '@/componentes/ui';
+import {
+  Abas,
+  Botao,
+  BotaoIcone,
+  CabecalhoPainel,
+  CampoSenha,
+  ControleQuantidade,
+  Esqueleto,
+  GrupoOpcoes,
+  Interruptor,
+  Painel,
+  Selo,
+} from '@/componentes/ui';
 import { NIVEIS_FORCA } from '@/configuracoes/forca';
 import { useTituloDocumento } from '@/ganchos/useTituloDocumento';
 import estilos from './PaginaComponentes.module.css';
@@ -40,6 +52,9 @@ export default function PaginaComponentes() {
   useTituloDocumento('Componentes');
   const [aba, setAba] = useState('senha');
   const [senha, setSenha] = useState('Correto#Cavalo9');
+  const [ligado, setLigado] = useState(true);
+  const [quantidade, setQuantidade] = useState(16);
+  const [separador, setSeparador] = useState('-');
 
   return (
     <>
@@ -135,6 +150,37 @@ export default function PaginaComponentes() {
 
         <Bloco titulo="Campo de senha">
           <CampoSenha rotulo="Senha" descricao="Texto de apoio do campo." valor={senha} aoMudar={setSenha} />
+        </Bloco>
+
+        <Bloco titulo="Controles">
+          <div className={estilos.pilha}>
+            <ControleQuantidade
+              rotulo="Tamanho"
+              unidade="caracteres"
+              valor={quantidade}
+              minimo={8}
+              maximo={64}
+              aoMudar={setQuantidade}
+            />
+            <Interruptor rotulo="Símbolos" amostra="!@#$%&*" ligado={ligado} aoMudar={setLigado} />
+            <Interruptor
+              rotulo="Último tipo ligado"
+              ligado
+              bloqueado
+              motivoBloqueio="Deixe pelo menos um tipo de caractere ligado."
+              aoMudar={() => undefined}
+            />
+            <GrupoOpcoes
+              legenda="Separador"
+              valor={separador}
+              aoMudar={setSeparador}
+              opcoes={[
+                { valor: '-', rotulo: 'Hífen', amostra: '-' },
+                { valor: '.', rotulo: 'Ponto', amostra: '.' },
+                { valor: ' ', rotulo: 'Espaço', amostra: '␣' },
+              ]}
+            />
+          </div>
         </Bloco>
 
         <Bloco titulo="Esqueletos">
