@@ -1,0 +1,79 @@
+.grade {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: var(--espaco-5);
+  align-items: start;
+}
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-5);
+  min-width: 0;
+}
+
+.vazamento {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-4);
+}
+
+.iconeVazamento {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--raio-md);
+  background-color: var(--superficie);
+  border: 1px solid var(--borda);
+  color: var(--texto-secundario);
+}
+
+.textoVazamento {
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+}
+
+.resultado {
+  gap: var(--espaco-2);
+}
+
+.metricas {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--espaco-4);
+}
+
+.metrica {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-4);
+  padding-block: var(--espaco-3);
+  border-top: 1px solid var(--borda);
+}
+
+.rotuloMetrica {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-medio);
+}
+
+.detalheMetrica {
+  color: var(--texto-terciario);
+  font-weight: var(--peso-regular);
+}
+
+.valorMetrica {
+  color: var(--texto-terciario);
+  font-family: var(--fonte-mono);
+}
+
+@media (max-width: 1023px) {
+  .grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

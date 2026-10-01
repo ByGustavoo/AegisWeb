@@ -1,0 +1,60 @@
+.visor {
+  display: block;
+  min-width: 0;
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letras-mono);
+  overflow-wrap: anywhere;
+}
+
+.quebraLivre {
+  line-break: anywhere;
+}
+
+.grande {
+  font-size: var(--tamanho-senha);
+  line-height: 1.3;
+}
+
+.normal {
+  font-size: var(--tamanho-base);
+  line-height: var(--altura-linha-compacta);
+}
+
+.esmaecido {
+  opacity: 0.55;
+}
+
+.letra {
+  color: var(--caractere-letra);
+}
+
+.numero {
+  color: var(--caractere-numero);
+}
+
+.simbolo {
+  color: var(--caractere-simbolo);
+}
+
+.espaco {
+  white-space: pre;
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-1) var(--espaco-4);
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+}
+
+.itemLegenda {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.amostra {
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-forte);
+}

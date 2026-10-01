@@ -1,0 +1,63 @@
+.abas {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--total), minmax(0, 1fr));
+  width: fit-content;
+  min-width: min(100%, 26rem);
+  padding: 3px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-md);
+  background-color: var(--superficie-suave);
+}
+
+.indicador {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px) / var(--total));
+  border-radius: calc(var(--raio-md) - 3px);
+  background-color: var(--superficie);
+  box-shadow: var(--sombra-cartao), 0 0 0 1px var(--borda);
+  transform: translateX(calc(var(--indice) * 100%));
+  transition: transform var(--duracao-lenta) var(--curva-saida);
+}
+
+.aba {
+  position: relative;
+  z-index: 1;
+  height: calc(var(--altura-controle) - 6px);
+  padding-inline: var(--espaco-4);
+  border-radius: calc(var(--raio-md) - 3px);
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-medio);
+  white-space: nowrap;
+  transition: color var(--duracao-rapida) var(--curva-saida);
+}
+
+.aba:focus-visible {
+  outline: none;
+  box-shadow: var(--anel-foco);
+}
+
+.ativa {
+  color: var(--texto);
+}
+
+@media (hover: hover) {
+  .aba:not(.ativa):hover {
+    color: var(--texto);
+  }
+}
+
+@media (max-width: 767px) {
+  .abas {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .aba {
+    padding-inline: var(--espaco-2);
+  }
+}

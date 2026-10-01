@@ -1,0 +1,42 @@
+.marca {
+  flex-shrink: 0;
+}
+
+.fundo {
+  fill: var(--marca-fundo);
+}
+
+.escudo,
+.chevron {
+  fill: none;
+  stroke: var(--marca-traco);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chevron {
+  transition: transform var(--duracao-lenta) var(--curva-mola);
+}
+
+@media (hover: hover) {
+  a:hover .chevron {
+    transform: translateY(-1px);
+  }
+}
+
+.entrando .escudo {
+  stroke-dasharray: 1;
+  animation: tracar 1s var(--curva-saida) 380ms backwards;
+}
+
+.entrando .chevron {
+  stroke-dasharray: 1;
+  animation: tracar 640ms var(--curva-saida) 980ms backwards;
+}
+
+@keyframes tracar {
+  from {
+    stroke-dashoffset: 1;
+  }
+}

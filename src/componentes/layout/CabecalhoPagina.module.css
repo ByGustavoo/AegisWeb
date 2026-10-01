@@ -1,0 +1,53 @@
+.cabecalhoPagina {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--espaco-4);
+  margin-bottom: var(--espaco-8);
+}
+
+.textos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  min-width: 0;
+}
+
+.sobretitulo {
+  color: var(--destaque);
+  font-family: var(--fonte-mono);
+  font-size: var(--tamanho-xs);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letras-rotulo);
+  text-transform: uppercase;
+}
+
+.titulo {
+  font-size: var(--tamanho-3xl);
+}
+
+.descricao {
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-base);
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+}
+
+@media (max-width: 767px) {
+  .cabecalhoPagina {
+    margin-bottom: var(--espaco-6);
+  }
+
+  .titulo {
+    font-size: var(--tamanho-2xl);
+  }
+
+  .acoes {
+    width: 100%;
+  }
+}

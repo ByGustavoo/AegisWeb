@@ -1,0 +1,199 @@
+.menu {
+  grid-area: menu;
+  position: sticky;
+  top: 0;
+  z-index: var(--camada-menu);
+  display: flex;
+  flex-direction: column;
+  width: var(--largura-menu);
+  height: 100dvh;
+  padding: 0 var(--espaco-3) var(--espaco-3);
+  background-color: var(--superficie);
+  overflow: hidden;
+  transition: width var(--duracao-base) var(--curva-saida);
+}
+
+.recolhido {
+  width: var(--largura-menu-recolhido);
+}
+
+.marca {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  height: var(--altura-cabecalho);
+  padding-inline: var(--espaco-2);
+}
+
+.linkMarca {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  min-width: 0;
+  padding: var(--espaco-1);
+  margin-left: calc(var(--espaco-1) * -1);
+  border-radius: var(--raio-md);
+}
+
+.simbolo {
+  display: grid;
+  flex-shrink: 0;
+}
+
+.nome {
+  display: inline-block;
+  font-size: var(--tamanho-lg);
+  font-weight: var(--peso-forte);
+  letter-spacing: var(--letras-titulo);
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: opacity var(--duracao-rapida) var(--curva-saida);
+}
+
+.recolhido .nome,
+.recolhido .rotuloItem {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.navegacao {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-top: calc(
+    var(--respiro-topo-conteudo) + var(--altura-sobretitulo) + var(--espaco-2) +
+      (var(--altura-titulo-pagina) - var(--altura-item-menu)) / 2
+  );
+  padding-bottom: var(--espaco-4);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.itens {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  min-height: var(--altura-item-menu);
+  padding-inline: calc((var(--largura-menu-recolhido) - var(--espaco-3) * 2 - 18px) / 2);
+  border-radius: var(--raio-md);
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-medio);
+  white-space: nowrap;
+  transition: color var(--duracao-rapida) var(--curva-saida);
+}
+
+.item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--superficie-suave);
+  opacity: 0;
+  transform: scale(0.96);
+  transition:
+    opacity var(--duracao-rapida) var(--curva-saida),
+    transform var(--duracao-base) var(--curva-mola),
+    background-color var(--duracao-rapida) var(--curva-saida);
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: var(--anel-foco);
+}
+
+.item:focus-visible::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.itemAtivo {
+  color: var(--destaque);
+}
+
+.itemAtivo::before {
+  background-color: var(--destaque-suave);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.iconeItem {
+  flex-shrink: 0;
+  transition: transform var(--duracao-base) var(--curva-mola);
+}
+
+.rotuloItem {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition:
+    opacity var(--duracao-rapida) var(--curva-saida),
+    transform var(--duracao-base) var(--curva-mola);
+}
+
+.rodape {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--borda);
+}
+
+.recolher {
+  display: grid;
+  place-items: center;
+  align-self: flex-start;
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  margin-left: calc((var(--largura-menu-recolhido) - var(--espaco-3) * 2 - var(--alvo-toque)) / 2);
+  border-radius: var(--raio-md);
+  color: var(--texto-terciario);
+  transition:
+    color var(--duracao-rapida) var(--curva-saida),
+    background-color var(--duracao-rapida) var(--curva-saida);
+}
+
+.recolher:focus-visible,
+.linkMarca:focus-visible {
+  outline: none;
+  box-shadow: var(--anel-foco);
+}
+
+@media (hover: hover) {
+  .item:hover {
+    color: var(--texto);
+  }
+
+  .itemAtivo:hover {
+    color: var(--destaque);
+  }
+
+  .item:hover::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .item:not(.itemAtivo):hover .iconeItem,
+  .item:not(.itemAtivo):hover .rotuloItem {
+    transform: translateX(2px);
+  }
+
+  .recolher:hover {
+    background-color: var(--superficie-suave);
+    color: var(--texto);
+  }
+}
+
+@media (max-width: 767px) {
+  .menu {
+    display: none;
+  }
+}

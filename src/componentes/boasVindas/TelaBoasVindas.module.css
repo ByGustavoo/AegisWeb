@@ -1,0 +1,618 @@
+.tela {
+  --curva-desenho: cubic-bezier(0.65, 0, 0.35, 1);
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: calc(var(--espaco-12) + env(safe-area-inset-top, 0px)) var(--espaco-6)
+    calc(var(--espaco-12) + env(safe-area-inset-bottom, 0px));
+  overflow: hidden;
+  background-color: var(--fundo);
+}
+
+.escudos {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, #000 55%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+.palcoEscudos {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(150dvh, 190vw);
+  aspect-ratio: 3 / 2;
+  transform: translate(-50%, -50%);
+}
+
+.palcoEscudos svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  overflow: visible;
+}
+
+.linhas {
+  filter: blur(var(--desfoque-escudo));
+}
+
+.linhaEscudo {
+  fill: none;
+  stroke: var(--linha-escudo);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  animation: desenharEscudo 1.6s var(--curva-desenho) backwards;
+  animation-delay: calc(var(--i, 0) * 140ms);
+}
+
+.sinal {
+  transition: opacity var(--duracao-base) var(--curva-saida);
+  animation: surgirSinal var(--duracao-expressiva) var(--curva-saida) 1.5s backwards;
+}
+
+.haloSinal {
+  fill: var(--destaque-suave);
+}
+
+.nucleoSinal {
+  fill: var(--destaque);
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 34rem;
+  text-align: center;
+}
+
+.marca {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-8);
+}
+
+.simbolo {
+  position: relative;
+  display: grid;
+  place-items: center;
+  animation: logoSurgir 900ms var(--curva-mola) 80ms backwards;
+}
+
+.simbolo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--destaque);
+  border-radius: 28%;
+  opacity: 0;
+  pointer-events: none;
+  animation: onda 1.3s var(--curva-saida) 420ms;
+}
+
+.nome {
+  display: inline-flex;
+  font-size: var(--tamanho-xl);
+  font-weight: var(--peso-forte);
+  letter-spacing: var(--letras-titulo);
+}
+
+.letra {
+  --dx: -3rem;
+
+  display: inline-block;
+  white-space: pre;
+  animation: letraEmergir 760ms var(--curva-saida) backwards;
+  animation-delay: calc(480ms + var(--i, 0) * 65ms);
+}
+
+.titulo {
+  font-size: var(--tamanho-destaque);
+  line-height: var(--altura-linha-justa);
+}
+
+.palavra {
+  display: inline-block;
+  overflow: clip;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+  vertical-align: top;
+}
+
+.palavraInterna {
+  display: inline-block;
+  animation: palavraSubir 820ms var(--curva-saida) backwards;
+  animation-delay: calc(640ms + var(--i, 0) * 70ms);
+}
+
+.descricao {
+  margin-top: var(--espaco-4);
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-md);
+  line-height: var(--altura-linha-normal);
+}
+
+.entra {
+  animation: blocoEntrar 760ms var(--curva-saida) backwards;
+  animation-delay: var(--atraso, 0ms);
+}
+
+.recursos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  width: 100%;
+  margin-top: var(--espaco-8);
+  text-align: left;
+}
+
+.recurso {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-4);
+  padding: var(--espaco-4);
+  overflow: hidden;
+  background-color: color-mix(in srgb, var(--superficie) 90%, transparent);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-lg);
+}
+
+.recurso.entra {
+  animation: cartaoEntrar 820ms var(--curva-mola) backwards;
+  animation-delay: var(--atraso, 0ms);
+}
+
+.brilhoRecurso {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    color-mix(in srgb, var(--destaque) 16%, transparent) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  pointer-events: none;
+  animation: varrerBrilho 1.1s var(--curva-saida) both;
+  animation-delay: calc(var(--atraso, 0ms) + 260ms);
+}
+
+.iconeRecurso {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--raio-md);
+  background-color: var(--destaque-suave);
+  color: var(--destaque);
+  animation: iconeSurgir 640ms var(--curva-mola) backwards;
+  animation-delay: calc(var(--atraso, 0ms) + 180ms);
+}
+
+.iconeRecurso svg {
+  transition: transform var(--duracao-lenta) var(--curva-mola);
+}
+
+.iconeRecurso {
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color var(--duracao-base) var(--curva-saida),
+    color var(--duracao-base) var(--curva-saida),
+    box-shadow var(--duracao-base) var(--curva-saida);
+}
+
+.recurso::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    color-mix(in srgb, var(--destaque) 12%, transparent) 50%,
+    transparent 65%
+  );
+  opacity: 0;
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.textosRecurso > * {
+  animation: textoRevelar 520ms var(--curva-saida) backwards;
+  animation-delay: calc(var(--atraso, 0ms) + 120ms);
+}
+
+.textosRecurso > * + * {
+  animation-delay: calc(var(--atraso, 0ms) + 200ms);
+}
+
+.textosRecurso {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tituloRecurso {
+  font-weight: var(--peso-forte);
+}
+
+.descricaoRecurso {
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+  line-height: var(--altura-linha-compacta);
+}
+
+@media (hover: hover) {
+  .recurso {
+    transition:
+      transform var(--duracao-base) var(--curva-saida),
+      border-color var(--duracao-base) var(--curva-saida),
+      background-color var(--duracao-base) var(--curva-saida),
+      box-shadow var(--duracao-base) var(--curva-saida);
+  }
+
+  .recurso:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--destaque) 45%, var(--borda));
+    background-color: var(--superficie);
+    box-shadow: var(--sombra-flutuante);
+  }
+
+  .recurso:hover::after {
+    animation: varrerBrilho 900ms var(--curva-saida);
+  }
+
+  .recurso:hover .iconeRecurso {
+    background-color: var(--destaque);
+    color: var(--destaque-contraste);
+    box-shadow: var(--sombra-destaque);
+  }
+
+  .recurso:hover .tituloRecurso {
+    color: var(--destaque);
+  }
+
+  .recurso[data-efeito='girar']:hover .iconeRecurso svg {
+    transform: rotate(-40deg) scale(1.08);
+  }
+
+  .recurso[data-efeito='escanear'] .iconeRecurso::after {
+    content: '';
+    position: absolute;
+    right: 5px;
+    left: 5px;
+    top: 4px;
+    height: 2px;
+    border-radius: 2px;
+    background-color: currentColor;
+    opacity: 0;
+  }
+
+  .recurso[data-efeito='escanear']:hover .iconeRecurso::after {
+    animation: escanear 1.1s var(--curva-tema) infinite alternate;
+  }
+
+  .recurso[data-efeito='escanear']:hover .iconeRecurso svg {
+    transform: scale(1.06);
+  }
+
+  .recurso[data-efeito='proteger'] .iconeRecurso::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1.5px solid currentColor;
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  .recurso[data-efeito='proteger']:hover .iconeRecurso svg {
+    animation: pulsarEscudo 640ms var(--curva-mola);
+  }
+
+  .recurso[data-efeito='proteger']:hover .iconeRecurso::after {
+    animation: ondaEscudo 900ms var(--curva-saida) 120ms;
+  }
+}
+
+.tituloRecurso {
+  transition: color var(--duracao-base) var(--curva-saida);
+}
+
+.acoes {
+  margin-top: var(--espaco-8);
+}
+
+.comecar {
+  min-width: 12rem;
+}
+
+.comecar svg {
+  transition: transform var(--duracao-base) var(--curva-mola);
+}
+
+@media (hover: hover) {
+  .comecar:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+.saindo {
+  pointer-events: none;
+}
+
+.saindo .etapa {
+  animation: blocoSair 340ms var(--curva-entrada) forwards;
+  animation-delay: calc(var(--ordem-saida, 0) * 30ms);
+}
+
+.saindo .palavraInterna {
+  animation: palavraSair 380ms var(--curva-entrada) forwards;
+  animation-delay: calc(90ms + var(--i, 0) * 40ms);
+}
+
+.saindo .letra {
+  animation: letraAbsorver 440ms var(--curva-entrada) forwards;
+  animation-delay: calc(140ms + var(--i, 0) * 45ms);
+}
+
+.saindo .simbolo {
+  animation: antecipar var(--duracao-expressiva) var(--curva-mola) 220ms forwards;
+}
+
+.saindo .simbolo::after {
+  animation: ondaSaida 700ms var(--curva-saida) 380ms;
+}
+
+.saindo .escudos svg {
+  animation: expandirEscudos 700ms var(--curva-saida) forwards;
+}
+
+.saindo .sinal {
+  opacity: 0;
+}
+
+.saindo .comecar svg {
+  animation: flechaPartir 380ms var(--curva-entrada) forwards;
+}
+
+@keyframes desenharEscudo {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+}
+
+@keyframes surgirSinal {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes logoSurgir {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+@keyframes onda {
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+@keyframes letraEmergir {
+  from {
+    opacity: 0;
+    transform: translate(var(--dx), 0) scale(0.2);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(calc(var(--dx) * 0.3), -10px) scale(0.92);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes cartaoEntrar {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+    filter: blur(6px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes iconeSurgir {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-24deg);
+  }
+}
+
+@keyframes textoRevelar {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes varrerBrilho {
+  from {
+    opacity: 1;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes palavraSubir {
+  from {
+    transform: translateY(110%);
+  }
+}
+
+@keyframes palavraSair {
+  to {
+    transform: translateY(-110%);
+  }
+}
+
+@keyframes blocoEntrar {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(4px);
+  }
+}
+
+@keyframes blocoSair {
+  to {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+    filter: blur(3px);
+  }
+}
+
+@keyframes expandirEscudos {
+  to {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+
+@keyframes letraAbsorver {
+  45% {
+    opacity: 1;
+    transform: translate(calc(var(--dx) * 0.35), -12px) scale(0.85);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), 0) scale(0.1);
+  }
+}
+
+@keyframes escanear {
+  0% {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateY(26px);
+  }
+}
+
+@keyframes pulsarEscudo {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.22) rotate(-6deg);
+  }
+  70% {
+    transform: scale(0.94) rotate(3deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes ondaEscudo {
+  from {
+    opacity: 0.8;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes ondaSaida {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+@keyframes antecipar {
+  40% {
+    transform: scale(1.14);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes flechaPartir {
+  to {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+
+@media (max-width: 767px) {
+  .tela {
+    align-items: start;
+    padding-inline: var(--espaco-5);
+  }
+
+  .marca {
+    margin-bottom: var(--espaco-6);
+  }
+
+  .titulo {
+    font-size: var(--tamanho-2xl);
+  }
+
+  .descricao {
+    font-size: var(--tamanho-base);
+  }
+
+  .recursos {
+    margin-top: var(--espaco-6);
+  }
+
+  .acoes {
+    width: 100%;
+  }
+
+  .comecar {
+    width: 100%;
+  }
+}

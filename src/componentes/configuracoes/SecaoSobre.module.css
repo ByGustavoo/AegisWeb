@@ -1,0 +1,28 @@
+.lista {
+  display: flex;
+  flex-direction: column;
+}
+
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-1) var(--espaco-4);
+  padding-block: var(--espaco-3);
+  border-top: 1px solid var(--borda);
+}
+
+.linha:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.linha dt {
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+}
+
+.valor {
+  font-weight: var(--peso-medio);
+}

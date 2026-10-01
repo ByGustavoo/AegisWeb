@@ -1,0 +1,56 @@
+.medidor {
+  --cor-nivel: var(--texto-terciario);
+  --cor-nivel-suave: var(--neutro-suave);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  min-width: 0;
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+}
+
+.rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  color: var(--cor-nivel);
+  font-weight: var(--peso-forte);
+}
+
+.vazio .rotulo {
+  color: var(--texto-terciario);
+  font-weight: var(--peso-medio);
+}
+
+.nota {
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-sm);
+}
+
+.trilho {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.segmento {
+  height: 6px;
+  border-radius: var(--raio-pilula);
+  background-color: var(--forca-vazia);
+  transition: background-color var(--duracao-lenta) var(--curva-saida);
+}
+
+.preenchido {
+  background-color: var(--cor-nivel);
+}
+
+.resumo {
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+}

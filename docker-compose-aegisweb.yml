@@ -1,0 +1,9 @@
+services:
+  aegisweb:
+    image: "gurudohimalaia/aegisweb:latest"
+    container_name: "AegisWeb"
+
+    restart: always
+
+    ports:
+      - "${AEGIS_PORTA:-9035}:8080"

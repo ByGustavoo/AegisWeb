@@ -1,0 +1,12 @@
+.secoes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-6);
+  max-width: 52rem;
+}
+
+@media (max-width: 767px) {
+  .secoes {
+    gap: var(--espaco-4);
+  }
+}

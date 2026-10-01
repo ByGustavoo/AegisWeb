@@ -1,0 +1,44 @@
+.esqueleto {
+  display: block;
+  width: var(--largura);
+  max-width: 100%;
+  height: var(--altura);
+  border-radius: var(--raio-sm);
+  background: linear-gradient(
+    90deg,
+    var(--esqueleto-base) 0%,
+    var(--esqueleto-brilho) 50%,
+    var(--esqueleto-base) 100%
+  );
+  background-size: 200% 100%;
+  animation: brilhar 1.6s ease-in-out infinite;
+}
+
+.arredondado {
+  border-radius: var(--raio-pilula);
+}
+
+.estatico {
+  background: var(--esqueleto-base);
+  animation: none;
+}
+
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+}
+
+.bloco {
+  margin-top: var(--espaco-4);
+  border-radius: var(--raio-lg);
+}
+
+@keyframes brilhar {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}

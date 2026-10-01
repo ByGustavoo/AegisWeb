@@ -1,0 +1,87 @@
+.barra {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .barra {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: var(--camada-barra-abas);
+    display: block;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-inline: max(var(--espaco-2), env(safe-area-inset-left, 0px));
+    background-color: color-mix(in srgb, var(--superficie) 92%, transparent);
+    backdrop-filter: saturate(1.4) blur(12px);
+    border-top: 1px solid var(--borda);
+  }
+}
+
+.lista {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  height: var(--altura-barra-abas);
+}
+
+.celula {
+  display: flex;
+}
+
+.item {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--texto-secundario);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.item:focus-visible {
+  outline: none;
+}
+
+.item:focus-visible .pilula {
+  box-shadow: var(--anel-foco);
+}
+
+.pilula {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 30px;
+  border-radius: var(--raio-pilula);
+  transition:
+    background-color var(--duracao-base) var(--curva-saida),
+    color var(--duracao-base) var(--curva-saida),
+    transform var(--duracao-rapida) var(--curva-saida);
+}
+
+.item:active .pilula {
+  transform: scale(0.94);
+}
+
+.rotulo {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--tamanho-xs);
+  font-weight: var(--peso-medio);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ativo {
+  color: var(--texto);
+}
+
+.ativo .pilula {
+  background-color: var(--destaque-suave);
+  color: var(--destaque);
+}
+
+.ativo .rotulo {
+  font-weight: var(--peso-forte);
+}
