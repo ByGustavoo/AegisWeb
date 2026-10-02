@@ -5,6 +5,7 @@ import { Botao, BotaoIcone } from '@/componentes/ui';
 import type { ForcaCalculada } from '@/modelos/senha';
 import type { EstadoAreaTransferencia } from '@/provedores/ProvedorAreaTransferencia';
 import { juntarClasses } from '@/utilitarios/juntarClasses';
+import { ExplicacaoEntropia } from './ExplicacaoEntropia';
 import estilos from './VisorGerador.module.css';
 
 const LIMITE_PONTOS_OCULTOS = 32;
@@ -98,8 +99,11 @@ export function VisorGerador({
       <div className={estilos.forca}>
         <MedidorForca nivel={forca.nivel} mostrarResumo={false} />
         <dl className={estilos.metricas}>
-          <div>
-            <dt>Entropia</dt>
+          <div className={estilos.metricaComDica}>
+            <dt className={estilos.rotuloComDica}>
+              Entropia
+              <ExplicacaoEntropia bits={forca.entropiaBits} className={estilos.dicaAncorada} />
+            </dt>
             <dd className="mono">{Math.round(forca.entropiaBits)} bits</dd>
           </div>
           <div>

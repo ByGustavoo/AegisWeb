@@ -32,9 +32,10 @@
 
 ## 📌 Status do Projeto
 
-**Fase 2 — Gerador: concluída.** Senha, frase-senha e PIN gerados no navegador, com finalidades,
-força e limpeza da área de transferência. A análise de senhas entra na fase 3. Decisões e escopo
-de cada fase em [`REQUISITOS.md`](REQUISITOS.md).
+**Fase 3 — Analisador: concluída.** Análise local de senhas com nota de 0 a 100, pontos fortes e fracos e
+recomendações. A verificação de vazamentos entra na fase 4. Decisões e escopo de cada fase em
+[`REQUISITOS.md`](REQUISITOS.md). As listas de senhas e palavras comuns têm origem e licença em
+[`LICENCAS-DE-TERCEIROS.md`](LICENCAS-DE-TERCEIROS.md).
 
 <br>
 
@@ -56,7 +57,15 @@ de cada fase em [`REQUISITOS.md`](REQUISITOS.md).
 
 * **Analisar esta senha:** abre o Analisador já preenchido, sem passar a senha pela URL.
 
-* **Analisador (estrutura):** campo de senha com mostrar e ocultar, medidor de força, métricas previstas e o painel opcional de vazamentos.
+* **Analisar senha:** análise feita só no navegador, enquanto a pessoa digita, com nota de 0 a 100 no medidor de 5 níveis, tempo estimado para quebrar e entropia estimada.
+
+* **Padrões detectados:** senhas comuns, palavras em português e inglês, nomes, letras trocadas (`s3nh@`), palavras invertidas, sequências, teclas vizinhas, repetições, datas, anos, frases curtas e formatos previsíveis como "Palavra + números + símbolo".
+
+* **Mapa da senha:** os trechos previsíveis aparecem marcados na própria senha, e com a senha oculta nada dela é citado.
+
+* **Pontos fortes, pontos fracos e recomendações:** cada recomendação mostra a nota que a senha teria ("E se…"), com atalho para gerar uma senha forte.
+
+* **Privacidade evidente:** faixa "Sua senha não sai deste aparelho", exemplos clicáveis e limpeza da senha ao sair, no botão Limpar ou depois de 2 minutos sem uso.
 
 * **Configurações:** tema claro, escuro ou automático; seção Privacidade com o que acontece com as senhas; versão e data de lançamento.
 
@@ -66,7 +75,7 @@ de cada fase em [`REQUISITOS.md`](REQUISITOS.md).
 
 🔹 **Próximas fases**
 
-* **Análise** de força, entropia, tempo estimado para quebrar, padrões e sugestões, e verificação de vazamento por k-anonimato.
+* **Verificação de vazamento** por k-anonimato (Have I Been Pwned), opcional e acionada pela pessoa.
 
 <br>
 
@@ -212,6 +221,7 @@ $ docker compose -f docker-compose-aegisweb.yml up -d
 ```
 src
 ├── componentes
+│   ├── analisador      # Faixa de privacidade, mapa da senha, placar, pontos e recomendações
 │   ├── boasVindas      # Tela de boas-vindas e transição para o app
 │   ├── gerador         # Visor, finalidades, opções e histórico da sessão
 │   ├── comum           # MarcaAegis
@@ -219,15 +229,15 @@ src
 │   ├── layout          # MenuLateral, Cabecalho, BarraAbas, BotaoTema, CabecalhoPagina
 │   ├── senha           # VisorSenha e MedidorForca
 │   └── ui              # Design system: botões, painéis, abas, campo de senha, estados
-├── configuracoes       # Ambiente, aplicação, navegação, finalidades, tipos de geração e níveis de força
-├── dados               # Lista de palavras da frase-senha
+├── configuracoes       # Ambiente, aplicação, navegação, finalidades, geração, análise e níveis de força
+├── dados               # Palavras da frase-senha e listas de senhas, palavras e nomes comuns
 ├── estilos             # tokens.css, temas.css e global.css
-├── ganchos             # Título do documento, armazenamento local, movimento reduzido
+├── ganchos             # Gerador, analisador, limpeza por inatividade, título e preferências
 ├── layouts             # LayoutAplicacao
 ├── modelos             # Tipos do domínio de senhas
 ├── paginas             # Uma página por rota
 ├── provedores          # Tema, área de transferência, histórico da sessão e encaminhamento à análise
-├── regras              # Sorteio, geradores, força e caracteres, com testes
+├── regras              # Sorteio, geradores, força, caracteres e motor de análise, com testes
 ├── rotas               # Caminhos e tabela de rotas
 └── utilitarios         # Formatação, título e classes
 ```
@@ -236,7 +246,7 @@ src
 
 ## 🗺️ Próximas Etapas
 
-* 🔍 **Fase 3 — Analisador:** avaliação de força, padrões, sugestões e verificação de vazamento.
+* 🔍 **Fase 4 — Vazamentos:** verificação opcional por k-anonimato no Analisador.
 
 <br>
 

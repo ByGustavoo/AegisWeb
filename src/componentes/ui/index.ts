@@ -4,6 +4,7 @@ export { Botao } from './Botao';
 export type { BotaoProps, TamanhoBotao, VarianteBotao } from './Botao';
 export { BotaoIcone } from './BotaoIcone';
 export { CampoSenha } from './CampoSenha';
+export { DicaInfo } from './DicaInfo';
 export { ControleQuantidade } from './ControleQuantidade';
 export { Esqueleto, EsqueletoPagina } from './Esqueleto';
 export { EstadoMensagem } from './EstadoMensagem';

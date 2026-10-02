@@ -1,21 +1,125 @@
 .grade {
+  --respiro-painel: var(--espaco-6) var(--espaco-8);
+
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  gap: var(--espaco-5);
+  grid-template-areas:
+    'entrada resultado'
+    'vazamento resultado'
+    'pontos pontos'
+    'melhorar melhorar';
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: var(--espaco-6);
   align-items: start;
+  margin-top: var(--espaco-6);
 }
 
-.coluna {
-  display: flex;
-  flex-direction: column;
-  gap: var(--espaco-5);
-  min-width: 0;
+.entrada {
+  grid-area: entrada;
+}
+
+.entrada > * + * + *,
+.resultado > * + * + * {
+  margin-top: var(--espaco-4);
+}
+
+.resultado {
+  grid-area: resultado;
+  align-self: stretch;
+}
+
+.pontos {
+  grid-area: pontos;
+}
+
+.melhorar {
+  grid-area: melhorar;
 }
 
 .vazamento {
+  grid-area: vazamento;
+  align-self: stretch;
+}
+
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-2) var(--espaco-3);
+  border-radius: var(--raio-md);
+  background-color: var(--info-suave);
+  color: var(--texto);
+  font-size: var(--tamanho-sm);
+}
+
+.aviso svg {
+  flex-shrink: 0;
+  color: var(--info);
+}
+
+.entrada > .acoesEntrada {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--espaco-3);
+}
+
+.exemplos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+.rotuloExemplos {
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+}
+
+.listaExemplos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+}
+
+.exemplo {
+  min-height: var(--alvo-toque);
+  padding-inline: var(--espaco-3);
+  border: 1px solid var(--borda-controle);
+  border-radius: var(--raio-md);
+  background-color: var(--superficie);
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+  transition:
+    border-color var(--duracao-rapida) var(--curva-saida),
+    color var(--duracao-rapida) var(--curva-saida),
+    background-color var(--duracao-rapida) var(--curva-saida);
+}
+
+.exemplo:focus-visible {
+  outline: none;
+  border-color: var(--destaque);
+  box-shadow: var(--anel-foco);
+}
+
+.preparando {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+}
+
+.colunasPontos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espaco-12);
+}
+
+.textoVazamento {
   display: flex;
   align-items: flex-start;
   gap: var(--espaco-4);
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
 }
 
 .iconeVazamento {
@@ -24,56 +128,36 @@
   place-items: center;
   width: 36px;
   height: 36px;
+  border: 1px solid var(--borda);
   border-radius: var(--raio-md);
   background-color: var(--superficie);
-  border: 1px solid var(--borda);
   color: var(--texto-secundario);
 }
 
-.textoVazamento {
-  color: var(--texto-secundario);
-  font-size: var(--tamanho-sm);
-}
-
-.resultado {
-  gap: var(--espaco-2);
-}
-
-.metricas {
-  display: flex;
-  flex-direction: column;
-  margin-top: var(--espaco-4);
-}
-
-.metrica {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--espaco-4);
-  padding-block: var(--espaco-3);
-  border-top: 1px solid var(--borda);
-}
-
-.rotuloMetrica {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: var(--tamanho-sm);
-  font-weight: var(--peso-medio);
-}
-
-.detalheMetrica {
-  color: var(--texto-terciario);
-  font-weight: var(--peso-regular);
-}
-
-.valorMetrica {
-  color: var(--texto-terciario);
-  font-family: var(--fonte-mono);
+@media (hover: hover) {
+  .exemplo:hover {
+    border-color: var(--destaque);
+    background-color: var(--destaque-suave);
+    color: var(--texto);
+  }
 }
 
 @media (max-width: 1023px) {
   .grade {
+    grid-template-areas:
+      'entrada'
+      'resultado'
+      'pontos'
+      'melhorar'
+      'vazamento';
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .colunasPontos {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espaco-6);
   }
 }

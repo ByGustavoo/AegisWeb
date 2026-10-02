@@ -49,10 +49,34 @@ privacidade visível.
 * **Analisar esta senha:** leva a senha ao Analisador só pela memória do app, nunca pela URL.
 * **Atalho:** `Ctrl+Enter` gera outra.
 
+## Decisões da fase 3 (analisador)
+
+| # | Tema | Decisão |
+|---|---|---|
+| A1 | Motor de análise | Próprio, no estilo do zxcvbn: divide a senha nos padrões encontrados e estima quantas tentativas um ataque precisaria. Explicações escritas em português. |
+| A2 | Listas | 10 mil senhas comuns (lista global do zxcvbn-ts com uma lista curada de senhas brasileiras intercalada no topo), 8 mil palavras em português, 4 mil em inglês e 3,5 mil nomes, mais a lista de palavras da frase-senha. Cerca de 90 KB compactados, baixados só ao abrir o Analisador. |
+| A3 | Vazamentos (HIBP) | Fica para uma fase própria. Nesta fase nada sai do aparelho, sem exceção; o painel aparece como "Em breve". |
+| A4 | Faixas da nota | 0–19 Muito fraca, 20–39 Fraca, 40–59 Razoável, 60–79 Forte, 80–100 Muito forte, usando o mesmo medidor de 5 níveis do Gerador. |
+| A5 | Quando analisar | Enquanto a pessoa digita, sem botão. |
+| A6 | Mapa da senha | Os trechos previsíveis aparecem marcados na própria senha, respeitando o ocultar. |
+| A7 | Privacidade evidente | Faixa "Sua senha não sai deste aparelho" no topo da página e selo "Só neste aparelho" junto ao campo. |
+
+## Regras do analisador
+
+* **Padrões detectados:** senhas comuns, palavras (português e inglês, com e sem acento), nomes, letras trocadas por números ou símbolos (`s3nh@`), palavras invertidas, sequências (`abc`, `9753`), teclas vizinhas (QWERTY e teclado numérico), repetições (`aaa`, `abcabc`), datas e anos, frases de palavras comuns com ou sem final curto, e os formatos "Palavra + números + símbolo" e "maiúscula só no começo".
+* **Nota:** pela estimativa de tentativas, em bits, com os mesmos cortes do Gerador (28, 40, 60 e 80 bits valem 20, 40, 60 e 80 pontos; 120 bits ou mais valem 100). Assim, uma senha gerada recebe no Analisador o mesmo nível do Gerador, com tolerância de um nível.
+* **Tempo para quebrar:** o mesmo cenário do Gerador, 10¹⁰ tentativas por segundo.
+* **Pontos fortes e fracos:** comprimento, variedade de caracteres, cada padrão encontrado e as combinações previsíveis. Trechos de 3 caracteres só contam em senhas abaixo de 80 pontos, para não apontar coincidências em senhas aleatórias.
+* **Recomendações:** até 4, em ordem da nota que a senha teria ("E se…"). A simulação troca o trecho por caracteres aleatórios ou acrescenta caracteres no fim, e só mostra o que sobe a nota em pelo menos 3 pontos.
+* **Senha oculta:** com a senha oculta, o mapa mostra pontos e os títulos não citam trechos dela.
+* **Limite:** analisa os primeiros 128 caracteres.
+* **Limpeza:** a senha some ao sair da página, no botão Limpar e depois de 2 minutos sem uso.
+* **Leitor de tela:** anuncia só a nota e o nível, nunca a senha.
+
 ## Regras
 
 * **Aleatoriedade:** toda geração usa `crypto.getRandomValues`, nunca `Math.random`.
-* **Nada sai do aparelho**, exceto a verificação de vazamento quando pedida, e nela só o prefixo do hash.
+* **Nada sai do aparelho**, exceto a verificação de vazamento quando pedida (fase 4), e nela só o prefixo do hash.
 * **Nada é gravado** (as senhas vivem só na memória da aba), exceto as preferências de tema (`aegis:tema`) e de menu recolhido (`aegis:menu-recolhido`) e a marca de boas-vindas vista na sessão (`sessionStorage`).
 * **Campos de senha** não têm `autocomplete`, correção ortográfica nem registro em console.
 * **Força** em 5 níveis (Muito fraca, Fraca, Razoável, Forte, Muito forte), sempre comunicada por cor, ícone e texto juntos.
@@ -69,6 +93,10 @@ privacidade visível.
 | 6 | Dica explicando cada finalidade | Aprovada, implementada na fase 2 |
 | 7 | Aviso quando a configuração fica abaixo do recomendado | Aprovada, implementada na fase 2 |
 | 8 | Botão "Analisar esta senha" | Aprovada, implementada na fase 2 |
+| 9 | Botão "Gerar uma senha forte" no resultado da análise | Aprovada, implementada na fase 3 |
+| 10 | Simulação "E se…" com a nota que cada recomendação daria | Aprovada, implementada na fase 3 |
+| 11 | Apagar a senha do Analisador depois de 2 minutos sem uso | Aprovada, implementada na fase 3 |
+| 12 | Exemplos clicáveis de senha fraca no Analisador | Aprovada, implementada na fase 3 |
 | 4 | Funcionar offline / instalável (PWA) | Recusada |
 | 5 | Atalhos de teclado (`G` gerar, `C` copiar) | Não aprovada |
 
@@ -78,4 +106,5 @@ privacidade visível.
 |---|---|---|
 | 1 | Estrutura, layout, identidade visual, tipografia, cores, header e navegação, responsividade, páginas preparadas | Concluída |
 | 2 | Gerador: senha, frase-senha e PIN, finalidades, opções, força, copiar com limpeza da área de transferência, histórico da sessão | Concluída |
-| 3 | Analisador: força, entropia, tempo estimado, padrões, sugestões e verificação de vazamento | A fazer |
+| 3 | Analisador: nota de 0 a 100, nível, tempo estimado, padrões, pontos fortes e fracos, recomendações com simulação | Concluída |
+| 4 | Verificação de vazamento (HIBP), opcional | A fazer |

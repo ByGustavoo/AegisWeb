@@ -1,0 +1,59 @@
+.mapa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  min-width: 0;
+}
+
+.rotulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-1) var(--espaco-3);
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-medio);
+}
+
+.legenda {
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+  font-weight: var(--peso-regular);
+}
+
+.caracteres {
+  padding: var(--espaco-3) var(--espaco-4);
+  border: 1px dashed var(--borda-forte);
+  border-radius: var(--raio-md);
+  background-color: var(--superficie-suave);
+  font-size: var(--tamanho-md);
+  letter-spacing: var(--letras-mono);
+  line-height: 2;
+  line-break: anywhere;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.livre {
+  color: var(--texto-secundario);
+}
+
+.fraco {
+  margin-inline: 1px;
+  padding: 2px 1px;
+  border-radius: var(--raio-xs);
+  background-color: var(--forca-2-suave);
+  color: var(--texto);
+  text-decoration: underline wavy var(--forca-2);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  box-decoration-break: clone;
+  transition:
+    background-color var(--duracao-rapida) var(--curva-saida),
+    box-shadow var(--duracao-rapida) var(--curva-saida);
+}
+
+.destacado {
+  background-color: var(--forca-1-suave);
+  box-shadow: 0 0 0 1.5px var(--forca-1);
+}

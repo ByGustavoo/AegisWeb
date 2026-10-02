@@ -10,13 +10,30 @@ export interface CampoSenhaProps
   descricao?: string;
   valor: string;
   aoMudar: (valor: string) => void;
+  visivel?: boolean;
+  aoAlternarVisivel?: (visivel: boolean) => void;
 }
 
-export function CampoSenha({ rotulo, descricao, valor, aoMudar, id, className, ...resto }: CampoSenhaProps) {
+export function CampoSenha({
+  rotulo,
+  descricao,
+  valor,
+  aoMudar,
+  visivel: visivelControlado,
+  aoAlternarVisivel,
+  id,
+  className,
+  ...resto
+}: CampoSenhaProps) {
   const idGerado = useId();
   const idCampo = id ?? idGerado;
   const idDescricao = `${idCampo}-descricao`;
-  const [visivel, setVisivel] = useState(false);
+  const [visivelInterno, setVisivelInterno] = useState(false);
+  const visivel = visivelControlado ?? visivelInterno;
+  const alternar = () => {
+    setVisivelInterno(!visivel);
+    aoAlternarVisivel?.(!visivel);
+  };
   const rotuloAlternar = visivel ? 'Ocultar senha' : 'Mostrar senha';
 
   return (
@@ -44,7 +61,7 @@ export function CampoSenha({ rotulo, descricao, valor, aoMudar, id, className, .
         <button
           type="button"
           className={estilos.alternar}
-          onClick={() => setVisivel(!visivel)}
+          onClick={alternar}
           aria-label={rotuloAlternar}
           aria-pressed={visivel}
           aria-controls={idCampo}

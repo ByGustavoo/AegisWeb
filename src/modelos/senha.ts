@@ -40,17 +40,3 @@ export interface ForcaCalculada {
   entropiaBits: number;
   tempoEstimadoQuebra: string;
 }
-
-export interface PadraoEncontrado {
-  tipo: string;
-  trecho: string;
-  descricao: string;
-}
-
-export interface AnaliseSenha {
-  nivel: NivelForca;
-  entropiaBits: number;
-  tempoEstimadoQuebra: string;
-  padroes: PadraoEncontrado[];
-  sugestoes: string[];
-}

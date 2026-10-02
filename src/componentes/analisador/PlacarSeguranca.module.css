@@ -1,0 +1,124 @@
+.placar {
+  --cor-nivel: var(--texto-terciario);
+  --cor-nivel-suave: var(--neutro-suave);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-4);
+}
+
+.topo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--espaco-8);
+  padding: var(--espaco-6);
+  border-radius: var(--raio-lg);
+  background-color: var(--cor-nivel-suave);
+  transition: background-color var(--duracao-lenta) var(--curva-saida);
+}
+
+.vazio {
+  background-color: var(--superficie-suave);
+}
+
+.nota {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+}
+
+.rotuloNota {
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-xs);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letras-rotulo);
+  text-transform: uppercase;
+}
+
+.valorNota {
+  display: flex;
+  align-items: baseline;
+  gap: var(--espaco-1);
+}
+
+.numero {
+  color: var(--cor-nivel);
+  font-size: 3rem;
+  font-weight: var(--peso-forte);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  transition: color var(--duracao-lenta) var(--curva-saida);
+}
+
+.vazio .numero {
+  color: var(--texto-terciario);
+}
+
+.total {
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-medio);
+}
+
+.medidor {
+  min-width: 0;
+}
+
+.metricas {
+  display: flex;
+  flex-direction: column;
+}
+
+.metrica {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-4);
+  padding-block: var(--espaco-4);
+  border-top: 1px solid var(--borda);
+}
+
+.metrica:first-child {
+  border-top: none;
+}
+
+.rotuloMetrica {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-medio);
+}
+
+.detalheMetrica {
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+  font-weight: var(--peso-regular);
+}
+
+.valorMetrica {
+  flex-shrink: 0;
+  max-width: 50%;
+  color: var(--texto-terciario);
+  font-family: var(--fonte-mono);
+  font-size: var(--tamanho-sm);
+  text-align: right;
+}
+
+.preenchida {
+  color: var(--texto);
+  font-weight: var(--peso-medio);
+}
+
+@media (max-width: 479px) {
+  .topo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espaco-4);
+  }
+}
+
+.avisoTruncada {
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+}

@@ -23,8 +23,11 @@ Vitest. Same stack and folder conventions as `D:\Projetos\OrbitWeb`.
 | `src/componentes/gerador/` | Generator UI: `VisorGerador`, `EscolhaFinalidade`, `OpcoesGerador`, `HistoricoSessao` |
 | `src/ganchos/useGerador.ts` | All generator state: options per type, purpose, generated values and strength |
 | `src/dados/palavras.ts` | Passphrase word list (1,008 words, a-z, 4-8 letters; a test enforces it) |
-| `src/configuracoes/` | `ambiente`, `aplicacao`, `navegacao`, `geracao` (types, defaults), `finalidades` (purpose presets, tips, minimum lengths), `forca` (5 strength levels) |
-| `src/regras/` | Pure logic with tests: `aleatorio` (unbiased crypto sampling), `geradorSenha`, `fraseSenha`, `pin`, `forca`, `caracteres` |
+| `src/dados/dicionarios.ts` | Generated analyzer lists (common passwords, pt/en words, names) as space-separated strings. Do not edit by hand; see Gotchas |
+| `src/regras/analise/` | Analyzer engine: `correspondencias` (pattern matchers), `estimativa` (zxcvbn-style minimum-guesses decomposition), `analisarSenha` (score, strong/weak points, recommendations with simulation), `dicionarios` (lazy load, cached) |
+| `src/componentes/analisador/` | Analyzer UI: `FaixaPrivacidade`, `MapaSenha`, `PlacarSeguranca`, `ListaObservacoes`, `ListaRecomendacoes` |
+| `src/configuracoes/` | `ambiente`, `aplicacao`, `navegacao`, `geracao` (types, defaults), `finalidades` (purpose presets, tips, minimum lengths), `analise` (examples, auto-clear time, privacy copy), `forca` (5 strength levels) |
+| `src/regras/` | Pure logic with tests: `aleatorio` (unbiased crypto sampling), `geradorSenha`, `fraseSenha`, `pin`, `forca`, `caracteres`, and the analyzer under `analise/` |
 | `src/provedores/` | `ProvedorTema`, `ProvedorAreaTransferencia` (copy + 30 s clear, app-level so it survives navigation), `ProvedorHistoricoSessao` and `ProvedorSenhaParaAnalise` (both in-memory only) |
 | `src/rotas/caminhos.ts` | Every route and query param name |
 | `docker/` | nginx config, security headers snippet, entrypoint that writes `config.js` |
@@ -58,9 +61,13 @@ No linter or formatter is configured. Before calling a task done, run `npm run t
 ## Gotchas
 * Chrome only lets a page write to the clipboard right after a click or key press. A timer-only `writeText` stays pending forever, so `ProvedorAreaTransferencia` races every write against a 2 s timeout and, when there is no user activation at 30 s, clears on the next `pointerdown`/`keydown` in the app. Do not "simplify" this back to a plain timer.
 * Never call `navigator.clipboard.readText()` while testing: it opens a permission prompt that blocks every later clipboard write in that tab. Verify clearing by pasting with `Ctrl+V` into the Analisador field instead.
+* The analyzer score is calibrated against the generator: `notaPorEntropia` maps 28/40/60/80 bits to 20/40/60/80 points, and a test checks that generated passwords and passphrases get the generator's level within one. Changing the bruteforce cardinality, the score curve or the dictionaries can break that test on purpose.
+* `src/dados/dicionarios.ts` was generated from `@zxcvbn-ts/language-common` 4.1.3, `language-pt-br` 4.1.1 and `language-en` 4.1.1 (MIT; the pt-BR and en word lists derive from OpenSubtitles, ODC-BY) plus a curated list of Brazilian passwords interleaved at the top. The notices live in `LICENCAS-DE-TERCEIROS.md`; keep it in sync if the file is regenerated.
+* Analyzer titles quote parts of the password. Every observation and recommendation that quotes one also has a `tituloOculto`, used while the password is hidden.
 * Generated passwords must never reach the URL, `localStorage`, `sessionStorage` or `history.state`; pass them between pages through `ProvedorSenhaParaAnalise`.
 * Chrome windows narrower than 500px are not possible; check 320 and 375 widths by loading the app in iframes.
 * The welcome screen shows once per browser session (`aegis:boas-vindas-vista` in `sessionStorage`); a new tab shows it again.
 * `/componentes` exists only in development (`ambiente.desenvolvimento`).
 * The welcome-to-app transition morphs the mark and the name through `view-transition-name` (`marca-em-transicao`, `nome-em-transicao` in `global.css`). Only one rendered element may carry each name: the sidebar brand and the mobile header brand share them because one of the two is always `display: none`.
+* Content width is `--largura-conteudo` (1440px). Routes in `ROTAS_DE_CONTEUDO_ESTREITO` (`LayoutAplicacao.tsx`, today only `/configuracoes`) override it with `--largura-conteudo-estreita` (1120px), which also narrows the top bar. Gerar and Analisar widen their panels through `--respiro-painel` on their grid; other pages keep the default panel padding.
 * The sidebar's first item is aligned with the page `h1` through `--altura-sobretitulo` and `--altura-titulo-pagina`; changing `CabecalhoPagina` sizes breaks that alignment.

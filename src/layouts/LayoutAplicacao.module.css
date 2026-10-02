@@ -17,6 +17,10 @@
   min-width: 0;
 }
 
+.principalEstreito {
+  --largura-conteudo: var(--largura-conteudo-estreita);
+}
+
 .conteudo {
   flex: 1;
   padding: var(--respiro-topo-conteudo) var(--respiro-conteudo) var(--espaco-10);

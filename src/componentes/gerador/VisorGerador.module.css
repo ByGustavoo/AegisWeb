@@ -66,6 +66,21 @@
   font-size: var(--tamanho-xs);
 }
 
+.metricaComDica {
+  position: relative;
+}
+
+.metricas .dicaAncorada {
+  position: static;
+}
+
+.rotuloComDica {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--espaco-1);
+}
+
 .metricas dd {
   font-size: var(--tamanho-sm);
   font-weight: var(--peso-medio);
@@ -172,7 +187,22 @@
   }
 
   .forca {
+    position: relative;
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .metricaComDica {
+    position: static;
+  }
+
+  .rotuloComDica {
+    justify-content: flex-start;
+  }
+
+  .dicaAncorada > [role='region'] {
+    right: 0;
+    left: 0;
+    width: auto;
   }
 
   .metricas {

@@ -1,19 +1,20 @@
 .grade {
+  --respiro-painel: var(--espaco-6) var(--espaco-8);
+
   display: grid;
   grid-template-areas:
     'visor opcoes'
     'historico opcoes';
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   grid-template-rows: auto 1fr;
-  gap: var(--espaco-5);
+  gap: var(--espaco-6);
   align-items: start;
 }
 
 .visor {
   position: relative;
   grid-area: visor;
-  padding: var(--espaco-6);
-  overflow: hidden;
+  padding: var(--espaco-8);
   isolation: isolate;
 }
 
@@ -22,6 +23,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
+  border-radius: inherit;
   background-image: radial-gradient(var(--textura-grade) 1px, transparent 1.2px);
   background-size: 14px 14px;
   mask-image: radial-gradient(ellipse 70% 90% at 100% 0%, #000 0%, transparent 70%);
@@ -33,7 +35,14 @@
 }
 
 .historico {
+  display: flex;
+  flex-direction: column;
   grid-area: historico;
+  align-self: stretch;
+}
+
+.historico > * {
+  flex: 1;
 }
 
 @media (max-width: 1023px) {

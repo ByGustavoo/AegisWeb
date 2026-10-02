@@ -7,8 +7,11 @@ import { EsqueletoPagina } from '@/componentes/ui';
 import { CHAVE_MENU_RECOLHIDO, ID_CONTEUDO_PRINCIPAL } from '@/configuracoes/aplicacao';
 import { useArmazenamentoLocal } from '@/ganchos/useArmazenamentoLocal';
 import { useMenuSempreRecolhido } from '@/ganchos/useConsultaMidia';
+import { caminhos } from '@/rotas/caminhos';
 import { juntarClasses } from '@/utilitarios/juntarClasses';
 import estilos from './LayoutAplicacao.module.css';
+
+const ROTAS_DE_CONTEUDO_ESTREITO: ReadonlySet<string> = new Set([caminhos.configuracoes]);
 
 export function LayoutAplicacao() {
   const localizacao = useLocation();
@@ -38,7 +41,12 @@ export function LayoutAplicacao() {
         aoAlternarRecolhido={() => setRecolhidoEscolhido(!recolhidoEscolhido)}
       />
 
-      <div className={estilos.principal}>
+      <div
+        className={juntarClasses(
+          estilos.principal,
+          ROTAS_DE_CONTEUDO_ESTREITO.has(localizacao.pathname) && estilos.principalEstreito,
+        )}
+      >
         <Cabecalho />
 
         <main className={estilos.conteudo} id={ID_CONTEUDO_PRINCIPAL} tabIndex={-1}>

@@ -1,0 +1,125 @@
+.dica {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.botao {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: var(--texto-terciario);
+  transition:
+    background-color var(--duracao-rapida) var(--curva-saida),
+    color var(--duracao-rapida) var(--curva-saida);
+}
+
+.botao::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+}
+
+.botao:focus-visible {
+  outline: none;
+  box-shadow: var(--anel-foco);
+}
+
+.ativo {
+  background-color: var(--destaque-suave);
+  color: var(--destaque);
+}
+
+.balao {
+  position: absolute;
+  top: calc(100% + var(--espaco-2));
+  z-index: var(--camada-sobreposicao);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  width: min(20rem, calc(100vw - 2 * var(--espaco-4)));
+  padding: var(--espaco-4);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-lg);
+  background-color: var(--superficie-elevada);
+  box-shadow: var(--sombra-flutuante);
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-regular);
+  line-height: var(--altura-linha-normal);
+  text-align: left;
+  white-space: normal;
+  animation: abrirBalao var(--duracao-base) var(--curva-saida);
+}
+
+.balao[hidden] {
+  display: none;
+}
+
+.inicio {
+  left: -8px;
+}
+
+.fim {
+  right: -8px;
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+}
+
+.titulo {
+  color: var(--texto);
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-forte);
+}
+
+.fechar {
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin: -6px -6px -6px 0;
+  border-radius: var(--raio-sm);
+  color: var(--texto-terciario);
+  transition:
+    background-color var(--duracao-rapida) var(--curva-saida),
+    color var(--duracao-rapida) var(--curva-saida);
+}
+
+.fechar:focus-visible {
+  outline: none;
+  box-shadow: var(--anel-foco);
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+@keyframes abrirBalao {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (hover: hover) {
+  .botao:hover {
+    background-color: var(--superficie-suave);
+    color: var(--texto);
+  }
+
+  .fechar:hover {
+    background-color: var(--superficie-suave);
+    color: var(--texto);
+  }
+}

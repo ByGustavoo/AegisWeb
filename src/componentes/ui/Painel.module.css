@@ -28,7 +28,7 @@
 }
 
 .espacamento-md {
-  padding: var(--espaco-5) var(--espaco-6);
+  padding: var(--respiro-painel, var(--espaco-5) var(--espaco-6));
 }
 
 .interativo {

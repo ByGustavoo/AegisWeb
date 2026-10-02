@@ -1,0 +1,15 @@
+.destaque {
+  padding: var(--espaco-2) var(--espaco-3);
+  border-radius: var(--raio-md);
+  background-color: var(--destaque-suave);
+  color: var(--texto);
+}
+
+.destaque strong {
+  font-family: var(--fonte-mono);
+  font-weight: var(--peso-forte);
+}
+
+.destaque sup {
+  font-size: 0.7em;
+}
