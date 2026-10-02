@@ -2,7 +2,7 @@
 set -eu
 
 escapar() {
-  printf '%s' "$1" | sed -e 's/[\\"]/\&/g'
+  printf '%s' "$1" | sed -e 's/[\\"]/\\&/g'
 }
 
 versao=$(escapar "${AEGIS_VERSION:-}")

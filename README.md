@@ -97,7 +97,7 @@ $ npm install
 ## ▶️ Como Executar
 
 ```bash
-# Sobe o servidor de desenvolvimento em http://localhost:5177
+# Sobe o servidor de desenvolvimento em http://localhost:5175
 $ npm run dev
 ```
 
@@ -119,7 +119,7 @@ $ npm run build
 
 🔹 preview
 ```bash
-# Serve o build de produção em http://localhost:4177
+# Serve o build de produção em http://localhost:4175
 $ npm run preview
 ```
 
@@ -143,7 +143,7 @@ O Aegis não tem backend e não precisa de nenhuma variável para rodar em desen
 
 | Variável | Descrição |
 |---|---|
-| `AEGIS_PORTA` | Porta publicada pelo `docker-compose-aegisweb.yml` (padrão `9035`) |
+| `AEGIS_PORTA` | Porta publicada pelo `docker-compose-aegisweb.yml` (padrão `5175`) |
 | `AEGIS_VERSION` | Versão exibida em Configurações, definida pelo container a partir do build |
 | `AEGIS_RELEASE_DATE` | Data de lançamento exibida em Configurações, definida pelo container |
 
@@ -159,8 +159,8 @@ A imagem compila o projeto e o serve com nginx na porta 8080. Ao subir, o contai
 # Constrói a imagem
 $ docker build -t aegisweb:local --build-arg VERSION=1.0.0 .
 
-# Sobe o container em http://localhost:9035
-$ docker run --rm -p 9035:8080 aegisweb:local
+# Sobe o container em http://localhost:5175
+$ docker run --rm -p 5175:8080 aegisweb:local
 ```
 
 🔹 Compose

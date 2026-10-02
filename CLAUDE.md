@@ -37,11 +37,11 @@ Vitest. Same stack and folder conventions as `D:\Projetos\OrbitWeb`.
 | Purpose | Command |
 |---|---|
 | Install | `npm install` |
-| Run (dev) | `npm run dev` (port 5177; 5173 is used by other projects) |
+| Run (dev) | `npm run dev` (port 5175, after PrismaWeb on 5173 and OrbitWeb on 5174) |
 | Test | `npm test` |
 | Typecheck | `npm run typecheck` |
 | Build | `npm run build` |
-| Preview | `npm run preview` (port 4177) |
+| Preview | `npm run preview` (port 4175) |
 
 No linter or formatter is configured. Before calling a task done, run `npm run typecheck` and `npm test`.
 

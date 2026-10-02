@@ -6,4 +6,4 @@ services:
     restart: always
 
     ports:
-      - "${AEGIS_PORTA:-9035}:8080"
+      - "${AEGIS_PORTA:-5175}:8080"
