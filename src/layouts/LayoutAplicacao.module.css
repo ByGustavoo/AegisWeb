@@ -33,6 +33,7 @@
 }
 
 .limite {
+  container: conteudo / inline-size;
   width: 100%;
   max-width: var(--largura-conteudo);
   margin-inline: auto;

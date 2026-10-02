@@ -46,11 +46,9 @@ export function CabecalhoPainel({ titulo, descricao, acao, nivel = 2 }: Cabecalh
 
   return (
     <header className={estilos.cabecalho}>
-      <div className={estilos.textosCabecalho}>
-        <Titulo className={estilos.titulo}>{titulo}</Titulo>
-        {descricao ? <p className={estilos.descricao}>{descricao}</p> : null}
-      </div>
+      <Titulo className={estilos.titulo}>{titulo}</Titulo>
       {acao ? <div className={estilos.acao}>{acao}</div> : null}
+      {descricao ? <p className={estilos.descricao}>{descricao}</p> : null}
     </header>
   );
 }

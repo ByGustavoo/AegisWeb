@@ -95,10 +95,13 @@ export default function PaginaGerador() {
   };
 
   const gerarOutra = useCallback(() => {
-    registrar(valor, tipo);
     gerarNovamente(tipo);
     setAnuncio((atual) => (atual === 'Nova senha gerada.' ? 'Outra senha gerada.' : 'Nova senha gerada.'));
-  }, [gerarNovamente, registrar, tipo, valor]);
+  }, [gerarNovamente, tipo]);
+
+  useEffect(() => {
+    if (estadoCopia.fase !== 'COPIADA') setValorCopiado(null);
+  }, [estadoCopia.fase]);
 
   const copiarAtual = async () => {
     const copiou = await copiar(valor);
@@ -130,7 +133,7 @@ export default function PaginaGerador() {
       <CabecalhoPagina
         sobretitulo="Gerador"
         titulo="Gerar senha"
-        descricao="Escolha o tipo e ajuste as opções. Tudo é criado no seu navegador, com aleatoriedade criptográfica."
+        descricao="Escolha o tipo e ajuste as opções. Cada senha é sorteada com a aleatoriedade criptográfica do navegador."
         acoes={
           <Abas idBase={ID_ABAS} rotulo="Tipo de senha" opcoes={opcoesAbas} valor={parametroTipo} aoMudar={mudarTipo} />
         }
@@ -174,6 +177,7 @@ export default function PaginaGerador() {
           <HistoricoSessao
             senhas={senhas}
             visivel={visivel}
+            valorCopiado={valorCopiado}
             aoCopiar={(senha) => {
               void copiar(senha.valor).then((copiou) => {
                 if (copiou) setValorCopiado(senha.valor);

@@ -12,6 +12,7 @@ export { GrupoOpcoes } from './GrupoOpcoes';
 export type { OpcaoGrupo } from './GrupoOpcoes';
 export { IndicadorGiratorio } from './IndicadorGiratorio';
 export { Interruptor } from './Interruptor';
+export { Nota } from './Nota';
 export { CabecalhoPainel, Painel } from './Painel';
 export { Selo } from './Selo';
 export type { TomSelo } from './Selo';

@@ -6,6 +6,7 @@ export const LIMITES_PALAVRAS = { minimo: 4, maximo: 10 } as const;
 
 const NUMERO_MINIMO = 10;
 const QUANTIDADE_NUMEROS = 90;
+export const SIMBOLOS_FRASE = '!@#$%&*?';
 
 function capitalizar(palavra: string): string {
   return palavra.charAt(0).toUpperCase() + palavra.slice(1);
@@ -21,10 +22,13 @@ export function gerarFraseSenha(opcoes: OpcoesFraseSenha, palavras: readonly str
     ? [...sorteadas, String(NUMERO_MINIMO + inteiroAleatorio(QUANTIDADE_NUMEROS))]
     : sorteadas;
 
-  return partes.join(opcoes.separador);
+  const frase = partes.join(opcoes.separador);
+  return opcoes.incluirSimbolo ? frase + escolher([...SIMBOLOS_FRASE]) : frase;
 }
 
 export function entropiaFraseSenha(opcoes: OpcoesFraseSenha, totalPalavras: number = PALAVRAS.length): number {
   const bitsPalavras = opcoes.quantidadePalavras * Math.log2(totalPalavras);
-  return opcoes.incluirNumero ? bitsPalavras + Math.log2(QUANTIDADE_NUMEROS) : bitsPalavras;
+  const bitsNumero = opcoes.incluirNumero ? Math.log2(QUANTIDADE_NUMEROS) : 0;
+  const bitsSimbolo = opcoes.incluirSimbolo ? Math.log2(SIMBOLOS_FRASE.length) : 0;
+  return bitsPalavras + bitsNumero + bitsSimbolo;
 }

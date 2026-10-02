@@ -2,6 +2,7 @@
   --cor-nivel: var(--texto-terciario);
   --cor-nivel-suave: var(--neutro-suave);
 
+  container: placar / inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--espaco-4);
@@ -71,10 +72,13 @@
 }
 
 .metrica {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--espaco-4);
+  display: grid;
+  grid-template-areas:
+    'rotulo valor'
+    'detalhe detalhe';
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px var(--espaco-4);
   padding-block: var(--espaco-4);
   border-top: 1px solid var(--borda);
 }
@@ -84,22 +88,21 @@
 }
 
 .rotuloMetrica {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  grid-area: rotulo;
   font-size: var(--tamanho-sm);
   font-weight: var(--peso-medio);
 }
 
 .detalheMetrica {
+  grid-area: detalhe;
   color: var(--texto-terciario);
   font-size: var(--tamanho-xs);
   font-weight: var(--peso-regular);
 }
 
 .valorMetrica {
-  flex-shrink: 0;
-  max-width: 50%;
+  grid-area: valor;
+  max-width: 14rem;
   color: var(--texto-terciario);
   font-family: var(--fonte-mono);
   font-size: var(--tamanho-sm);
@@ -111,10 +114,25 @@
   font-weight: var(--peso-medio);
 }
 
-@media (max-width: 479px) {
+@container placar (max-width: 419px) {
   .topo {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--espaco-4);
+  }
+}
+
+@container placar (max-width: 339px) {
+  .metrica {
+    grid-template-areas:
+      'rotulo'
+      'valor'
+      'detalhe';
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .valorMetrica {
+    max-width: none;
+    text-align: left;
   }
 }
 

@@ -1,4 +1,5 @@
 .grupo {
+  container: finalidade / inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--espaco-3);
@@ -50,6 +51,10 @@
 
 .entrada {
   position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
   opacity: 0;
   pointer-events: none;
 }
@@ -86,30 +91,6 @@
   transform: scale(0.97);
 }
 
-.dica {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--espaco-2);
-  max-width: none;
-  padding: var(--espaco-3);
-  border-radius: var(--raio-md);
-  background-color: var(--superficie-suave);
-  color: var(--texto-secundario);
-  font-size: var(--tamanho-sm);
-  line-height: var(--altura-linha-compacta);
-}
-
-.dica strong {
-  color: var(--texto);
-  font-weight: var(--peso-forte);
-}
-
-.iconeDica {
-  flex-shrink: 0;
-  margin-top: 1px;
-  color: var(--aviso);
-}
-
 @media (hover: hover) {
   .opcao:not(.selecionada):hover {
     border-color: var(--borda-forte);
@@ -121,7 +102,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@container finalidade (max-width: 339px) {
   .opcao {
     flex-direction: column;
     gap: var(--espaco-1);

@@ -22,6 +22,7 @@ export interface OpcoesFraseSenha {
   separador: SeparadorFrase;
   iniciaisMaiusculas: boolean;
   incluirNumero: boolean;
+  incluirSimbolo: boolean;
 }
 
 export interface OpcoesPin {

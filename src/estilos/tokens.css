@@ -52,7 +52,7 @@
   --altura-titulo-pagina: calc(var(--tamanho-3xl) * var(--altura-linha-justa));
   --altura-barra-abas: 68px;
   --largura-conteudo: 1440px;
-  --largura-conteudo-estreita: 1120px;
+  --largura-conteudo-estreita: 52rem;
   --respiro-conteudo: var(--espaco-8);
   --respiro-topo-conteudo: var(--espaco-10);
 

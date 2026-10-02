@@ -1,9 +1,9 @@
-import { ControleQuantidade, GrupoOpcoes, Interruptor } from '@/componentes/ui';
+import { ControleQuantidade, GrupoOpcoes, Interruptor, Nota } from '@/componentes/ui';
 import { separadoresFrase } from '@/configuracoes/geracao';
 import type { EstadoFinalidade } from '@/ganchos/useGerador';
 import type { Finalidade, OpcoesFraseSenha, OpcoesPin, OpcoesSenha } from '@/modelos/senha';
-import { LIMITES_PALAVRAS } from '@/regras/fraseSenha';
-import { contarTiposSelecionados, LIMITES_TAMANHO_SENHA } from '@/regras/geradorSenha';
+import { LIMITES_PALAVRAS, SIMBOLOS_FRASE } from '@/regras/fraseSenha';
+import { CONJUNTOS_CARACTERES, contarTiposSelecionados, LIMITES_TAMANHO_SENHA } from '@/regras/geradorSenha';
 import { LIMITES_TAMANHO_PIN } from '@/regras/pin';
 import { EscolhaFinalidade } from './EscolhaFinalidade';
 import estilos from './OpcoesGerador.module.css';
@@ -23,7 +23,7 @@ export function OpcoesSenhaAleatoria({ finalidade, opcoes, aoEscolherFinalidade,
     { chave: 'usarMaiusculas', rotulo: 'Letras maiúsculas', amostra: 'A–Z' },
     { chave: 'usarMinusculas', rotulo: 'Letras minúsculas', amostra: 'a–z' },
     { chave: 'usarNumeros', rotulo: 'Números', amostra: '0–9' },
-    { chave: 'usarSimbolos', rotulo: 'Símbolos', amostra: '!@#$%&*' },
+    { chave: 'usarSimbolos', rotulo: 'Símbolos', amostra: CONJUNTOS_CARACTERES.simbolos },
   ];
 
   return (
@@ -75,6 +75,13 @@ interface OpcoesFraseProps {
 export function OpcoesFrase({ opcoes, aoAjustar }: OpcoesFraseProps) {
   return (
     <div className={estilos.opcoes}>
+      <Nota>
+        <strong>Mais fácil de lembrar e de digitar.</strong> A frase-senha (passphrase) é a alternativa para senhas que
+        você guarda de cabeça ou digita à mão, como a senha mestra do gerenciador.
+      </Nota>
+
+      <div className={estilos.divisor} role="presentation" />
+
       <ControleQuantidade
         rotulo="Quantidade de palavras"
         unidade="palavras"
@@ -101,6 +108,13 @@ export function OpcoesFrase({ opcoes, aoAjustar }: OpcoesFraseProps) {
           descricao="Dois dígitos no fim, para sites que exigem números"
           ligado={opcoes.incluirNumero}
           aoMudar={(incluirNumero) => aoAjustar({ incluirNumero })}
+        />
+        <Interruptor
+          rotulo="Incluir um símbolo"
+          amostra={SIMBOLOS_FRASE}
+          descricao="Um no fim, para sites que exigem símbolos"
+          ligado={opcoes.incluirSimbolo}
+          aoMudar={(incluirSimbolo) => aoAjustar({ incluirSimbolo })}
         />
       </div>
     </div>

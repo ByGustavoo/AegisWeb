@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eraser, GlobeLock, Lock, RotateCcw, ScanSearch, TimerReset } from 'lucide-react';
-import { FaixaPrivacidade } from '@/componentes/analisador/FaixaPrivacidade';
+import { Eraser, GlobeLock, RotateCcw, ScanSearch, TimerReset } from 'lucide-react';
 import { ListaObservacoes } from '@/componentes/analisador/ListaObservacoes';
 import { ListaRecomendacoes } from '@/componentes/analisador/ListaRecomendacoes';
 import { MapaSenha } from '@/componentes/analisador/MapaSenha';
 import { PlacarSeguranca } from '@/componentes/analisador/PlacarSeguranca';
+import { SelosPrivacidade } from '@/componentes/comum/SelosPrivacidade';
 import { CabecalhoPagina } from '@/componentes/layout/CabecalhoPagina';
 import { Botao, CabecalhoPainel, CampoSenha, EstadoMensagem, IndicadorGiratorio, Painel, Selo } from '@/componentes/ui';
 import { EXEMPLOS_SENHA, MILISSEGUNDOS_PARA_APAGAR_SENHA, MINUTOS_PARA_APAGAR_SENHA } from '@/configuracoes/analise';
@@ -82,25 +82,16 @@ export default function PaginaAnalisador() {
       <CabecalhoPagina
         sobretitulo="Analisador"
         titulo="Analisar senha"
-        descricao="Veja quanto uma senha resiste a um ataque e o que melhorar nela. Tudo é calculado neste navegador."
+        descricao="Veja quanto uma senha resiste a um ataque e o que melhorar nela."
       />
-
-      <FaixaPrivacidade />
 
       <div className={estilos.grade}>
         <Painel className={estilos.entrada} aria-labelledby="titulo-entrada">
-          <CabecalhoPainel
-            titulo={<span id="titulo-entrada">Sua senha</span>}
-            acao={
-              <Selo tom="sucesso" icone={Lock}>
-                Só neste aparelho
-              </Selo>
-            }
-          />
+          <CabecalhoPainel titulo={<span id="titulo-entrada">Sua senha</span>} />
           <CampoSenha
             id={ID_CAMPO}
             rotulo="Senha para analisar"
-            descricao="Analisada enquanto você digita. Nada é enviado nem guardado."
+            descricao={`Analisada enquanto você digita. Apagada ao sair da página ou depois de ${MINUTOS_PARA_APAGAR_SENHA} minutos sem uso.`}
             valor={senha}
             aoMudar={mudarSenha}
             visivel={visivel}
@@ -143,6 +134,7 @@ export default function PaginaAnalisador() {
               </ul>
             </div>
           )}
+          <SelosPrivacidade />
         </Painel>
 
         <Painel className={estilos.resultado} aria-labelledby="titulo-resultado">

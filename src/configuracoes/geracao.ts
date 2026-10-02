@@ -33,6 +33,7 @@ export const OPCOES_FRASE_PADRAO: OpcoesFraseSenha = {
   separador: '-',
   iniciaisMaiusculas: true,
   incluirNumero: true,
+  incluirSimbolo: false,
 };
 
 export const OPCOES_PIN_PADRAO: OpcoesPin = { tamanho: 6 };

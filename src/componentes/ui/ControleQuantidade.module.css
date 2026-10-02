@@ -33,6 +33,16 @@
   text-align: center;
 }
 
+.ajuste {
+  color: var(--aviso);
+  font-size: var(--tamanho-xs);
+  font-weight: var(--peso-medio);
+}
+
+.ajuste:empty {
+  margin-top: calc(var(--espaco-2) * -1);
+}
+
 .numero:focus-visible {
   outline: none;
   border-color: var(--destaque);

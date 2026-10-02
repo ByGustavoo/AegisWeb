@@ -3,7 +3,7 @@ import { PALAVRAS } from '@/dados/palavras';
 import type { OpcoesFraseSenha, OpcoesSenha } from '@/modelos/senha';
 import { embaralhar, inteiroAleatorio } from './aleatorio';
 import { calcularForca, nivelPorEntropia, tempoParaQuebrar } from './forca';
-import { entropiaFraseSenha, gerarFraseSenha } from './fraseSenha';
+import { entropiaFraseSenha, gerarFraseSenha, SIMBOLOS_FRASE } from './fraseSenha';
 import { CARACTERES_AMBIGUOS, CONJUNTOS_CARACTERES, entropiaSenha, gerarSenha } from './geradorSenha';
 import { entropiaPin, gerarPin, pinEhObvio } from './pin';
 
@@ -116,6 +116,7 @@ describe('gerarFraseSenha', () => {
     separador: '-',
     iniciaisMaiusculas: true,
     incluirNumero: true,
+    incluirSimbolo: false,
   };
 
   it('junta as palavras com o separador e termina com um número de dois dígitos', () => {
@@ -131,15 +132,32 @@ describe('gerarFraseSenha', () => {
   });
 
   it('respeita as opções de capitalização, número e separador', () => {
-    const frase = gerarFraseSenha({ quantidadePalavras: 4, separador: ' ', iniciaisMaiusculas: false, incluirNumero: false });
+    const frase = gerarFraseSenha({ quantidadePalavras: 4, separador: ' ', iniciaisMaiusculas: false, incluirNumero: false, incluirSimbolo: false });
     const partes = frase.split(' ');
     expect(partes).toHaveLength(4);
     partes.forEach((palavra) => expect(palavra).toMatch(/^[a-z]+$/));
   });
 
-  it('soma a entropia das palavras e do número', () => {
+  it('termina com um símbolo da lista, colado ao número', () => {
+    const simbolos = new Set<string>();
+    repetir(REPETICOES, () => gerarFraseSenha({ ...opcoes, incluirSimbolo: true })).forEach((frase) => {
+      const simbolo = frase.slice(-1);
+      expect(SIMBOLOS_FRASE).toContain(simbolo);
+      expect(frase.slice(0, -1)).toMatch(/-[1-9][0-9]$/);
+      simbolos.add(simbolo);
+    });
+    expect(simbolos.size).toBe(SIMBOLOS_FRASE.length);
+  });
+
+  it('cola o símbolo à última palavra quando não há número', () => {
+    const frase = gerarFraseSenha({ ...opcoes, incluirNumero: false, incluirSimbolo: true });
+    expect(frase).toMatch(/^([A-Z][a-z]+-){5}[A-Z][a-z]+[!@#$%&*?]$/);
+  });
+
+  it('soma a entropia das palavras, do número e do símbolo', () => {
     expect(entropiaFraseSenha({ ...opcoes, incluirNumero: false }, 1024)).toBeCloseTo(60);
     expect(entropiaFraseSenha(opcoes, 1024)).toBeCloseTo(60 + Math.log2(90));
+    expect(entropiaFraseSenha({ ...opcoes, incluirSimbolo: true }, 1024)).toBeCloseTo(60 + Math.log2(90) + 3);
   });
 });
 

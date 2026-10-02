@@ -18,7 +18,9 @@ function limitar(valor: number, minimo: number, maximo: number): number {
 export function ControleQuantidade({ rotulo, unidade, valor, minimo, maximo, aoMudar }: ControleQuantidadeProps) {
   const id = useId();
   const idCampo = `${id}-campo`;
+  const idAjuste = `${id}-ajuste`;
   const [rascunho, setRascunho] = useState(String(valor));
+  const [ajuste, setAjuste] = useState('');
 
   useEffect(() => {
     setRascunho(String(valor));
@@ -31,6 +33,7 @@ export function ControleQuantidade({ rotulo, unidade, valor, minimo, maximo, aoM
       return;
     }
     const limitado = limitar(numero, minimo, maximo);
+    setAjuste(limitado === numero ? '' : `Use de ${minimo} a ${maximo} ${unidade}. Ajustado para ${limitado}.`);
     setRascunho(String(limitado));
     if (limitado !== valor) aoMudar(limitado);
   };
@@ -54,7 +57,11 @@ export function ControleQuantidade({ rotulo, unidade, valor, minimo, maximo, aoM
             pattern="[0-9]*"
             className={`${estilos.numero} mono`}
             value={rascunho}
-            onChange={(evento) => setRascunho(evento.target.value.replace(/\D/g, '').slice(0, 3))}
+            aria-describedby={ajuste ? idAjuste : undefined}
+            onChange={(evento) => {
+              setRascunho(evento.target.value.replace(/\D/g, '').slice(0, 3));
+              setAjuste('');
+            }}
             onBlur={confirmarRascunho}
             onKeyDown={(evento) => {
               if (evento.key === 'Enter') confirmarRascunho();
@@ -75,8 +82,14 @@ export function ControleQuantidade({ rotulo, unidade, valor, minimo, maximo, aoM
         aria-valuetext={`${valor} ${unidade}`}
         className={estilos.deslizante}
         style={{ '--progresso': `${progresso}%` } as CSSProperties}
-        onChange={(evento) => aoMudar(Number(evento.target.value))}
+        onChange={(evento) => {
+          setAjuste('');
+          aoMudar(Number(evento.target.value));
+        }}
       />
+      <p id={idAjuste} className={estilos.ajuste} role="status">
+        {ajuste}
+      </p>
     </div>
   );
 }

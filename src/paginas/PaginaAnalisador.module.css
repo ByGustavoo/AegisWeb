@@ -38,7 +38,6 @@
 
 .vazamento {
   grid-area: vazamento;
-  align-self: stretch;
 }
 
 .aviso {
@@ -142,16 +141,11 @@
   }
 }
 
-@media (max-width: 1023px) {
+@container conteudo (max-width: 919px) {
   .grade {
-    grid-template-areas:
-      'entrada'
-      'resultado'
-      'pontos'
-      'melhorar'
-      'vazamento';
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 

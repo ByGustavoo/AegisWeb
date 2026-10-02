@@ -53,10 +53,7 @@ export function PlacarSeguranca({ analise }: PlacarSegurancaProps) {
       <dl className={estilos.metricas}>
         {metricas.map((metrica) => (
           <div key={metrica.rotulo} className={estilos.metrica}>
-            <dt className={estilos.rotuloMetrica}>
-              {metrica.rotulo}
-              <span className={estilos.detalheMetrica}>{metrica.detalhe}</span>
-            </dt>
+            <dt className={estilos.rotuloMetrica}>{metrica.rotulo}</dt>
             <dd className={juntarClasses(estilos.valorMetrica, metrica.valor && estilos.preenchida)}>
               {metrica.valor ?? (
                 <>
@@ -65,6 +62,7 @@ export function PlacarSeguranca({ analise }: PlacarSegurancaProps) {
                 </>
               )}
             </dd>
+            <dd className={estilos.detalheMetrica}>{metrica.detalhe}</dd>
           </div>
         ))}
       </dl>

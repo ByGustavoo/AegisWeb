@@ -51,34 +51,33 @@
 }
 
 .cabecalho {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--espaco-2) var(--espaco-4);
+  display: grid;
+  grid-template-areas:
+    'titulo acao'
+    'descricao descricao';
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--espaco-4);
   margin-bottom: var(--espaco-4);
 }
 
-.textosCabecalho {
-  display: flex;
-  flex: 1 1 14rem;
-  flex-direction: column;
-  gap: var(--espaco-1);
-  min-width: 0;
-}
-
 .titulo {
+  grid-area: titulo;
   font-size: var(--tamanho-md);
   letter-spacing: -0.01em;
 }
 
 .descricao {
+  grid-area: descricao;
+  margin-top: var(--espaco-1);
   color: var(--texto-terciario);
   font-size: var(--tamanho-sm);
 }
 
 .acao {
-  flex-shrink: 0;
+  grid-area: acao;
+  display: flex;
+  margin-block: calc(var(--espaco-2) * -1);
 }
 
 @media (max-width: 767px) {

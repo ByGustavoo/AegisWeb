@@ -21,9 +21,12 @@ const ContextoAreaTransferencia = createContext<ValorContextoAreaTransferencia |
 const INTERVALO_CONTAGEM_MS = 1000;
 const TEMPO_AVISO_LIMPEZA_MS = 4000;
 const TEMPO_LIMITE_ESCRITA_MS = 2000;
-const EVENTOS_DE_INTERACAO = ['pointerdown', 'keydown'] as const;
+const EVENTOS_DE_INTERACAO = ['pointerdown', 'pointerup', 'keydown'] as const;
 
 function escreverComLimite(texto: string): Promise<void> {
+  if (!navigator.clipboard?.writeText) {
+    return Promise.reject(new Error('Este navegador não deixa a página escrever na área de transferência.'));
+  }
   return Promise.race([
     navigator.clipboard.writeText(texto),
     new Promise<never>((_, rejeitar) => {
@@ -73,7 +76,10 @@ export function ProvedorAreaTransferencia({ children }: { children: ReactNode })
       return;
     }
     setEstado({ fase: 'AGUARDANDO_INTERACAO' });
-    const aoInteragir = () => limparAgora();
+    const aoInteragir = () => {
+      if (navigator.userActivation && !navigator.userActivation.isActive) return;
+      limparAgora();
+    };
     limpezaNaInteracao.current = aoInteragir;
     EVENTOS_DE_INTERACAO.forEach((evento) => window.addEventListener(evento, aoInteragir, true));
   }, [limparAgora]);

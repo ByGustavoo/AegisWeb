@@ -86,3 +86,11 @@
     grid-row: 1 / span 2;
   }
 }
+
+.titulo:focus {
+  outline: none;
+}
+
+.copiada {
+  color: var(--sucesso);
+}

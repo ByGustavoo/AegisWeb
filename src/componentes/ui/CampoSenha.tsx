@@ -63,7 +63,6 @@ export function CampoSenha({
           className={estilos.alternar}
           onClick={alternar}
           aria-label={rotuloAlternar}
-          aria-pressed={visivel}
           aria-controls={idCampo}
           title={rotuloAlternar}
         >

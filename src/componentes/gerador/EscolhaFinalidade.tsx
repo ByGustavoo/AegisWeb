@@ -1,6 +1,5 @@
 import { useId } from 'react';
-import { Lightbulb } from 'lucide-react';
-import { Selo } from '@/componentes/ui';
+import { Nota, Selo } from '@/componentes/ui';
 import { descreverFinalidade, finalidades } from '@/configuracoes/finalidades';
 import type { EstadoFinalidade } from '@/ganchos/useGerador';
 import type { Finalidade } from '@/modelos/senha';
@@ -54,18 +53,15 @@ export function EscolhaFinalidade({ estado, aoEscolher }: EscolhaFinalidadeProps
         })}
       </div>
 
-      <p id={`${nome}-dica`} className={estilos.dica} aria-live="polite">
-        <Lightbulb size={16} strokeWidth={2} aria-hidden="true" className={estilos.iconeDica} />
-        <span>
-          {estado.personalizada ? (
-            <>
-              Baseado em <strong>{rotulo}</strong>, com ajustes seus. Toque em {rotulo} para voltar ao recomendado.
-            </>
-          ) : (
-            dica
-          )}
-        </span>
-      </p>
+      <Nota id={`${nome}-dica`} className={estilos.dica} aria-live="polite">
+        {estado.personalizada ? (
+          <>
+            Baseado em <strong>{rotulo}</strong>, com ajustes seus. Toque em {rotulo} para voltar ao recomendado.
+          </>
+        ) : (
+          dica
+        )}
+      </Nota>
     </fieldset>
   );
 }

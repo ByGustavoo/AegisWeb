@@ -45,7 +45,7 @@
   flex: 1;
 }
 
-@media (max-width: 1023px) {
+@container conteudo (max-width: 919px) {
   .grade {
     grid-template-areas:
       'visor'

@@ -47,13 +47,13 @@ recomendações. A verificação de vazamentos entra na fase 4. Decisões e esco
 
 * **Geração inteligente:** finalidades Uso geral, Banco, E-mail, Trabalho, Games e Wi-Fi, cada uma com a configuração recomendada, uma dica e um aviso quando a configuração fica abaixo do recomendado.
 
-* **Frase-senha e PIN:** frase com 4 a 10 palavras de uma lista própria em português, separador e número opcional; PIN de 4 a 12 dígitos, sem sequências nem repetições óbvias.
+* **Frase-senha e PIN:** frase com 4 a 10 palavras de uma lista própria em português, separador, número e símbolo opcionais e uma dica de quando preferir a frase à senha aleatória; PIN de 4 a 12 dígitos, sem sequências nem repetições óbvias.
 
 * **Visor:** senha com cores por tipo de caractere, mostrar e ocultar, força em 5 níveis, entropia e tempo estimado para quebrar.
 
-* **Copiar com limpeza:** a área de transferência é limpa 30 s depois (ou no próximo clique, quando o navegador exige um gesto), com "Limpar agora".
+* **Copiar com limpeza:** a área de transferência é limpa 30 s depois (ou no próximo clique ou tecla, quando o navegador exige um gesto), com "Limpar agora". Se o navegador não deixar copiar, o app avisa em vermelho e deixa a senha selecionada para a cópia manual, nunca mostra "Copiada".
 
-* **Histórico da sessão:** as últimas 10 senhas copiadas ou trocadas, só em memória, com copiar, remover e limpar.
+* **Histórico da sessão:** as últimas 10 senhas copiadas, só em memória, com copiar, remover e limpar.
 
 * **Analisar esta senha:** abre o Analisador já preenchido, sem passar a senha pela URL.
 
@@ -65,7 +65,7 @@ recomendações. A verificação de vazamentos entra na fase 4. Decisões e esco
 
 * **Pontos fortes, pontos fracos e recomendações:** cada recomendação mostra a nota que a senha teria ("E se…"), com atalho para gerar uma senha forte.
 
-* **Privacidade evidente:** faixa "Sua senha não sai deste aparelho", exemplos clicáveis e limpeza da senha ao sair, no botão Limpar ou depois de 2 minutos sem uso.
+* **Privacidade evidente:** selos "Processado localmente", "Nenhuma senha armazenada" e "Sua senha não sai do aparelho" no Gerador e no Analisador, com link para os detalhes; exemplos clicáveis e limpeza da senha ao sair, no botão Limpar ou depois de 2 minutos sem uso.
 
 * **Configurações:** tema claro, escuro ou automático; seção Privacidade com o que acontece com as senhas; versão e data de lançamento.
 
@@ -206,7 +206,7 @@ $ docker compose -f docker-compose-aegisweb.yml up -d
 
 * 🖥️ **Desktop:** menu lateral recolhível, no modelo do OrbitWeb e do PrismaWeb, com a preferência salva no navegador. O header e o menu formam uma moldura, e a área de conteúdo tem o canto superior esquerdo arredondado.
 
-* 📲 **Tablet (até 1023px):** o menu fica recolhido, só com ícones, e as colunas das páginas empilham.
+* 📲 **Tablet (até 1023px):** o menu fica recolhido, só com ícones. As colunas do Gerador e do Analisador empilham pela largura real da área de conteúdo (container queries), então também empilham em 1024px com o menu aberto.
 
 * 📱 **Celular (até 767px):** barra de abas fixa embaixo, com Gerar, Analisar e Configurações.
 
@@ -221,15 +221,15 @@ $ docker compose -f docker-compose-aegisweb.yml up -d
 ```
 src
 ├── componentes
-│   ├── analisador      # Faixa de privacidade, mapa da senha, placar, pontos e recomendações
+│   ├── analisador      # Mapa da senha, placar, pontos e recomendações
 │   ├── boasVindas      # Tela de boas-vindas e transição para o app
 │   ├── gerador         # Visor, finalidades, opções e histórico da sessão
-│   ├── comum           # MarcaAegis
+│   ├── comum           # MarcaAegis e SelosPrivacidade
 │   ├── configuracoes   # Seções Aparência, Privacidade e Sobre
 │   ├── layout          # MenuLateral, Cabecalho, BarraAbas, BotaoTema, CabecalhoPagina
 │   ├── senha           # VisorSenha e MedidorForca
 │   └── ui              # Design system: botões, painéis, abas, campo de senha, estados
-├── configuracoes       # Ambiente, aplicação, navegação, finalidades, geração, análise e níveis de força
+├── configuracoes       # Ambiente, aplicação, navegação, finalidades, geração, análise, privacidade e níveis de força
 ├── dados               # Palavras da frase-senha e listas de senhas, palavras e nomes comuns
 ├── estilos             # tokens.css, temas.css e global.css
 ├── ganchos             # Gerador, analisador, limpeza por inatividade, título e preferências

@@ -35,17 +35,18 @@ privacidade visível.
 | G4 | Configurações por finalidade | Uso geral 16 (todos os tipos); Banco 12 (sem símbolos, sem ambíguos); E-mail 20 (todos os tipos); Trabalho 16 (todos os tipos, sem ambíguos); Games 16 (sem símbolos, sem ambíguos); Wi-Fi 20 (sem símbolos, sem ambíguos). |
 | G5 | Visibilidade | A senha começa visível, com botão para ocultar (que também mascara o histórico). |
 | G6 | Limpeza da área de transferência | Contador de 30 s. O navegador só deixa escrever na área de transferência logo depois de um clique ou tecla; se não houver esse gesto aos 30 s, a limpeza acontece no próximo clique ou tecla em qualquer lugar do app. Há um botão "Limpar agora" durante a contagem. |
+| G7 | Símbolo na frase-senha | Opção "Incluir um símbolo", desligada por padrão: um de `! @ # $ % & * ?` no fim, colado ao número (`Cacto-Tigre-Lua-47!`). O nome da aba continua "Frase-senha"; a dica cita "passphrase" uma vez. (Pedido em 2 de outubro de 2026.) |
 
 ## Regras do gerador
 
 * **Sorteio sem viés:** amostragem por rejeição sobre `crypto.getRandomValues`.
 * **Tipos garantidos:** a senha sempre tem ao menos um caractere de cada tipo ligado; o último tipo ligado não pode ser desligado.
 * **Ambíguos:** `O 0 o I l 1 | S 5 B 8`.
-* **Tamanhos:** senha de 8 a 64; frase de 4 a 10 palavras (padrão 6, com número de dois dígitos no fim); PIN de 4 a 12 dígitos (padrão 6), sem repetições como 0000 nem sequências como 1234 ou 9876.
+* **Tamanhos:** senha de 8 a 64; frase de 4 a 10 palavras (padrão 6, com número de dois dígitos no fim e, se pedido, um símbolo depois dele); PIN de 4 a 12 dígitos (padrão 6), sem repetições como 0000 nem sequências como 1234 ou 9876.
 * **Força:** pela entropia do sorteio (tamanho × log₂ do alfabeto). Níveis: abaixo de 28 bits muito fraca, até 40 fraca, até 60 razoável, até 80 forte, e muito forte a partir de 80. O tempo para quebrar considera um ataque offline a 10¹⁰ tentativas por segundo, na média de metade das combinações.
 * **Personalizado:** mudar qualquer opção depois de escolher uma finalidade marca "Personalizado"; tocar na finalidade de novo volta ao recomendado.
 * **Avisos:** abaixo do tamanho mínimo da finalidade (Uso geral 12, Banco 10, E-mail 16, Trabalho 14, Games 12, Wi-Fi 16), Wi-Fi acima de 63 caracteres, senha fraca e frase com menos de 6 palavras. O PIN sempre mostra que a proteção vem do bloqueio após tentativas erradas.
-* **Histórico da sessão:** guarda a senha quando ela é copiada ou trocada por "Gerar outra", sem repetir, até 10. Mudar uma opção não registra.
+* **Histórico da sessão:** guarda só a senha copiada, sem repetir, até 10. "Gerar outra" e mudar uma opção não registram (ver P2).
 * **Analisar esta senha:** leva a senha ao Analisador só pela memória do app, nunca pela URL.
 * **Atalho:** `Ctrl+Enter` gera outra.
 
@@ -59,7 +60,16 @@ privacidade visível.
 | A4 | Faixas da nota | 0–19 Muito fraca, 20–39 Fraca, 40–59 Razoável, 60–79 Forte, 80–100 Muito forte, usando o mesmo medidor de 5 níveis do Gerador. |
 | A5 | Quando analisar | Enquanto a pessoa digita, sem botão. |
 | A6 | Mapa da senha | Os trechos previsíveis aparecem marcados na própria senha, respeitando o ocultar. |
-| A7 | Privacidade evidente | Faixa "Sua senha não sai deste aparelho" no topo da página e selo "Só neste aparelho" junto ao campo. |
+| A7 | Privacidade evidente | Substituída por P1: os selos de privacidade ficam no painel da senha, iguais aos do Gerador. A faixa do topo e o selo "Só neste aparelho" saíram por repetir a mesma mensagem. |
+
+## Decisões da etapa de privacidade e confiança
+
+| # | Tema | Decisão |
+|---|---|---|
+| P1 | Selos de confiança | "Processado localmente", "Nenhuma senha armazenada" e "Sua senha não sai do aparelho" numa linha discreta no painel da senha do Gerador e do Analisador, com o link "Como funciona" para a seção Privacidade de Configurações. O cabeçalho do app continua sem selo (sugestão 2). |
+| P2 | Histórico da sessão | Guarda só as senhas copiadas. Uma senha trocada por "Gerar outra" sem ser copiada não fica na memória. |
+| P3 | Histórico ao sair do Gerador | Continua até fechar ou recarregar a aba, como em Q4. |
+| P4 | Transparência | A seção Privacidade usa os mesmos títulos dos selos, diz que a verificação de vazamentos ainda não existe e avisa que, se a aba for fechada antes dos 30 segundos, a senha copiada continua na área de transferência. (Pedido em 2 de outubro de 2026.) |
 
 ## Regras do analisador
 

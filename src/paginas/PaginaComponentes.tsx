@@ -14,6 +14,7 @@ import {
   Esqueleto,
   GrupoOpcoes,
   Interruptor,
+  Nota,
   Painel,
   Selo,
 } from '@/componentes/ui';
@@ -150,6 +151,12 @@ export default function PaginaComponentes() {
 
         <Bloco titulo="Campo de senha">
           <CampoSenha rotulo="Senha" descricao="Texto de apoio do campo." valor={senha} aoMudar={setSenha} />
+        </Bloco>
+
+        <Bloco titulo="Nota">
+          <Nota>
+            <strong>Dica em destaque.</strong> Texto curto de apoio, como a explicação da finalidade ou da frase-senha.
+          </Nota>
         </Bloco>
 
         <Bloco titulo="Controles">

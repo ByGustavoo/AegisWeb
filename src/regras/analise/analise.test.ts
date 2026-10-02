@@ -172,10 +172,13 @@ describe('analisarSenha', () => {
     }
   });
 
-  it('concorda com o gerador sobre frases-senha', () => {
-    const nivelGerador = calcularForca(entropiaFraseSenha(OPCOES_FRASE_PADRAO)).nivel;
+  it.each([
+    ['padrão', OPCOES_FRASE_PADRAO],
+    ['com símbolo', { ...OPCOES_FRASE_PADRAO, incluirSimbolo: true }],
+  ])('concorda com o gerador sobre frases-senha (%s)', (_, opcoes) => {
+    const nivelGerador = calcularForca(entropiaFraseSenha(opcoes)).nivel;
     for (let i = 0; i < 20; i += 1) {
-      const analise = analisarSenha(gerarFraseSenha(OPCOES_FRASE_PADRAO), dicionarios, ANO);
+      const analise = analisarSenha(gerarFraseSenha(opcoes), dicionarios, ANO);
       expect(Math.abs((analise?.nivel ?? 0) - nivelGerador)).toBeLessThanOrEqual(1);
       expect(analise?.pontosFortes.map((item) => item.id)).toContain('frase');
     }

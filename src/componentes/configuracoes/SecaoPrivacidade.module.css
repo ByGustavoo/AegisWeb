@@ -1,3 +1,11 @@
+.secao {
+  scroll-margin-top: calc(var(--altura-cabecalho) + var(--espaco-6));
+}
+
+.secao:focus:not(:focus-visible) {
+  outline: none;
+}
+
 .lista {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

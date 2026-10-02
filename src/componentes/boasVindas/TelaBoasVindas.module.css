@@ -589,7 +589,8 @@
 @media (max-width: 767px) {
   .tela {
     align-items: start;
-    padding-inline: var(--espaco-5);
+    padding: calc(var(--espaco-8) + env(safe-area-inset-top, 0px)) var(--espaco-5) 0;
+    overflow: clip;
   }
 
   .marca {
@@ -609,7 +610,14 @@
   }
 
   .acoes {
-    width: 100%;
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    width: calc(100% + 2 * var(--espaco-5));
+    margin-top: var(--espaco-6);
+    margin-inline: calc(var(--espaco-5) * -1);
+    padding: var(--espaco-6) var(--espaco-5) calc(var(--espaco-5) + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(to bottom, transparent, var(--fundo) var(--espaco-6));
   }
 
   .comecar {

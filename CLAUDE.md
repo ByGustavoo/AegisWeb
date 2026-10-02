@@ -25,11 +25,12 @@ Vitest. Same stack and folder conventions as `D:\Projetos\OrbitWeb`.
 | `src/dados/palavras.ts` | Passphrase word list (1,008 words, a-z, 4-8 letters; a test enforces it) |
 | `src/dados/dicionarios.ts` | Generated analyzer lists (common passwords, pt/en words, names) as space-separated strings. Do not edit by hand; see Gotchas |
 | `src/regras/analise/` | Analyzer engine: `correspondencias` (pattern matchers), `estimativa` (zxcvbn-style minimum-guesses decomposition), `analisarSenha` (score, strong/weak points, recommendations with simulation), `dicionarios` (lazy load, cached) |
-| `src/componentes/analisador/` | Analyzer UI: `FaixaPrivacidade`, `MapaSenha`, `PlacarSeguranca`, `ListaObservacoes`, `ListaRecomendacoes` |
-| `src/configuracoes/` | `ambiente`, `aplicacao`, `navegacao`, `geracao` (types, defaults), `finalidades` (purpose presets, tips, minimum lengths), `analise` (examples, auto-clear time, privacy copy), `forca` (5 strength levels) |
+| `src/componentes/analisador/` | Analyzer UI: `MapaSenha`, `PlacarSeguranca`, `ListaObservacoes`, `ListaRecomendacoes` |
+| `src/configuracoes/` | `ambiente`, `aplicacao`, `navegacao`, `geracao` (types, defaults), `finalidades` (purpose presets, tips, minimum lengths), `analise` (examples, auto-clear time), `privacidade` (trust seals and the Configurações privacy copy, one source for both), `forca` (5 strength levels) |
+| `src/componentes/comum/` | `MarcaAegis`, `SelosPrivacidade` (the trust row in the Gerador and Analisador password panels) |
 | `src/regras/` | Pure logic with tests: `aleatorio` (unbiased crypto sampling), `geradorSenha`, `fraseSenha`, `pin`, `forca`, `caracteres`, and the analyzer under `analise/` |
 | `src/provedores/` | `ProvedorTema`, `ProvedorAreaTransferencia` (copy + 30 s clear, app-level so it survives navigation), `ProvedorHistoricoSessao` and `ProvedorSenhaParaAnalise` (both in-memory only) |
-| `src/rotas/caminhos.ts` | Every route and query param name |
+| `src/rotas/caminhos.ts` | Every route, query param and anchor name |
 | `docker/` | nginx config, security headers snippet, entrypoint that writes `config.js` |
 
 ## Commands
@@ -59,7 +60,7 @@ No linter or formatter is configured. Before calling a task done, run `npm run t
 * No inline scripts: the CSP is `script-src 'self'`. The pre-render theme script lives in `public/tema-inicial.js` for that reason.
 
 ## Gotchas
-* Chrome only lets a page write to the clipboard right after a click or key press. A timer-only `writeText` stays pending forever, so `ProvedorAreaTransferencia` races every write against a 2 s timeout and, when there is no user activation at 30 s, clears on the next `pointerdown`/`keydown` in the app. Do not "simplify" this back to a plain timer.
+* Chrome only lets a page write to the clipboard right after a click or key press. A timer-only `writeText` stays pending forever, so `ProvedorAreaTransferencia` races every write against a 2 s timeout and, when there is no user activation at 30 s, clears on the next `pointerdown`/`pointerup`/`keydown` in the app that actually grants user activation (a lone Shift or a touch `pointerdown` does not, so those are skipped and the listener keeps waiting). Do not "simplify" this back to a plain timer.
 * Never call `navigator.clipboard.readText()` while testing: it opens a permission prompt that blocks every later clipboard write in that tab. Verify clearing by pasting with `Ctrl+V` into the Analisador field instead.
 * The analyzer score is calibrated against the generator: `notaPorEntropia` maps 28/40/60/80 bits to 20/40/60/80 points, and a test checks that generated passwords and passphrases get the generator's level within one. Changing the bruteforce cardinality, the score curve or the dictionaries can break that test on purpose.
 * `src/dados/dicionarios.ts` was generated from `@zxcvbn-ts/language-common` 4.1.3, `language-pt-br` 4.1.1 and `language-en` 4.1.1 (MIT; the pt-BR and en word lists derive from OpenSubtitles, ODC-BY) plus a curated list of Brazilian passwords interleaved at the top. The notices live in `LICENCAS-DE-TERCEIROS.md`; keep it in sync if the file is regenerated.
@@ -69,5 +70,6 @@ No linter or formatter is configured. Before calling a task done, run `npm run t
 * The welcome screen shows once per browser session (`aegis:boas-vindas-vista` in `sessionStorage`); a new tab shows it again.
 * `/componentes` exists only in development (`ambiente.desenvolvimento`).
 * The welcome-to-app transition morphs the mark and the name through `view-transition-name` (`marca-em-transicao`, `nome-em-transicao` in `global.css`). Only one rendered element may carry each name: the sidebar brand and the mobile header brand share them because one of the two is always `display: none`.
-* Content width is `--largura-conteudo` (1440px). Routes in `ROTAS_DE_CONTEUDO_ESTREITO` (`LayoutAplicacao.tsx`, today only `/configuracoes`) override it with `--largura-conteudo-estreita` (1120px), which also narrows the top bar. Gerar and Analisar widen their panels through `--respiro-painel` on their grid; other pages keep the default panel padding.
+* Content width is `--largura-conteudo` (1440px). Routes in `ROTAS_DE_CONTEUDO_ESTREITO` (`LayoutAplicacao.tsx`, today only `/configuracoes`) override it with `--largura-conteudo-estreita` (52rem, the Configurações reading width), which also narrows the top bar so its right edge lines up with the sections. Gerar and Analisar widen their panels through `--respiro-painel` on their grid; other pages keep the default panel padding.
+* Layouts that depend on the space actually available use container queries, not viewport media queries, because the expanded sidebar takes 248px: `conteudo` (`.limite` in `LayoutAplicacao`, stacks the Gerar and Analisar grids below 920px), `visor` (strength row and legend in `VisorGerador`), `placar` (`PlacarSeguranca`) and `finalidade` (`EscolhaFinalidade`). Keep viewport media queries for things tied to the device, like the mobile tab bar and touch sizes.
 * The sidebar's first item is aligned with the page `h1` through `--altura-sobretitulo` and `--altura-titulo-pagina`; changing `CabecalhoPagina` sizes breaks that alignment.
