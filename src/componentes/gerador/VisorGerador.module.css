@@ -207,7 +207,12 @@
 
   .metricas {
     justify-content: space-between;
+    gap: var(--espaco-4);
     text-align: left;
+  }
+
+  .metricas dd {
+    white-space: normal;
   }
 
   .acoes > * {
