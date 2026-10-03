@@ -32,6 +32,7 @@ Vitest. Same stack and folder conventions as `D:\Projetos\OrbitWeb`.
 | `src/provedores/` | `ProvedorTema`, `ProvedorAreaTransferencia` (copy + 30 s clear, app-level so it survives navigation), `ProvedorHistoricoSessao` and `ProvedorSenhaParaAnalise` (both in-memory only) |
 | `src/rotas/caminhos.ts` | Every route, query param and anchor name |
 | `docker/` | nginx config, security headers snippet, entrypoint that writes `config.js` |
+| `video/` | Separate Remotion package for the presentation video (own `package.json`, outside the app build, CI and Docker context). `src/linhaDoTempo.ts` holds every frame cue; `scripts/gerarAudio.ts` arranges the synthesized soundtrack (150 BPM; every scene start and accent sits on the 12-frame beat grid) on top of the DSP in `scripts/sintese.ts` |
 
 ## Commands
 | Purpose | Command |
@@ -42,6 +43,7 @@ Vitest. Same stack and folder conventions as `D:\Projetos\OrbitWeb`.
 | Typecheck | `npm run typecheck` |
 | Build | `npm run build` |
 | Preview | `npm run preview` (port 4175) |
+| Presentation video | `npm install --prefix video`, then `npm run render --prefix video` (writes the 3840×2160 `video/out/aegis-apresentacao.mp4`: the 1920×1080 composition rendered at `--scale=2`); `npm run gif --prefix video` rebuilds the README GIF `video/apresentacao.gif` (800px, 12 fps, kept under 10 MB) from that render; `npm run estudio --prefix video` opens Remotion Studio |
 
 No linter or formatter is configured. Before calling a task done, run `npm run typecheck` and `npm test`.
 

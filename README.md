@@ -20,6 +20,8 @@
 
 * 🎨 HTML e CSS
 
+* 🎬 Remotion 4
+
 * 🖼️ Lucide React
 
 * 🔷 TypeScript 5
@@ -27,6 +29,33 @@
 * 🧭 React Router 6
 
 * 🔤 Geist e Geist Mono
+
+<br>
+
+## 🎬 Apresentação
+
+<div align="center">
+  <img alt="Apresentação do Aegis: gerador, formatos, finalidades, cópia segura, analisador, recomendações e privacidade" src="video/apresentacao.gif" width="800" />
+</div>
+
+<br>
+
+O vídeo completo tem 42 segundos, em 4K (3840×2160) e com trilha sintetizada. É feito com Remotion na pasta
+`video`, que tem `package.json` próprio e fica fora do build, da CI e da imagem Docker.
+
+```bash
+# Instala as dependências do vídeo
+$ npm install --prefix video
+
+# Gera a trilha e renderiza video/out/aegis-apresentacao.mp4 em 4K
+$ npm run render --prefix video
+
+# Gera o video/apresentacao.gif deste README a partir do vídeo renderizado
+$ npm run gif --prefix video
+
+# Abre o Remotion Studio para editar as cenas
+$ npm run estudio --prefix video
+```
 
 <br>
 
