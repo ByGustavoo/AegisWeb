@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useId, useLayoutEffect, useRef, useState } from 'react';
+import { Fragment, useId, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { ArrowRight, KeyRound, ScanSearch, ShieldCheck } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
@@ -84,29 +84,7 @@ export function TelaBoasVindas({ aoComecar }: { aoComecar: () => void }) {
   const [saindo, setSaindo] = useState(false);
   const movimentoReduzido = useMovimentoReduzido();
   const idBase = useId().replace(/:/g, '');
-  const simboloRef = useRef<HTMLSpanElement>(null);
-  const nomeRef = useRef<HTMLSpanElement>(null);
-  const letrasRef = useRef<(HTMLSpanElement | null)[]>([]);
   useTituloDocumento('');
-
-  const medirDistanciaAteOLogo = useCallback(() => {
-    const simbolo = simboloRef.current?.getBoundingClientRect();
-    const nome = nomeRef.current?.getBoundingClientRect();
-    if (!simbolo || !nome) return;
-    const centroDoLogo = simbolo.left + simbolo.width / 2;
-    letrasRef.current.forEach((letra) => {
-      if (!letra) return;
-      const centroDaLetra = nome.left + letra.offsetLeft + letra.offsetWidth / 2;
-      letra.style.setProperty('--dx', `${(centroDoLogo - centroDaLetra).toFixed(1)}px`);
-    });
-  }, []);
-
-  useLayoutEffect(() => {
-    medirDistanciaAteOLogo();
-    void document.fonts.ready.then(medirDistanciaAteOLogo);
-    window.addEventListener('resize', medirDistanciaAteOLogo);
-    return () => window.removeEventListener('resize', medirDistanciaAteOLogo);
-  }, [medirDistanciaAteOLogo]);
 
   const comecar = () => {
     if (saindo) return;
@@ -114,7 +92,6 @@ export function TelaBoasVindas({ aoComecar }: { aoComecar: () => void }) {
       aoComecar();
       return;
     }
-    medirDistanciaAteOLogo();
     setSaindo(true);
     void import('@/paginas/PaginaGerador');
     window.setTimeout(() => transicionarParaAplicacao(aoComecar), DURACAO_DESPEDIDA_MS);
@@ -156,21 +133,13 @@ export function TelaBoasVindas({ aoComecar }: { aoComecar: () => void }) {
 
       <div className={estilos.conteudo}>
         <div className={estilos.marca}>
-          <span ref={simboloRef} className={juntarClasses(estilos.simbolo, 'marca-em-transicao')}>
+          <span className={juntarClasses(estilos.simbolo, 'marca-em-transicao')}>
             <MarcaAegis tamanho={48} animarEntrada={!movimentoReduzido} />
           </span>
-          <span ref={nomeRef} className={estilos.nome}>
+          <span className={estilos.nome} style={{ '--total': LETRAS_DO_NOME.length } as CSSProperties}>
             <span className="visualmente-oculto">{NOME_APLICACAO}</span>
             {LETRAS_DO_NOME.map((letra, indice) => (
-              <span
-                key={`${letra}-${indice}`}
-                ref={(elemento) => {
-                  letrasRef.current[indice] = elemento;
-                }}
-                className={estilos.letra}
-                style={comIndice(indice)}
-                aria-hidden="true"
-              >
+              <span key={`${letra}-${indice}`} className={estilos.letra} style={comIndice(indice)} aria-hidden="true">
                 {letra}
               </span>
             ))}

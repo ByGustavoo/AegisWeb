@@ -1,6 +1,7 @@
 import { flushSync } from 'react-dom';
 
 const CLASSE_TRANSICAO = 'saindo-das-boas-vindas';
+const CLASSE_CHEGADA_DO_NOME = 'nome-chegando';
 const ESPERA_MAXIMA_PAGINA_MS = 600;
 const INTERVALO_VERIFICACAO_MS = 16;
 
@@ -11,6 +12,16 @@ interface TransicaoDeVisao {
 
 interface DocumentoComTransicao {
   startViewTransition?: (atualizar: () => Promise<void> | void) => TransicaoDeVisao;
+}
+
+function animarChegadaDoNome(raiz: HTMLElement): void {
+  raiz.classList.add(CLASSE_CHEGADA_DO_NOME);
+  const animacoes = [...document.querySelectorAll('.nome-em-transicao')].flatMap((nome) =>
+    nome.getAnimations({ subtree: true }),
+  );
+  void Promise.allSettled(animacoes.map((animacao) => animacao.finished)).then(() =>
+    raiz.classList.remove(CLASSE_CHEGADA_DO_NOME),
+  );
 }
 
 function esperarPaginaPronta(): Promise<void> {
@@ -41,6 +52,6 @@ export function transicionarParaAplicacao(aoComecar: () => void): void {
     flushSync(aoComecar);
     await esperarPaginaPronta();
   });
-  transicao.ready.catch(limpar);
+  transicao.ready.then(() => animarChegadaDoNome(raiz), limpar);
   transicao.finished.then(limpar, limpar);
 }

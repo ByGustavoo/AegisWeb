@@ -220,20 +220,8 @@ legend {
   animation: aegis-transicao-entrar 640ms var(--curva-saida) 200ms both;
 }
 
-.saindo-das-boas-vindas::view-transition-group(nome-aegis) {
-  animation: none;
-}
-
 .saindo-das-boas-vindas::view-transition-new(nome-aegis) {
-  animation: aegis-nome-chegar 520ms var(--curva-saida) 620ms both;
-}
-
-@keyframes aegis-nome-chegar {
-  from {
-    opacity: 0;
-    transform: translateX(-12px);
-    filter: blur(3px);
-  }
+  animation: none;
 }
 
 @keyframes aegis-transicao-sair {

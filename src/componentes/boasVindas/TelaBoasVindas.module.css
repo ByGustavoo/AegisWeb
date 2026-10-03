@@ -105,15 +105,15 @@
   font-size: var(--tamanho-xl);
   font-weight: var(--peso-forte);
   letter-spacing: var(--letras-titulo);
+  line-height: 1.2;
+  clip-path: inset(-0.5em -0.5em -0.5em 0);
 }
 
 .letra {
-  --dx: -3rem;
-
   display: inline-block;
   white-space: pre;
-  animation: letraEmergir 760ms var(--curva-saida) backwards;
-  animation-delay: calc(480ms + var(--i, 0) * 65ms);
+  animation: letraEmergir 720ms var(--curva-saida) backwards;
+  animation-delay: calc(560ms + var(--i, 0) * 55ms);
 }
 
 .titulo {
@@ -364,8 +364,8 @@
 }
 
 .saindo .letra {
-  animation: letraAbsorver 440ms var(--curva-entrada) forwards;
-  animation-delay: calc(140ms + var(--i, 0) * 45ms);
+  animation: letraRecolher 400ms var(--curva-entrada) forwards;
+  animation-delay: calc(60ms + (var(--total, 1) - 1 - var(--i, 0)) * 50ms);
 }
 
 .saindo .simbolo {
@@ -373,7 +373,7 @@
 }
 
 .saindo .simbolo::after {
-  animation: ondaSaida 700ms var(--curva-saida) 380ms;
+  animation: ondaSaida 520ms var(--curva-saida) 220ms;
 }
 
 .saindo .escudos svg {
@@ -428,14 +428,16 @@
 @keyframes letraEmergir {
   from {
     opacity: 0;
-    transform: translate(var(--dx), 0) scale(0.2);
+    transform: translateX(-0.7em);
+    filter: blur(6px);
   }
-  55% {
-    opacity: 1;
-    transform: translate(calc(var(--dx) * 0.3), -10px) scale(0.92);
-  }
+}
+
+@keyframes letraRecolher {
   to {
-    transform: none;
+    opacity: 0;
+    transform: translateX(-0.8em);
+    filter: blur(6px);
   }
 }
 
@@ -508,17 +510,6 @@
   to {
     opacity: 0;
     transform: scale(1.25);
-  }
-}
-
-@keyframes letraAbsorver {
-  45% {
-    opacity: 1;
-    transform: translate(calc(var(--dx) * 0.35), -12px) scale(0.85);
-  }
-  to {
-    opacity: 0;
-    transform: translate(var(--dx), 0) scale(0.1);
   }
 }
 

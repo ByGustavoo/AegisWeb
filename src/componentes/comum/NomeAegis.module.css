@@ -1,0 +1,21 @@
+.letra {
+  display: inline-block;
+  white-space: pre;
+}
+
+:global(.nome-chegando) .nome {
+  clip-path: inset(-0.5em -0.5em -0.5em 0);
+}
+
+:global(.nome-chegando) .letra {
+  animation: letraChegar 600ms var(--curva-saida) backwards;
+  animation-delay: calc(540ms + var(--i, 0) * 50ms);
+}
+
+@keyframes letraChegar {
+  from {
+    opacity: 0;
+    transform: translateX(-0.8em);
+    filter: blur(6px);
+  }
+}
