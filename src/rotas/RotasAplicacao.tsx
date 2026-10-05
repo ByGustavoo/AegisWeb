@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ambiente } from '@/configuracoes/ambiente';
 import { LayoutAplicacao } from '@/layouts/LayoutAplicacao';
@@ -19,8 +19,16 @@ export function RotasAplicacao() {
         <Route path={caminhos.analisar} element={<PaginaAnalisador />} />
         <Route path={caminhos.configuracoes} element={<PaginaConfiguracoes />} />
         {PaginaComponentes ? <Route path={caminhos.componentes} element={<PaginaComponentes />} /> : null}
-        <Route path="*" element={<PaginaNaoEncontrada />} />
       </Route>
+
+      <Route
+        path="*"
+        element={
+          <Suspense fallback={null}>
+            <PaginaNaoEncontrada />
+          </Suspense>
+        }
+      />
     </Routes>
   );
 }
