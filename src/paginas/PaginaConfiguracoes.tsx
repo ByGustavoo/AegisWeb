@@ -1,6 +1,6 @@
 import { SecaoAparencia } from '@/componentes/configuracoes/SecaoAparencia';
 import { SecaoPrivacidade } from '@/componentes/configuracoes/SecaoPrivacidade';
-import { SecaoSobre } from '@/componentes/configuracoes/SecaoSobre';
+import { SecaoVersoes } from '@/componentes/configuracoes/SecaoVersoes';
 import { CabecalhoPagina } from '@/componentes/layout/CabecalhoPagina';
 import { useTituloDocumento } from '@/ganchos/useTituloDocumento';
 import estilos from './PaginaConfiguracoes.module.css';
@@ -16,9 +16,11 @@ export default function PaginaConfiguracoes() {
         descricao="Aparência do aplicativo e o que acontece com as suas senhas."
       />
       <div className={estilos.secoes}>
-        <SecaoAparencia idTitulo="titulo-aparencia" />
-        <SecaoPrivacidade idTitulo="titulo-privacidade" />
-        <SecaoSobre idTitulo="titulo-sobre" />
+        <div className={estilos.linhaSuperior}>
+          <SecaoAparencia idTitulo="titulo-aparencia" indiceCascata={3} />
+          <SecaoVersoes idTitulo="titulo-versoes" indiceCascata={4} />
+        </div>
+        <SecaoPrivacidade idTitulo="titulo-privacidade" indiceCascata={5} />
       </div>
     </>
   );

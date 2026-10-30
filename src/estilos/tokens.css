@@ -52,7 +52,6 @@
   --altura-titulo-pagina: calc(var(--tamanho-3xl) * var(--altura-linha-justa));
   --altura-barra-abas: 68px;
   --largura-conteudo: 1440px;
-  --largura-conteudo-estreita: 52rem;
   --respiro-conteudo: var(--espaco-8);
   --respiro-topo-conteudo: var(--espaco-10);
 
@@ -70,7 +69,13 @@
   --duracao-lenta: 360ms;
   --duracao-expressiva: 520ms;
   --duracao-tema: 600ms;
-  --passo-cascata-pagina: 70ms;
+  --espera-esqueleto: 300ms;
+  --curva-revelar: cubic-bezier(0.33, 1, 0.68, 1);
+  --curva-assentar: cubic-bezier(0.25, 1, 0.5, 1);
+  --passo-cascata-pagina: 60ms;
+  --duracao-revelar-pagina: 520ms;
+  --duracao-entrada-pagina: 880ms;
+  --deslocamento-entrada-pagina: 12px;
 
   --camada-cabecalho: 30;
   --camada-menu: 40;

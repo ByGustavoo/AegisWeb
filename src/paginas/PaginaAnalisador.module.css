@@ -14,8 +14,25 @@
   margin-top: var(--espaco-6);
 }
 
+.gradeComSenha {
+  grid-template-areas:
+    'entrada resultado'
+    'vazamento vazamento'
+    'pontos pontos'
+    'melhorar melhorar';
+  grid-template-rows: none;
+}
+
 .entrada {
   grid-area: entrada;
+}
+
+.gradeComSenha .entrada {
+  align-self: stretch;
+}
+
+.gradeComSenha .acoesEntrada {
+  margin-bottom: auto;
 }
 
 .entrada > * + * + *,
@@ -38,6 +55,7 @@
 
 .vazamento {
   grid-area: vazamento;
+  align-self: stretch;
 }
 
 .aviso {
@@ -117,6 +135,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--espaco-4);
+  margin-block: auto;
   color: var(--texto-secundario);
   font-size: var(--tamanho-sm);
 }

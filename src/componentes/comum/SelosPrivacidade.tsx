@@ -16,7 +16,7 @@ export function SelosPrivacidade({ className }: { className?: string }) {
         ))}
       </ul>
       <Link to={`${caminhos.configuracoes}#${ancoras.privacidade}`} className={estilos.link}>
-        Como funciona
+        Como funciona?
       </Link>
     </div>
   );

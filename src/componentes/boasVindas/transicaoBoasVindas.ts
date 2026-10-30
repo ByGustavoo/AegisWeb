@@ -16,7 +16,7 @@ interface DocumentoComTransicao {
 
 function animarChegadaDoNome(raiz: HTMLElement): void {
   raiz.classList.add(CLASSE_CHEGADA_DO_NOME);
-  const animacoes = [...document.querySelectorAll('.nome-em-transicao')].flatMap((nome) =>
+  const animacoes = [...document.querySelectorAll('.nome-em-transicao, .descricao-em-transicao')].flatMap((nome) =>
     nome.getAnimations({ subtree: true }),
   );
   void Promise.allSettled(animacoes.map((animacao) => animacao.finished)).then(() =>

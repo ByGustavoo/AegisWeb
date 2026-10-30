@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { ArchiveX, ClipboardX, CloudOff, Cpu, ShieldCheck } from 'lucide-react';
+import { ArchiveX, ClipboardX, CloudOff, Cpu, Printer, ShieldCheck } from 'lucide-react';
 import { NOME_APLICACAO } from './aplicacao';
 import { SEGUNDOS_PARA_LIMPAR_AREA_TRANSFERENCIA } from './geracao';
 
@@ -37,6 +37,12 @@ export const compromissosPrivacidade: CompromissoPrivacidade[] = [
     icone: ClipboardX,
     rotulo: 'Área de transferência limpa',
     descricao: `Ao copiar, a senha é apagada da área de transferência depois de ${SEGUNDOS_PARA_LIMPAR_AREA_TRANSFERENCIA} segundos. Se você fechar a aba antes disso, ela continua lá até você copiar outra coisa.`,
+  },
+  {
+    icone: Printer,
+    rotulo: 'PDF para imprimir',
+    descricao:
+      'A folha de impressão fica só na memória desta aba, como o histórico. O PDF é montado neste navegador e salvo direto no seu aparelho, sem senha de proteção: guarde o arquivo em local seguro e apague-o depois de imprimir.',
   },
   {
     icone: ShieldCheck,

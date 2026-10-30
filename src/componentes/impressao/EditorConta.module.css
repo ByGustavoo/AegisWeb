@@ -1,0 +1,190 @@
+.conta {
+  container: conta / inline-size;
+  gap: var(--espaco-4);
+  animation: surgirConta var(--duracao-lenta) var(--curva-saida);
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  margin-top: calc(var(--espaco-1) * -1);
+  padding-bottom: var(--espaco-3);
+  border-bottom: 1px solid var(--borda);
+}
+
+.numero {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  min-width: 2.25rem;
+  height: 1.75rem;
+  padding-inline: var(--espaco-2);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-sm);
+  background-color: var(--superficie-suave);
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-xs);
+  font-weight: var(--peso-forte);
+}
+
+.campoTitulo {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+}
+
+.titulo {
+  width: 100%;
+  height: var(--altura-controle);
+  padding-inline: var(--espaco-2);
+  cursor: text;
+  border: 1px solid transparent;
+  border-radius: var(--raio-md);
+  background-color: transparent;
+  font-size: var(--tamanho-md);
+  font-weight: var(--peso-forte);
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  transition:
+    border-color var(--duracao-rapida) var(--curva-saida),
+    background-color var(--duracao-rapida) var(--curva-saida),
+    box-shadow var(--duracao-base) var(--curva-saida);
+}
+
+.titulo::placeholder {
+  color: var(--texto-terciario);
+  font-weight: var(--peso-medio);
+}
+
+.titulo:focus-visible {
+  outline: none;
+  border-color: var(--destaque);
+  background-color: var(--superficie);
+  box-shadow: var(--anel-foco);
+}
+
+.acoesConta {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.colunas {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.6fr) minmax(0, 1fr) calc(var(--altura-controle-sm) * 3);
+  gap: var(--espaco-2);
+  margin-bottom: calc(var(--espaco-2) * -1);
+  padding-inline: var(--espaco-1);
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letras-rotulo);
+  text-transform: uppercase;
+}
+
+.campos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+.adicionar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+}
+
+.atalho {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-1);
+  min-height: var(--altura-controle-sm);
+  padding-inline: var(--espaco-2) var(--espaco-3);
+  border: 1px dashed var(--borda-forte);
+  border-radius: var(--raio-pilula);
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-medio);
+  transition:
+    border-color var(--duracao-rapida) var(--curva-saida),
+    background-color var(--duracao-rapida) var(--curva-saida),
+    color var(--duracao-rapida) var(--curva-saida),
+    transform var(--duracao-rapida) var(--curva-saida);
+}
+
+.atalho svg {
+  color: var(--destaque);
+}
+
+.atalhoLivre {
+  border-style: solid;
+  border-color: var(--borda-controle);
+  color: var(--texto);
+}
+
+.atalho:focus-visible {
+  outline: none;
+  border-color: var(--destaque);
+  box-shadow: var(--anel-foco);
+}
+
+.atalho:active {
+  transform: scale(0.97);
+}
+
+.foraDoPdf {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  margin-top: calc(var(--espaco-1) * -1);
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-sm);
+}
+
+.foraDoPdf svg {
+  flex-shrink: 0;
+}
+
+@keyframes surgirConta {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (hover: hover) {
+  .titulo:hover:not(:focus-visible) {
+    background-color: var(--superficie-suave);
+  }
+
+  .atalho:hover {
+    border-color: var(--destaque);
+    background-color: var(--destaque-suave);
+    color: var(--texto);
+  }
+}
+
+@container conta (max-width: 559px) {
+  .colunas {
+    display: none;
+  }
+
+  .topo {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: var(--espaco-2);
+  }
+
+  .acoesConta {
+    margin-right: calc(var(--espaco-2) * -1);
+  }
+
+  .campoTitulo {
+    flex-basis: calc(100% + var(--espaco-2));
+    order: 1;
+    margin-left: calc(var(--espaco-2) * -1);
+  }
+}

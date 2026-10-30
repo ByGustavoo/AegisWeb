@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react';
-import { KeyRound, ScanSearch, Settings } from 'lucide-react';
+import { KeyRound, Printer, ScanSearch, Settings } from 'lucide-react';
 import { caminhos } from '@/rotas/caminhos';
 
 export interface ItemNavegacao {
@@ -11,6 +11,7 @@ export interface ItemNavegacao {
 export const navegacaoFerramentas: ItemNavegacao[] = [
   { rotulo: 'Gerar', icone: KeyRound, destino: caminhos.gerar },
   { rotulo: 'Analisar', icone: ScanSearch, destino: caminhos.analisar },
+  { rotulo: 'Imprimir', icone: Printer, destino: caminhos.imprimir },
 ];
 
 export const navegacaoConfiguracoes: ItemNavegacao = {

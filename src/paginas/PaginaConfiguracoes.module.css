@@ -4,8 +4,21 @@
   gap: var(--espaco-6);
 }
 
+.linhaSuperior {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: var(--espaco-6);
+}
+
+@container conteudo (max-width: 1199px) {
+  .linhaSuperior {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 767px) {
-  .secoes {
+  .secoes,
+  .linhaSuperior {
     gap: var(--espaco-4);
   }
 }

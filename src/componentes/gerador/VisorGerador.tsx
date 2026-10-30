@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Check, Copy, Eye, EyeOff, Info, RefreshCw, ScanSearch, TriangleAlert } from 'lucide-react';
+import { Check, Copy, Eye, EyeOff, Info, Printer, RefreshCw, ScanSearch, TriangleAlert } from 'lucide-react';
 import { SelosPrivacidade } from '@/componentes/comum/SelosPrivacidade';
 import { MedidorForca } from '@/componentes/senha/MedidorForca';
 import { LegendaCaracteres, VisorSenha } from '@/componentes/senha/VisorSenha';
@@ -33,6 +33,7 @@ interface VisorGeradorProps {
   aoCopiar: () => void;
   aoGerar: () => void;
   aoAnalisar: () => void;
+  aoImprimir: () => void;
 }
 
 function textoEstadoCopia(estado: EstadoAreaTransferencia, visivel: boolean): string {
@@ -76,6 +77,7 @@ export function VisorGerador({
   aoCopiar,
   aoGerar,
   aoAnalisar,
+  aoImprimir,
 }: VisorGeradorProps) {
   const copiada = copiadaAgora;
   const textoCopia = textoEstadoCopia(estadoCopia, visivel);
@@ -154,6 +156,16 @@ export function VisorGerador({
         </Botao>
         <Botao icone={ScanSearch} variante="terciario" tamanho="lg" onClick={aoAnalisar} className={estilos.analisar}>
           Analisar
+        </Botao>
+        <Botao
+          icone={Printer}
+          variante="terciario"
+          tamanho="lg"
+          onClick={aoImprimir}
+          aria-label="Imprimir: levar esta senha para a folha de impressão"
+          title="Levar esta senha para a folha de impressão"
+        >
+          Imprimir
         </Botao>
       </div>
 

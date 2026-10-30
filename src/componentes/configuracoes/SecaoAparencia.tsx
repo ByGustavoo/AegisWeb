@@ -3,6 +3,7 @@ import { CabecalhoPainel, Painel } from '@/componentes/ui';
 import { NOME_APLICACAO } from '@/configuracoes/aplicacao';
 import type { ModoTema, TemaAplicado } from '@/provedores/ProvedorTema';
 import { useTema } from '@/provedores/ProvedorTema';
+import { CLASSE_CASCATA, comIndice } from '@/utilitarios/cascata';
 import { juntarClasses } from '@/utilitarios/juntarClasses';
 import estilos from './SecaoAparencia.module.css';
 
@@ -48,14 +49,19 @@ function Miniatura({ tema }: { tema: TemaAplicado }) {
 
 export interface SecaoConfiguracaoProps {
   idTitulo: string;
+  indiceCascata: number;
 }
 
-export function SecaoAparencia({ idTitulo }: SecaoConfiguracaoProps) {
+export function SecaoAparencia({ idTitulo, indiceCascata }: SecaoConfiguracaoProps) {
   const { modo, temaDoSistema, definirModo } = useTema();
   const nomeGrupo = useId();
 
   return (
-    <Painel aria-labelledby={idTitulo} className={estilos.secao}>
+    <Painel
+      aria-labelledby={idTitulo}
+      className={juntarClasses(estilos.secao, CLASSE_CASCATA)}
+      style={comIndice(indiceCascata)}
+    >
       <CabecalhoPainel
         titulo={<span id={idTitulo}>Aparência</span>}
         descricao={`Escolha como o ${NOME_APLICACAO} aparece para você. A mudança vale na hora e fica salva neste navegador.`}

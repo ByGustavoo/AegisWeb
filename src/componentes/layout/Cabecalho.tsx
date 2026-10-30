@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { MarcaAegis } from '@/componentes/comum/MarcaAegis';
+import { DescricaoAegis } from '@/componentes/comum/DescricaoAegis';
 import { NomeAegis } from '@/componentes/comum/NomeAegis';
 import { NOME_APLICACAO } from '@/configuracoes/aplicacao';
 import { caminhos } from '@/rotas/caminhos';
@@ -15,7 +16,10 @@ export function Cabecalho() {
           <span className={juntarClasses(estilos.simbolo, 'marca-em-transicao')}>
             <MarcaAegis tamanho={28} />
           </span>
-          <NomeAegis className={juntarClasses(estilos.nome, 'nome-em-transicao')} />
+          <span className={estilos.textosMarca}>
+            <NomeAegis className={juntarClasses(estilos.nome, 'nome-em-transicao')} />
+            <DescricaoAegis className={juntarClasses(estilos.descricao, 'descricao-em-transicao')} />
+          </span>
         </Link>
 
         <div className={estilos.acoes}>

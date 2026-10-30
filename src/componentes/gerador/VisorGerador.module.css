@@ -243,8 +243,4 @@
   .copiar {
     min-width: 0;
   }
-
-  .acoes > .analisar {
-    flex-basis: 100%;
-  }
 }

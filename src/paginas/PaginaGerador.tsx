@@ -9,14 +9,18 @@ import { Abas, CabecalhoPainel, idAba, idPainelAbas, Painel } from '@/componente
 import type { OpcaoAba } from '@/componentes/ui';
 import { descreverFinalidade } from '@/configuracoes/finalidades';
 import { AVISO_PIN, OPCOES_FRASE_PADRAO, tiposGeracao } from '@/configuracoes/geracao';
+import { NOME_CAMPO_POR_TIPO_GERADO } from '@/configuracoes/impressao';
 import type { EstadoFinalidade } from '@/ganchos/useGerador';
 import { useGerador } from '@/ganchos/useGerador';
 import { useTituloDocumento } from '@/ganchos/useTituloDocumento';
 import type { ForcaCalculada, OpcoesFraseSenha, OpcoesSenha, TipoGeracao } from '@/modelos/senha';
 import { useAreaTransferencia } from '@/provedores/ProvedorAreaTransferencia';
+import { useFolhaImpressao } from '@/provedores/ProvedorFolhaImpressao';
 import { useHistoricoSessao } from '@/provedores/ProvedorHistoricoSessao';
 import { useSenhaParaAnalise } from '@/provedores/ProvedorSenhaParaAnalise';
 import { caminhos, parametros } from '@/rotas/caminhos';
+import { CLASSE_CASCATA, comIndice } from '@/utilitarios/cascata';
+import { juntarClasses } from '@/utilitarios/juntarClasses';
 import estilos from './PaginaGerador.module.css';
 
 const ID_ABAS = 'tipo-geracao';
@@ -70,6 +74,7 @@ export default function PaginaGerador() {
   const { estado: estadoCopia, copiar, limparAgora } = useAreaTransferencia();
   const { senhas, registrar, remover, limpar } = useHistoricoSessao();
   const { encaminhar } = useSenhaParaAnalise();
+  const { encaminharSenha } = useFolhaImpressao();
   const [visivel, setVisivel] = useState(true);
   const [anuncio, setAnuncio] = useState('');
   const [valorCopiado, setValorCopiado] = useState<string | null>(null);
@@ -115,6 +120,11 @@ export default function PaginaGerador() {
     navegar(caminhos.analisar);
   };
 
+  const imprimirAtual = () => {
+    encaminharSenha(NOME_CAMPO_POR_TIPO_GERADO[tipo], valor);
+    navegar(caminhos.imprimir);
+  };
+
   useEffect(() => {
     const aoTeclar = (evento: KeyboardEvent) => {
       if ((evento.ctrlKey || evento.metaKey) && evento.key === 'Enter') {
@@ -140,7 +150,7 @@ export default function PaginaGerador() {
       />
 
       <div role="tabpanel" id={idPainelAbas(ID_ABAS)} aria-labelledby={idAba(ID_ABAS, parametroTipo)} className={estilos.grade}>
-        <Painel className={estilos.visor} aria-label="Senha gerada">
+        <Painel className={juntarClasses(estilos.visor, CLASSE_CASCATA)} style={comIndice(3)} aria-label="Senha gerada">
           <VisorGerador
             valor={valor}
             visivel={visivel}
@@ -156,10 +166,11 @@ export default function PaginaGerador() {
             aoCopiar={() => void copiarAtual()}
             aoGerar={gerarOutra}
             aoAnalisar={analisarAtual}
+            aoImprimir={imprimirAtual}
           />
         </Painel>
 
-        <Painel className={estilos.opcoes} aria-labelledby="titulo-opcoes">
+        <Painel className={juntarClasses(estilos.opcoes, CLASSE_CASCATA)} style={comIndice(4)} aria-labelledby="titulo-opcoes">
           <CabecalhoPainel titulo={<span id="titulo-opcoes">Opções</span>} />
           {tipo === 'SENHA' ? (
             <OpcoesSenhaAleatoria
@@ -173,7 +184,7 @@ export default function PaginaGerador() {
           {tipo === 'PIN' ? <OpcoesPinNumerico opcoes={gerador.opcoesPin} aoAjustar={gerador.ajustarPin} /> : null}
         </Painel>
 
-        <div className={estilos.historico}>
+        <div className={juntarClasses(estilos.historico, CLASSE_CASCATA)} style={comIndice(5)}>
           <HistoricoSessao
             senhas={senhas}
             visivel={visivel}

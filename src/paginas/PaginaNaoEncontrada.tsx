@@ -15,6 +15,7 @@ import { embaralhar, escolher } from '@/regras/aleatorio';
 import { classificarCaractere } from '@/regras/caracteres';
 import { CONJUNTOS_CARACTERES } from '@/regras/geradorSenha';
 import { caminhos } from '@/rotas/caminhos';
+import { CLASSE_CASCATA, comIndice } from '@/utilitarios/cascata';
 import { juntarClasses } from '@/utilitarios/juntarClasses';
 import estilos from './PaginaNaoEncontrada.module.css';
 
@@ -58,10 +59,6 @@ const classesPorTipo: Record<ClasseCaractere, string | undefined> = {
   SIMBOLO: estilos.simbolo,
   ESPACO: undefined,
 };
-
-function comIndice(indice: number): CSSProperties {
-  return { '--indice': indice } as CSSProperties;
-}
 
 function comAtraso(atrasoMs: number): CSSProperties {
   return { '--atraso': `${atrasoMs}ms` } as CSSProperties;
@@ -182,11 +179,11 @@ export default function PaginaNaoEncontrada() {
         </div>
 
         <div className={estilos.conteudo}>
-          <h1 className={juntarClasses(estilos.titulo, estilos.entra)} style={comIndice(0)}>
+          <h1 className={juntarClasses(estilos.titulo, CLASSE_CASCATA)} style={comIndice(0)}>
             Página não encontrada
           </h1>
 
-          <p className={juntarClasses(estilos.descricao, estilos.entra)} style={comIndice(1)}>
+          <p className={juntarClasses(estilos.descricao, CLASSE_CASCATA)} style={comIndice(1)}>
             Nenhuma combinação abre o endereço{' '}
             <code className={estilos.endereco}>
               <VisorSenha
@@ -199,7 +196,7 @@ export default function PaginaNaoEncontrada() {
             . Ele pode ter sido digitado com um erro ou pertencer a uma tela que mudou de lugar.
           </p>
 
-          <div className={juntarClasses(estilos.acoes, estilos.entra)} style={comIndice(2)}>
+          <div className={juntarClasses(estilos.acoes, CLASSE_CASCATA)} style={comIndice(2)}>
             <Botao icone={KeyRound} onClick={() => navegar(caminhos.gerar)}>
               Ir para o gerador
             </Botao>
@@ -210,7 +207,7 @@ export default function PaginaNaoEncontrada() {
             ) : null}
           </div>
 
-          <nav className={juntarClasses(estilos.atalhos, estilos.entra)} style={comIndice(3)} aria-label="Atalhos">
+          <nav className={juntarClasses(estilos.atalhos, CLASSE_CASCATA)} style={comIndice(3)} aria-label="Atalhos">
             <span className={estilos.rotuloAtalhos}>Talvez você procure</span>
             <ul className={estilos.links}>
               {atalhos.map(({ rotulo, destino }) => (

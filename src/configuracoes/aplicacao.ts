@@ -1,5 +1,6 @@
 export const NOME_APLICACAO = 'Aegis';
 export const SLOGAN_APLICACAO = 'Senhas fortes, sem sair do seu aparelho.';
+export const DESCRICAO_APLICACAO = 'Segurança de senhas';
 
 export const PREFIXO_ARMAZENAMENTO = 'aegis:';
 export const CHAVE_TEMA = `${PREFIXO_ARMAZENAMENTO}tema`;

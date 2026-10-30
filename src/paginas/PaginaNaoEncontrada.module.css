@@ -398,18 +398,6 @@
   text-align: center;
 }
 
-.entra {
-  animation: entrar var(--duracao-lenta) var(--curva-saida) backwards;
-  animation-delay: calc(var(--indice, 0) * var(--passo-cascata-pagina));
-}
-
-@keyframes entrar {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-
 .titulo {
   font-size: var(--tamanho-xl);
 }
