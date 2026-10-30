@@ -20,7 +20,7 @@
 
 .lista {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   height: var(--altura-barra-abas);
 }
 
@@ -84,4 +84,11 @@
 
 .ativo .rotulo {
   font-weight: var(--peso-forte);
+}
+
+@media (max-width: 359px) {
+  .rotulo {
+    font-size: 0.6875rem;
+    letter-spacing: -0.015em;
+  }
 }

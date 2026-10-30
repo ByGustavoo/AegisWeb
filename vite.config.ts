@@ -12,6 +12,9 @@ export default defineConfig({
   server: {
     port: 5175,
   },
+  optimizeDeps: {
+    include: ['jspdf'],
+  },
   preview: {
     port: 4175,
   },

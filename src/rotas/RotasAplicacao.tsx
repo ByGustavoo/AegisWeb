@@ -6,6 +6,7 @@ import { caminhos } from './caminhos';
 
 const PaginaGerador = lazy(() => import('@/paginas/PaginaGerador'));
 const PaginaAnalisador = lazy(() => import('@/paginas/PaginaAnalisador'));
+const PaginaImpressao = lazy(() => import('@/paginas/PaginaImpressao'));
 const PaginaConfiguracoes = lazy(() => import('@/paginas/PaginaConfiguracoes'));
 const PaginaComponentes = ambiente.desenvolvimento ? lazy(() => import('@/paginas/PaginaComponentes')) : null;
 const PaginaNaoEncontrada = lazy(() => import('@/paginas/PaginaNaoEncontrada'));
@@ -17,6 +18,7 @@ export function RotasAplicacao() {
         <Route path={caminhos.inicio} element={<Navigate to={caminhos.gerar} replace />} />
         <Route path={caminhos.gerar} element={<PaginaGerador />} />
         <Route path={caminhos.analisar} element={<PaginaAnalisador />} />
+        <Route path={caminhos.imprimir} element={<PaginaImpressao />} />
         <Route path={caminhos.configuracoes} element={<PaginaConfiguracoes />} />
         {PaginaComponentes ? <Route path={caminhos.componentes} element={<PaginaComponentes />} /> : null}
       </Route>

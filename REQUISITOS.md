@@ -7,7 +7,8 @@ seguintes sem nova aprovação.
 
 Ferramenta pessoal, sem login, para criar senhas fortes e entender se uma senha existente é segura.
 Responde a três perguntas: "me dá uma senha boa agora", "essa senha é forte?" e "por que ela é fraca,
-e como melhoro?". A interface transmite confiança silenciosa: sóbria, precisa, sem alarmismo, com a
+e como melhoro?". Desde a fase 5 responde também a "como guardo minhas contas no papel, organizadas e
+legíveis?". A interface transmite confiança silenciosa: sóbria, precisa, sem alarmismo, com a
 privacidade visível.
 
 ## Decisões
@@ -66,7 +67,7 @@ privacidade visível.
 
 | # | Tema | Decisão |
 |---|---|---|
-| P1 | Selos de confiança | "Processado localmente", "Nenhuma senha armazenada" e "Sua senha não sai do aparelho" numa linha discreta no painel da senha do Gerador e do Analisador, com o link "Como funciona" para a seção Privacidade de Configurações. O cabeçalho do app continua sem selo (sugestão 2). |
+| P1 | Selos de confiança | "Processado localmente", "Nenhuma senha armazenada" e "Sua senha não sai do aparelho" numa linha discreta no painel da senha do Gerador e do Analisador, com o link "Como funciona?" para a seção Privacidade de Configurações. O cabeçalho do app continua sem selo (sugestão 2). |
 | P2 | Histórico da sessão | Guarda só as senhas copiadas. Uma senha trocada por "Gerar outra" sem ser copiada não fica na memória. |
 | P3 | Histórico ao sair do Gerador | Continua até fechar ou recarregar a aba, como em Q4. |
 | P4 | Transparência | A seção Privacidade usa os mesmos títulos dos selos, diz que a verificação de vazamentos ainda não existe e avisa que, se a aba for fechada antes dos 30 segundos, a senha copiada continua na área de transferência. (Pedido em 2 de outubro de 2026.) |
@@ -83,11 +84,41 @@ privacidade visível.
 * **Limpeza:** a senha some ao sair da página, no botão Limpar e depois de 2 minutos sem uso.
 * **Leitor de tela:** anuncia só a nota e o nível, nunca a senha.
 
+## Decisões da fase 5 (impressão)
+
+Pedido em 29 de outubro de 2026: organizar contas e credenciais numa página e gerar um PDF A4 pronto para
+imprimir.
+
+| # | Tema | Decisão |
+|---|---|---|
+| I1 | Onde fica | Item "Imprimir" no menu lateral e na barra de abas (quarta aba no celular), rota `/imprimir`. |
+| I2 | Onde os dados vivem | Só na memória da aba, num provedor do app: continuam ao trocar de tela e somem ao recarregar ou fechar. Com dados na folha, o navegador avisa antes de recarregar ou fechar. |
+| I3 | Limpeza | Sem limpeza por inatividade. Botão "Apagar tudo" com confirmação. |
+| I4 | Conta nova | Começa com um campo vazio. Atalhos E-mail, Usuário, Senha, Código de recuperação e Observação, e sugestões de nome enquanto a pessoa digita. Nenhum campo é obrigatório. |
+| I5 | Layout do PDF | A4 em duas colunas de cartões, preenchidas como um jornal. Cada conta fica inteira numa coluna; a que não cabe se divide com o título repetido e "Continuação". |
+| I6 | Valores no PDF | Geist Mono, com números e símbolos coloridos como no visor e o zero cortado. |
+| I7 | Ocultar | Botão "Ocultar valores" para a tela toda: os valores viram pontos no editor e na prévia. O PDF sai sempre completo. |
+| I8 | Senha no PDF | Não. A criptografia disponível no navegador é fraca (RC4) e daria uma segurança falsa; o app avisa que o arquivo não tem proteção. |
+
+## Regras da impressão
+
+* **Campos livres:** cada campo tem nome e valor livres e independentes; contas e campos podem ser adicionados, editados, removidos e reordenados.
+* **O que vai para o PDF:** só campos com valor. Uma conta sem nenhum valor fica de fora, e o editor diz por quê. Conta sem título sai como "Sem título"; campo sem nome sai só com o valor.
+* **Linhas para preencher à mão:** opção desligada por padrão. Ligada, um campo com nome e sem valor sai como uma linha em branco.
+* **Paginação:** uma conta nunca se divide se couber inteira numa coluna; o nome de um campo nunca fica separado do valor; uma conta pode ser dividida para não deixar mais de 40% de uma coluna em branco; a última página distribui as contas entre as duas colunas; se um espaçamento mais justo economizar uma página, ele é usado. A fonte nunca diminui para caber.
+* **Valores longos:** quebram em espaços quando há; senhas e códigos sem espaço quebram em qualquer caractere. Quando a quebra cai num espaço, um ponto (`·`) marca o espaço no fim da linha. Um valor maior que uma coluna se divide repetindo o nome do campo com "(continuação)".
+* **Documento:** na primeira página, uma faixa verde-clara com a assinatura do Aegis à esquerda (logo, nome e slogan) e o título escolhido (padrão "Minhas credenciais") e a data à direita; nas demais, uma faixa compacta com a assinatura compacta (logo e nome) à esquerda e o título à direita. Cada conta é um cartão com faixa de título (inicial da conta num círculo e nome) e cada valor numa caixa clara. Enfeites: cada conta tem uma cor de uma paleta de 6 tons, usada no círculo, numa barra na lateral do cartão e nos ícones; cada campo tem um ícone escolhido pelo nome (e-mail, senha, usuário, código, telefone, banco, nota, site ou um neutro); a faixa do cabeçalho tem textura de pontos, que se repete no canto inferior esquerdo de cada página, sumindo em curva e sem passar por baixo dos cartões. Rodapé com uma caixa de legenda em duas linhas ("Caracteres parecidos" e "Cores", cada amostra numa etiqueta e os itens separados por hífen), e abaixo dela um cadeado com o aviso de confidencialidade e "Página X de Y". Margens de 15 mm.
+* **Prévia:** desenhada a partir do mesmo cálculo que monta o PDF, enquanto a pessoa digita.
+* **Nome do arquivo:** exatamente o título do documento, com acentos, espaços e maiúsculas, mais `.pdf` (padrão "Minhas credenciais.pdf"). Só saem os caracteres que o sistema não aceita em nome de arquivo (`\ / : * ? " < > |`).
+* **Gerador:** o botão Imprimir leva a senha gerada a uma conta nova no fim da folha, pela memória do app. Cada campo vazio tem um botão para gerar uma senha forte (configuração Uso geral).
+* **Desfazer:** remover uma conta ou um campo com dados mostra "Desfazer" por 8 segundos.
+* **Privacidade:** o PDF é montado no navegador e salvo direto no aparelho; nenhum valor vai para a rede, o console, a URL, o `history.state` ou o armazenamento do navegador. A seção Privacidade de Configurações explica isso.
+
 ## Regras
 
 * **Aleatoriedade:** toda geração usa `crypto.getRandomValues`, nunca `Math.random`.
 * **Nada sai do aparelho**, exceto a verificação de vazamento quando pedida (fase 4), e nela só o prefixo do hash.
-* **Nada é gravado** (as senhas vivem só na memória da aba), exceto as preferências de tema (`aegis:tema`) e de menu recolhido (`aegis:menu-recolhido`) e a marca de boas-vindas vista na sessão (`sessionStorage`).
+* **Nada é gravado** (as senhas e a folha de impressão vivem só na memória da aba; o PDF só existe quando a pessoa baixa), exceto as preferências de tema (`aegis:tema`) e de menu recolhido (`aegis:menu-recolhido`) e a marca de boas-vindas vista na sessão (`sessionStorage`).
 * **Campos de senha** não têm `autocomplete`, correção ortográfica nem registro em console.
 * **Força** em 5 níveis (Muito fraca, Fraca, Razoável, Forte, Muito forte), sempre comunicada por cor, ícone e texto juntos.
 * **Sem dependências externas em tempo de execução:** fontes e ícones vêm do próprio pacote; sem analytics, sem cookies.
@@ -107,6 +138,11 @@ privacidade visível.
 | 10 | Simulação "E se…" com a nota que cada recomendação daria | Aprovada, implementada na fase 3 |
 | 11 | Apagar a senha do Analisador depois de 2 minutos sem uso | Aprovada, implementada na fase 3 |
 | 12 | Exemplos clicáveis de senha fraca no Analisador | Aprovada, implementada na fase 3 |
+| 13 | Botão para gerar uma senha forte num campo vazio da folha de impressão | Aprovada, implementada na fase 5 |
+| 14 | Botão Imprimir no Gerador, levando a senha para uma conta nova da folha | Aprovada, implementada na fase 5 |
+| 15 | Opção de imprimir campos vazios como linha para preencher à mão | Aprovada, implementada na fase 5 |
+| 16 | Legenda de caracteres parecidos no rodapé do PDF | Aprovada, implementada na fase 5 |
+| 17 | Importar o CSV exportado pelo gerenciador de senhas do navegador | Não aprovada |
 | 4 | Funcionar offline / instalável (PWA) | Recusada |
 | 5 | Atalhos de teclado (`G` gerar, `C` copiar) | Não aprovada |
 
@@ -118,3 +154,4 @@ privacidade visível.
 | 2 | Gerador: senha, frase-senha e PIN, finalidades, opções, força, copiar com limpeza da área de transferência, histórico da sessão | Concluída |
 | 3 | Analisador: nota de 0 a 100, nível, tempo estimado, padrões, pontos fortes e fracos, recomendações com simulação | Concluída |
 | 4 | Verificação de vazamento (HIBP), opcional | A fazer |
+| 5 | Impressão: folha de credenciais com campos livres, prévia A4 e PDF gerado no navegador | Concluída |

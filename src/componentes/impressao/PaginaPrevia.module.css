@@ -1,0 +1,13 @@
+.pagina {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 210 / 297;
+  border-radius: var(--raio-xs);
+  box-shadow:
+    0 0 0 1px var(--borda),
+    var(--sombra-flutuante);
+  font-kerning: none;
+  font-variant-ligatures: none;
+  white-space: pre;
+  user-select: none;
+}

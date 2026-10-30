@@ -50,7 +50,22 @@
   transition: opacity var(--duracao-rapida) var(--curva-saida);
 }
 
+.textosMarca {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.descricao {
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+  line-height: 1.35;
+  white-space: nowrap;
+  transition: opacity var(--duracao-rapida) var(--curva-saida);
+}
+
 .recolhido .nome,
+.recolhido .descricao,
 .recolhido .rotuloItem {
   opacity: 0;
   pointer-events: none;
@@ -60,10 +75,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding-top: calc(
-    var(--respiro-topo-conteudo) + var(--altura-sobretitulo) + var(--espaco-2) +
-      (var(--altura-titulo-pagina) - var(--altura-item-menu)) / 2
-  );
+  padding-top: calc(var(--respiro-topo-conteudo) + 1px + (var(--altura-sobretitulo) - var(--altura-item-menu)) / 2);
   padding-bottom: var(--espaco-4);
   overflow-x: hidden;
   overflow-y: auto;

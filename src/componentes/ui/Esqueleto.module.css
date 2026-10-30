@@ -27,11 +27,18 @@
   display: flex;
   flex-direction: column;
   gap: var(--espaco-3);
+  animation: aguardarEsqueleto var(--duracao-lenta) var(--curva-revelar) var(--espera-esqueleto) backwards;
 }
 
 .bloco {
   margin-top: var(--espaco-4);
   border-radius: var(--raio-lg);
+}
+
+@keyframes aguardarEsqueleto {
+  from {
+    opacity: 0;
+  }
 }
 
 @keyframes brilhar {

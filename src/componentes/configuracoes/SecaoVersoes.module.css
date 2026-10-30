@@ -1,0 +1,39 @@
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+}
+
+.linha {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--espaco-4);
+  padding-bottom: var(--espaco-3);
+  border-bottom: 1px solid var(--borda);
+}
+
+.linha:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.linha dt {
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+}
+
+.valor {
+  font-size: var(--tamanho-sm);
+  text-align: right;
+}
+
+.numero {
+  color: var(--texto);
+  font-weight: var(--peso-forte);
+  font-variant-numeric: tabular-nums;
+}
+
+.secundario {
+  color: var(--texto-secundario);
+}

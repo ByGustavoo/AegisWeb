@@ -1,12 +1,18 @@
-const formatoData = new Intl.DateTimeFormat('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
+const formatoData = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
 
-export function formatarDataLonga(instante: string | null): string | null {
-  if (!instante) return null;
-  const data = new Date(instante);
-  return Number.isNaN(data.getTime()) ? null : formatoData.format(data);
+function capitalizar(texto: string): string {
+  return texto.charAt(0).toLocaleUpperCase('pt-BR') + texto.slice(1);
 }
 
-export function formatarVersao(versao: string | null): string {
-  if (!versao) return 'Desenvolvimento';
-  return /^\d/.test(versao) ? `v${versao}` : versao;
+export function formatarDataLonga(instante: string): string | null {
+  const data = new Date(instante);
+  if (Number.isNaN(data.getTime())) return null;
+  return formatoData
+    .formatToParts(data)
+    .map((parte) => (parte.type === 'month' ? capitalizar(parte.value) : parte.value))
+    .join('');
+}
+
+export function formatarVersao(versao: string): string {
+  return versao.replace(/^v(?=\d)/i, '');
 }

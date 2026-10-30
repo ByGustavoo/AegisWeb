@@ -2,6 +2,7 @@ export const caminhos = {
   inicio: '/',
   gerar: '/gerar',
   analisar: '/analisar',
+  imprimir: '/imprimir',
   configuracoes: '/configuracoes',
   componentes: '/componentes',
 } as const;

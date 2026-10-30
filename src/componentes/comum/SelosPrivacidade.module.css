@@ -1,8 +1,8 @@
 .selos {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--espaco-2) var(--espaco-4);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espaco-2);
   padding-top: var(--espaco-4);
   border-top: 1px solid var(--borda);
 }
@@ -29,8 +29,7 @@
 }
 
 .link {
-  margin-left: auto;
-  margin-right: calc(var(--espaco-1) * -1);
+  margin-left: calc(var(--espaco-1) * -1);
   padding: 2px var(--espaco-1);
   border-radius: var(--raio-xs);
   color: var(--destaque);

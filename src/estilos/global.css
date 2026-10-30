@@ -161,6 +161,25 @@ legend {
   transform: translateY(0);
 }
 
+.item-em-cascata {
+  animation:
+    aegis-revelar var(--duracao-revelar-pagina) var(--curva-revelar) backwards,
+    aegis-assentar var(--duracao-entrada-pagina) var(--curva-assentar) backwards;
+  animation-delay: calc(var(--indice, 0) * var(--passo-cascata-pagina));
+}
+
+@keyframes aegis-revelar {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes aegis-assentar {
+  from {
+    transform: translateY(var(--deslocamento-entrada-pagina));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -15,6 +15,8 @@ import { useLimpezaPorInatividade } from '@/ganchos/useLimpezaPorInatividade';
 import { useTituloDocumento } from '@/ganchos/useTituloDocumento';
 import { useSenhaParaAnalise } from '@/provedores/ProvedorSenhaParaAnalise';
 import { caminhos } from '@/rotas/caminhos';
+import { CLASSE_CASCATA, comIndice } from '@/utilitarios/cascata';
+import { juntarClasses } from '@/utilitarios/juntarClasses';
 import estilos from './PaginaAnalisador.module.css';
 
 const ID_CAMPO = 'senha-para-analisar';
@@ -85,8 +87,8 @@ export default function PaginaAnalisador() {
         descricao="Veja quanto uma senha resiste a um ataque e o que melhorar nela."
       />
 
-      <div className={estilos.grade}>
-        <Painel className={estilos.entrada} aria-labelledby="titulo-entrada">
+      <div className={preenchida ? `${estilos.grade} ${estilos.gradeComSenha}` : estilos.grade}>
+        <Painel className={juntarClasses(estilos.entrada, CLASSE_CASCATA)} style={comIndice(3)} aria-labelledby="titulo-entrada">
           <CabecalhoPainel titulo={<span id="titulo-entrada">Sua senha</span>} />
           <CampoSenha
             id={ID_CAMPO}
@@ -137,7 +139,7 @@ export default function PaginaAnalisador() {
           <SelosPrivacidade />
         </Painel>
 
-        <Painel className={estilos.resultado} aria-labelledby="titulo-resultado">
+        <Painel className={juntarClasses(estilos.resultado, CLASSE_CASCATA)} style={comIndice(4)} aria-labelledby="titulo-resultado">
           <CabecalhoPainel titulo={<span id="titulo-resultado">Resultado</span>} />
           {fase === 'FALHOU' ? (
             <EstadoMensagem
@@ -211,7 +213,12 @@ export default function PaginaAnalisador() {
           </>
         ) : null}
 
-        <Painel tom="suave" className={estilos.vazamento} aria-labelledby="titulo-vazamento">
+        <Painel
+          tom="suave"
+          className={juntarClasses(estilos.vazamento, CLASSE_CASCATA)}
+          style={comIndice(5)}
+          aria-labelledby="titulo-vazamento"
+        >
           <CabecalhoPainel
             nivel={2}
             titulo={<span id="titulo-vazamento">Vazamentos conhecidos</span>}

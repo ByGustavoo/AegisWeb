@@ -11,7 +11,7 @@
 .opcao {
   position: relative;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: var(--espaco-3);
   padding: var(--espaco-2);
   border: 1px solid var(--borda);
@@ -50,6 +50,7 @@
 
 .previa {
   display: block;
+  flex: 0 0 30%;
   overflow: hidden;
   border-radius: var(--raio-md);
   aspect-ratio: 16 / 10;
@@ -185,7 +186,8 @@
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 2px var(--espaco-2);
-  padding: 0 var(--espaco-2) var(--espaco-2);
+  min-width: 0;
+  padding-right: var(--espaco-2);
 }
 
 .marcador {
@@ -221,22 +223,13 @@
   }
 }
 
-@container aparencia (max-width: 560px) {
+@container aparencia (max-width: 600px) {
   .grupo {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--espaco-3);
   }
 
-  .opcao {
-    flex-direction: row;
-    align-items: center;
-  }
-
   .previa {
-    flex: 0 0 38%;
-  }
-
-  .textos {
-    padding: 0 var(--espaco-2) 0 0;
+    flex-basis: min(38%, 7rem);
   }
 }

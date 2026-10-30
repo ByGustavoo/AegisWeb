@@ -61,6 +61,19 @@
   letter-spacing: -0.02em;
 }
 
+.textosMarca {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.descricao {
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
 .acoes {
   display: flex;
   align-items: center;

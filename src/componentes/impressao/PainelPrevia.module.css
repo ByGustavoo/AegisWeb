@@ -1,0 +1,92 @@
+.painel {
+  gap: var(--espaco-4);
+  min-height: 0;
+}
+
+.painel:focus {
+  outline: none;
+}
+
+.painel > header {
+  margin-bottom: 0;
+}
+
+.baixar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+.estado {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-2);
+  min-height: 1.35em;
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+  line-height: var(--altura-linha-compacta);
+  overflow-wrap: anywhere;
+}
+
+.estado:empty {
+  display: none;
+}
+
+.estado svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.falhou {
+  color: var(--erro);
+}
+
+.aviso {
+  margin-top: calc(var(--espaco-1) * -1);
+}
+
+.paginas {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--espaco-5);
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-inline: calc(var(--espaco-2) * -1);
+  padding: var(--espaco-2);
+  border-radius: var(--raio-md);
+}
+
+.paginas:focus-visible {
+  outline: 2px solid var(--destaque);
+  outline-offset: 0;
+}
+
+.estadoCentral {
+  margin-block: auto;
+}
+
+.figura {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  animation: surgirPagina var(--duracao-lenta) var(--curva-saida);
+}
+
+.legenda {
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+  text-align: center;
+}
+
+.esqueleto {
+  display: block;
+  aspect-ratio: 210 / 297;
+}
+
+@keyframes surgirPagina {
+  from {
+    opacity: 0;
+  }
+}

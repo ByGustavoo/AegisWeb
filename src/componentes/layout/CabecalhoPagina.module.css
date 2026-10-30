@@ -1,4 +1,6 @@
 .cabecalhoPagina {
+  --deslocamento-entrada-pagina: 6px;
+
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
@@ -30,6 +32,10 @@
 .descricao {
   color: var(--texto-secundario);
   font-size: var(--tamanho-base);
+}
+
+.descricaoLivre {
+  max-width: none;
 }
 
 .acoes {

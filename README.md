@@ -5,7 +5,7 @@
 <br>
 
 <div align="center">
-  <strong>Aegis</strong> é um gerador e analisador de senhas: <em>senhas fortes, sem sair do seu aparelho</em>. Cria senhas, frases-senha e PINs e mostra quanto uma senha resiste a um ataque, com tudo acontecendo no navegador. Não tem backend, não grava senhas e não carrega nada de terceiros.
+  <strong>Aegis</strong> é um gerador e analisador de senhas: <em>senhas fortes, sem sair do seu aparelho</em>. Cria senhas, frases-senha e PINs, mostra quanto uma senha resiste a um ataque e monta uma folha de credenciais em PDF para guardar no papel, com tudo acontecendo no navegador. Não tem backend, não grava senhas e não carrega nada de terceiros.
 </div>
 
 <br> <br>
@@ -23,6 +23,8 @@
 * 🎬 Remotion 4
 
 * 🖼️ Lucide React
+
+* 📄 jsPDF 4
 
 * 🔷 TypeScript 5
 
@@ -61,10 +63,10 @@ $ npm run estudio --prefix video
 
 ## 📌 Status do Projeto
 
-**Fase 3 — Analisador: concluída.** Análise local de senhas com nota de 0 a 100, pontos fortes e fracos e
-recomendações. A verificação de vazamentos entra na fase 4. Decisões e escopo de cada fase em
+**Fase 5 — Impressão: concluída.** Folha de credenciais com contas e campos livres, prévia A4 e PDF gerado
+no navegador. A verificação de vazamentos (fase 4) continua a fazer. Decisões e escopo de cada fase em
 [`REQUISITOS.md`](REQUISITOS.md). As listas de senhas e palavras comuns têm origem e licença em
-[`LICENCAS-DE-TERCEIROS.md`](LICENCAS-DE-TERCEIROS.md).
+[`LICENCAS-DE-TERCEIROS.md`](LICENCAS-DE-TERCEIROS.md), junto com as do jsPDF e das fontes embutidas no PDF.
 
 <br>
 
@@ -96,7 +98,15 @@ recomendações. A verificação de vazamentos entra na fase 4. Decisões e esco
 
 * **Privacidade evidente:** selos "Processado localmente", "Nenhuma senha armazenada" e "Sua senha não sai do aparelho" no Gerador e no Analisador, com link para os detalhes; exemplos clicáveis e limpeza da senha ao sair, no botão Limpar ou depois de 2 minutos sem uso.
 
-* **Configurações:** tema claro, escuro ou automático; seção Privacidade com o que acontece com as senhas; versão e data de lançamento.
+* **Imprimir credenciais:** contas com título livre e quantos campos quiser, cada um com nome e valor livres; atalhos para E-mail, Usuário, Senha, Código de recuperação e Observação; reordenar contas e campos; desfazer remoções; ocultar os valores na tela; "Apagar tudo" com confirmação.
+
+* **PDF de verdade, montado no navegador:** papel A4 em duas colunas, com quebras que mantêm cada conta inteira quando ela cabe, nunca separam o nome do valor e equilibram a última página. Campos vazios ficam de fora, valores em Geist Mono com números e símbolos coloridos e o zero cortado, legenda de caracteres parecidos no rodapé e, se pedido, linhas em branco para preencher à mão.
+
+* **Prévia fiel:** as páginas são desenhadas pelo mesmo cálculo que monta o PDF e se atualizam enquanto a pessoa digita.
+
+* **Do Gerador para o papel:** o botão Imprimir leva a senha gerada a uma conta nova da folha, sem passar pela URL, e cada campo vazio tem um botão para gerar uma senha forte ali.
+
+* **Configurações:** tema claro, escuro ou automático; seção Privacidade com o que acontece com as senhas; versão da aplicação web e data de lançamento.
 
 * **Tela de boas-vindas** uma vez por sessão, com a marca deslizando até o menu na entrada do app, e página de não encontrada.
 
@@ -237,7 +247,7 @@ $ docker compose -f docker-compose-aegisweb.yml up -d
 
 * 📲 **Tablet (até 1023px):** o menu fica recolhido, só com ícones. As colunas do Gerador e do Analisador empilham pela largura real da área de conteúdo (container queries), então também empilham em 1024px com o menu aberto.
 
-* 📱 **Celular (até 767px):** barra de abas fixa embaixo, com Gerar, Analisar e Configurações.
+* 📱 **Celular (até 767px):** barra de abas fixa embaixo, com Gerar, Analisar, Imprimir e Configurações. Em Imprimir, a edição e a prévia viram duas abas.
 
 * 👆 **Toque:** alvos de 44px em telas de toque e campos de senha com mais de 16px.
 
@@ -249,24 +259,27 @@ $ docker compose -f docker-compose-aegisweb.yml up -d
 
 ```
 src
+├── assets
+│   └── fontes          # Geist e Geist Mono estáticas, embutidas no PDF
 ├── componentes
 │   ├── analisador      # Mapa da senha, placar, pontos e recomendações
 │   ├── boasVindas      # Tela de boas-vindas e transição para o app
 │   ├── gerador         # Visor, finalidades, opções e histórico da sessão
+│   ├── impressao       # Editor de contas, prévia A4 e geração do PDF
 │   ├── comum           # MarcaAegis e SelosPrivacidade
 │   ├── configuracoes   # Seções Aparência, Privacidade e Sobre
 │   ├── layout          # MenuLateral, Cabecalho, BarraAbas, BotaoTema, CabecalhoPagina
 │   ├── senha           # VisorSenha e MedidorForca
 │   └── ui              # Design system: botões, painéis, abas, campo de senha, estados
-├── configuracoes       # Ambiente, aplicação, navegação, finalidades, geração, análise, privacidade e níveis de força
+├── configuracoes       # Ambiente, aplicação, navegação, finalidades, geração, análise, impressão, privacidade e níveis de força
 ├── dados               # Palavras da frase-senha e listas de senhas, palavras e nomes comuns
 ├── estilos             # tokens.css, temas.css e global.css
 ├── ganchos             # Gerador, analisador, limpeza por inatividade, título e preferências
 ├── layouts             # LayoutAplicacao
 ├── modelos             # Tipos do domínio de senhas
 ├── paginas             # Uma página por rota
-├── provedores          # Tema, área de transferência, histórico da sessão e encaminhamento à análise
-├── regras              # Sorteio, geradores, força, caracteres e motor de análise, com testes
+├── provedores          # Tema, área de transferência, histórico da sessão, encaminhamento à análise e folha de impressão
+├── regras              # Sorteio, geradores, força, caracteres, motor de análise e paginação do PDF, com testes
 ├── rotas               # Caminhos e tabela de rotas
 └── utilitarios         # Formatação, título e classes
 ```
