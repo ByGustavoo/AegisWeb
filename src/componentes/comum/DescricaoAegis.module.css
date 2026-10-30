@@ -1,0 +1,20 @@
+.palavra {
+  display: inline-block;
+}
+
+:global(.nome-chegando) .descricao {
+  clip-path: inset(-0.5em -0.5em -0.5em 0);
+}
+
+:global(.nome-chegando) .palavra {
+  animation: palavraChegar 560ms var(--curva-saida) backwards;
+  animation-delay: calc(700ms + var(--i, 0) * 70ms);
+}
+
+@keyframes palavraChegar {
+  from {
+    opacity: 0;
+    transform: translateX(-1.4em);
+    filter: blur(4px);
+  }
+}

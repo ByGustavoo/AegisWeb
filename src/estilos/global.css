@@ -221,6 +221,10 @@ legend {
   view-transition-name: nome-aegis;
 }
 
+.descricao-em-transicao {
+  view-transition-name: descricao-aegis;
+}
+
 ::view-transition-group(marca-aegis),
 ::view-transition-old(marca-aegis),
 ::view-transition-new(marca-aegis),
@@ -239,7 +243,8 @@ legend {
   animation: aegis-transicao-entrar 640ms var(--curva-saida) 200ms both;
 }
 
-.saindo-das-boas-vindas::view-transition-new(nome-aegis) {
+.saindo-das-boas-vindas::view-transition-new(nome-aegis),
+.saindo-das-boas-vindas::view-transition-new(descricao-aegis) {
   animation: none;
 }
 

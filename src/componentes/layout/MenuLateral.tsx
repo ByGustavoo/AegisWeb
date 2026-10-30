@@ -1,8 +1,9 @@
 import { Link, NavLink } from 'react-router-dom';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { MarcaAegis } from '@/componentes/comum/MarcaAegis';
+import { DescricaoAegis } from '@/componentes/comum/DescricaoAegis';
 import { NomeAegis } from '@/componentes/comum/NomeAegis';
-import { DESCRICAO_APLICACAO, NOME_APLICACAO } from '@/configuracoes/aplicacao';
+import { NOME_APLICACAO } from '@/configuracoes/aplicacao';
 import type { ItemNavegacao } from '@/configuracoes/navegacao';
 import { navegacaoConfiguracoes, navegacaoFerramentas } from '@/configuracoes/navegacao';
 import { caminhos } from '@/rotas/caminhos';
@@ -31,7 +32,7 @@ export function MenuLateral({ recolhido, podeExpandir, aoAlternarRecolhido }: Me
           </span>
           <span className={estilos.textosMarca}>
             <NomeAegis className={juntarClasses(estilos.nome, 'nome-em-transicao')} />
-            <span className={estilos.descricao}>{DESCRICAO_APLICACAO}</span>
+            <DescricaoAegis className={juntarClasses(estilos.descricao, 'descricao-em-transicao')} />
           </span>
         </Link>
       </div>
