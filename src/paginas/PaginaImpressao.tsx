@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { Eye, EyeOff, FileDown, PencilLine, Plus, Printer, Trash2, Undo2 } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Eye, EyeOff, FileDown, FileUp, PencilLine, Plus, Printer, Trash2, Undo2 } from 'lucide-react';
 import { EditorConta } from '@/componentes/impressao/EditorConta';
+import { ImportarSenhas } from '@/componentes/impressao/ImportarSenhas';
 import {
   ID_LISTA_NOMES_CAMPO,
   idAdicionarCampo,
@@ -10,22 +10,24 @@ import {
   idValorCampo,
 } from '@/componentes/impressao/idsImpressao';
 import { PainelPrevia } from '@/componentes/impressao/PainelPrevia';
-import type { EstadoDownload } from '@/componentes/impressao/PainelPrevia';
 import { CabecalhoPagina } from '@/componentes/layout/CabecalhoPagina';
 import { Botao, CabecalhoPainel, EstadoMensagem, Interruptor, Painel } from '@/componentes/ui';
 import { descreverFinalidade, FINALIDADE_PADRAO } from '@/configuracoes/finalidades';
 import {
   NOMES_CAMPO_SUGERIDOS,
+  SEGUNDOS_PARA_AVISO_IMPORTACAO,
   SEGUNDOS_PARA_DESFAZER_REMOCAO,
   TAMANHO_MAXIMO_TITULO_DOCUMENTO,
   TITULO_DOCUMENTO_PADRAO,
 } from '@/configuracoes/impressao';
 import { useDocumentoImpresso } from '@/ganchos/useDocumentoImpresso';
 import { useTituloDocumento } from '@/ganchos/useTituloDocumento';
-import type { CampoCredencial } from '@/modelos/impressao';
+import type { CampoCredencial, ContaImportada } from '@/modelos/impressao';
 import { useFolhaImpressao } from '@/provedores/ProvedorFolhaImpressao';
 import type { RemocaoDesfazivel } from '@/provedores/ProvedorFolhaImpressao';
+import { useNotificacoes } from '@/provedores/ProvedorNotificacoes';
 import { nomeDoArquivo } from '@/regras/impressao/arquivo';
+import { chaveDaConta } from '@/regras/impressao/importacaoCsv';
 import { gerarSenha } from '@/regras/geradorSenha';
 import { CLASSE_CASCATA, comIndice } from '@/utilitarios/cascata';
 import { juntarClasses } from '@/utilitarios/juntarClasses';
@@ -36,6 +38,7 @@ type Vista = 'EDITAR' | 'PREVIA';
 const ID_TITULO_DOCUMENTO = 'titulo-do-documento';
 const ID_PREVIA = 'previa-do-pdf';
 const ID_APAGAR_TUDO = 'apagar-folha';
+const ID_ADICIONAR_CONTA = 'adicionar-conta';
 
 function focar(id: string, bloco: ScrollLogicalPosition = 'nearest'): void {
   window.requestAnimationFrame(() => {
@@ -61,10 +64,14 @@ function baixarArquivo(conteudo: Blob, nome: string): void {
 function descreverRemocao(remocao: RemocaoDesfazivel): string {
   if (remocao.tipo === 'CONTA') {
     const titulo = remocao.conta.titulo.trim();
-    return titulo ? `Conta “${titulo}” excluída.` : 'Conta sem nome excluída.';
+    return titulo ? `Conta “${titulo}” excluída` : 'Conta sem nome excluída';
   }
   const nome = remocao.campo.nome.trim();
-  return nome ? `Campo “${nome}” removido.` : 'Campo sem nome removido.';
+  return nome ? `Campo “${nome}” removido` : 'Campo sem nome removido';
+}
+
+function descreverImportacao(total: number): string {
+  return total === 1 ? '1 conta entrou na folha' : `${total} contas entraram na folha`;
 }
 
 export default function PaginaImpressao() {
@@ -72,13 +79,18 @@ export default function PaginaImpressao() {
   const folhaImpressao = useFolhaImpressao();
   const { folha, remocao, esquecerRemocao, retirarContaEncaminhada } = folhaImpressao;
   const { documento, fase, montarAgora } = useDocumentoImpresso(folha);
+  const { notificar, dispensar, dispensarTodas } = useNotificacoes();
   const [valoresOcultos, setValoresOcultos] = useState(false);
   const [vista, setVista] = useState<Vista>('EDITAR');
   const [confirmandoApagar, setConfirmandoApagar] = useState(false);
-  const [download, setDownload] = useState<EstadoDownload>({ fase: 'OCIOSO' });
+  const [gerandoPdf, setGerandoPdf] = useState(false);
   const [anuncio, setAnuncio] = useState('');
+  const [importando, setImportando] = useState(false);
+  const contaParaFocar = useRef<string | null>(null);
+  const avisoRemocao = useRef<string | null>(null);
 
   const totalContas = folha.contas.length;
+  const chavesNaFolha = useMemo(() => new Set(folha.contas.map(chaveDaConta)), [folha.contas]);
 
   useEffect(() => {
     const encaminhada = retirarContaEncaminhada();
@@ -87,21 +99,70 @@ export default function PaginaImpressao() {
     focar(idTituloConta(encaminhada), 'center');
   }, [retirarContaEncaminhada]);
 
-  useEffect(() => {
-    if (!remocao) return undefined;
-    const temporizador = window.setTimeout(esquecerRemocao, SEGUNDOS_PARA_DESFAZER_REMOCAO * 1000);
-    return () => window.clearTimeout(temporizador);
-  }, [esquecerRemocao, remocao]);
+  const desfazerRemocao = (alvo: RemocaoDesfazivel) => {
+    folhaImpressao.desfazerRemocao();
+    focar(alvo.tipo === 'CONTA' ? idTituloConta(alvo.conta.id) : idNomeCampo(alvo.campo.id));
+  };
+  const desfazerRemocaoAtual = useRef(desfazerRemocao);
+  desfazerRemocaoAtual.current = desfazerRemocao;
 
   useEffect(() => {
-    setDownload((atual) => (atual.fase === 'BAIXADO' || atual.fase === 'FALHOU' ? { fase: 'OCIOSO' } : atual));
-  }, [folha]);
+    if (avisoRemocao.current) {
+      dispensar(avisoRemocao.current);
+      avisoRemocao.current = null;
+    }
+    if (!remocao) return;
+    avisoRemocao.current = notificar({
+      titulo: descreverRemocao(remocao),
+      variante: 'INFO',
+      duracao: SEGUNDOS_PARA_DESFAZER_REMOCAO * 1000,
+      acao: { rotulo: 'Desfazer', icone: Undo2, aoAcionar: () => desfazerRemocaoAtual.current(remocao) },
+      aoSair: () => esquecerRemocao(remocao),
+    });
+  }, [dispensar, esquecerRemocao, notificar, remocao]);
 
   const adicionarConta = () => {
     const conta = folhaImpressao.adicionarConta();
     setConfirmandoApagar(false);
     focar(idTituloConta(conta.id), 'center');
   };
+
+  const abrirImportacao = () => {
+    dispensarTodas();
+    esquecerRemocao();
+    setImportando(true);
+  };
+
+  const desfazerImportacao = (ids: string[]) => {
+    folhaImpressao.desfazerImportacao(ids);
+    setAnuncio(ids.length === 1 ? 'A conta importada saiu da folha.' : 'As contas importadas saíram da folha.');
+    focar(ID_ADICIONAR_CONTA);
+  };
+
+  const importarContas = (contas: ContaImportada[]) => {
+    const novas = folhaImpressao.importarContas(contas.map(({ titulo, campos }) => ({ titulo, campos })));
+    const ids = novas.map((conta) => conta.id);
+    esquecerRemocao();
+    setConfirmandoApagar(false);
+    setVista('EDITAR');
+    setImportando(false);
+    contaParaFocar.current = ids[0] ?? null;
+    notificar({
+      titulo: descreverImportacao(novas.length),
+      descricao: 'Apague o arquivo .csv do computador, pois ele guarda as senhas sem proteção.',
+      variante: 'SUCESSO',
+      duracao: SEGUNDOS_PARA_AVISO_IMPORTACAO * 1000,
+      acao: { rotulo: 'Desfazer', icone: Undo2, aoAcionar: () => desfazerImportacao(ids) },
+    });
+  };
+
+  const focarContaImportada = useCallback(() => {
+    const id = contaParaFocar.current;
+    contaParaFocar.current = null;
+    if (!id) return false;
+    focar(idTituloConta(id), 'center');
+    return true;
+  }, []);
 
   const adicionarCampo = (contaId: string, nome?: string) => {
     const campo = folhaImpressao.adicionarCampo(contaId, nome);
@@ -131,7 +192,7 @@ export default function PaginaImpressao() {
     const indice = folha.contas.findIndex((conta) => conta.id === contaId);
     const vizinha = folha.contas[indice + 1] ?? folha.contas[indice - 1];
     folhaImpressao.removerConta(contaId);
-    focar(vizinha ? idTituloConta(vizinha.id) : 'adicionar-conta');
+    focar(vizinha ? idTituloConta(vizinha.id) : ID_ADICIONAR_CONTA);
   };
 
   const removerCampo = (contaId: string, campoId: string) => {
@@ -149,32 +210,36 @@ export default function PaginaImpressao() {
     focar(idValorCampo(campo.id));
   };
 
-  const desfazer = useCallback(() => {
-    if (!remocao) return;
-    folhaImpressao.desfazerRemocao();
-    focar(remocao.tipo === 'CONTA' ? idTituloConta(remocao.conta.id) : idNomeCampo(remocao.campo.id));
-  }, [folhaImpressao, remocao]);
-
   const apagarTudo = () => {
     folhaImpressao.apagarTudo();
+    dispensarTodas();
     setConfirmandoApagar(false);
-    setDownload({ fase: 'OCIOSO' });
     setAnuncio('A folha foi apagada.');
-    focar('adicionar-conta');
+    focar(ID_ADICIONAR_CONTA);
   };
 
   const baixar = async () => {
     const atual = montarAgora();
     if (!atual || atual.paginas.length === 0) return;
-    setDownload({ fase: 'GERANDO' });
+    setGerandoPdf(true);
     try {
       const { gerarPdf } = await import('@/componentes/impressao/gerarPdf');
       const conteudo = await gerarPdf(atual);
       const arquivo = nomeDoArquivo(atual.titulo);
       baixarArquivo(conteudo, arquivo);
-      setDownload({ fase: 'BAIXADO', arquivo });
+      notificar({
+        titulo: 'PDF baixado',
+        descricao: `${arquivo} está na pasta de downloads. Guarde em local seguro e apague depois de imprimir.`,
+        variante: 'SUCESSO',
+      });
     } catch {
-      setDownload({ fase: 'FALHOU' });
+      notificar({
+        titulo: 'Não foi possível gerar o PDF',
+        descricao: 'As fontes do documento não carregaram. Confira a conexão e tente de novo.',
+        variante: 'ERRO',
+      });
+    } finally {
+      setGerandoPdf(false);
     }
   };
 
@@ -193,6 +258,9 @@ export default function PaginaImpressao() {
         acoes={
           totalContas > 0 ? (
             <>
+              <Botao variante="secundario" icone={FileUp} onClick={abrirImportacao}>
+                Importar do navegador
+              </Botao>
               <Botao
                 variante="secundario"
                 icone={valoresOcultos ? Eye : EyeOff}
@@ -203,6 +271,7 @@ export default function PaginaImpressao() {
               </Botao>
               <Botao
                 id={ID_APAGAR_TUDO}
+                className="botao-fechar"
                 variante="terciario"
                 icone={Trash2}
                 aria-expanded={confirmandoApagar}
@@ -301,11 +370,16 @@ export default function PaginaImpressao() {
                 icone={Printer}
                 nivelTitulo={2}
                 titulo="Nenhuma conta na folha ainda"
-                descricao="Cada conta vira um cartão no PDF. Dê um nome, como Conta Google, e adicione só os campos de que precisa: e-mail, senha, código de recuperação ou o que quiser."
+                descricao="Cada conta vira um cartão no PDF. Adicione uma por uma ou traga de uma vez as senhas salvas no navegador, pelo arquivo .csv da exportação."
                 acao={
-                  <Botao id="adicionar-conta" icone={Plus} onClick={adicionarConta}>
-                    Adicionar conta
-                  </Botao>
+                  <div className={estilos.acoesVazio}>
+                    <Botao id={ID_ADICIONAR_CONTA} icone={Plus} onClick={adicionarConta}>
+                      Adicionar conta
+                    </Botao>
+                    <Botao variante="secundario" icone={FileUp} onClick={abrirImportacao}>
+                      Importar do navegador
+                    </Botao>
+                  </div>
                 }
               />
             </Painel>
@@ -332,7 +406,7 @@ export default function PaginaImpressao() {
                 ))}
               </ol>
               <div className={juntarClasses(estilos.fimEditor, CLASSE_CASCATA)} style={comIndice(5)}>
-                <Botao id="adicionar-conta" variante="secundario" tamanho="lg" icone={Plus} larguraTotal onClick={adicionarConta}>
+                <Botao id={ID_ADICIONAR_CONTA} variante="secundario" tamanho="lg" icone={Plus} larguraTotal onClick={adicionarConta}>
                   Adicionar conta
                 </Botao>
                 <Botao
@@ -356,7 +430,7 @@ export default function PaginaImpressao() {
           documento={documento}
           fase={fase}
           valoresOcultos={valoresOcultos}
-          download={download}
+          gerando={gerandoPdf}
           aoBaixar={() => void baixar()}
         />
       </div>
@@ -367,17 +441,13 @@ export default function PaginaImpressao() {
         ))}
       </datalist>
 
-      {remocao
-        ? createPortal(
-            <div className={estilos.desfazer} role="status">
-              <span>{descreverRemocao(remocao)}</span>
-              <Botao variante="terciario" tamanho="sm" icone={Undo2} className={estilos.botaoDesfazer} onClick={desfazer}>
-                Desfazer
-              </Botao>
-            </div>,
-            document.body,
-          )
-        : null}
+      <ImportarSenhas
+        aberto={importando}
+        aoFechar={() => setImportando(false)}
+        chavesNaFolha={chavesNaFolha}
+        aoImportar={importarContas}
+        assumirFocoAoFechar={focarContaImportada}
+      />
 
       <p className="visualmente-oculto" aria-live="polite">
         {anuncio}

@@ -104,6 +104,8 @@ no navegador. A verificação de vazamentos (fase 4) continua a fazer. Decisões
 
 * **Prévia fiel:** as páginas são desenhadas pelo mesmo cálculo que monta o PDF e se atualizam enquanto a pessoa digita.
 
+* **Importar do navegador:** o arquivo .csv que o Chrome, o Edge, o Brave, o Opera, o Firefox ou o Safari geram ao exportar as senhas salvas vira uma conta por login, com E-mail ou Usuário, Senha, Site e Observação. Antes de entrar, as contas aparecem numa lista em ordem alfabética para marcar só as que vão para o papel; as repetidas e as que já estão na folha ficam de fora. O arquivo é lido no navegador e não é guardado.
+
 * **Do Gerador para o papel:** o botão Imprimir leva a senha gerada a uma conta nova da folha, sem passar pela URL, e cada campo vazio tem um botão para gerar uma senha forte ali.
 
 * **Configurações:** tema claro, escuro ou automático; seção Privacidade com o que acontece com as senhas; versão da aplicação web e data de lançamento.

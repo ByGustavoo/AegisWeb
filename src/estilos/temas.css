@@ -54,6 +54,8 @@
   --sombra-cartao: 0 1px 2px rgba(17, 22, 26, 0.04);
   --sombra-flutuante: 0 12px 28px -12px rgba(17, 22, 26, 0.2), 0 2px 6px rgba(17, 22, 26, 0.05);
   --sombra-destaque: 0 6px 16px -8px rgba(11, 107, 93, 0.5);
+  --sombra-sobreposicao: 0 24px 56px -20px rgba(17, 22, 26, 0.35), 0 4px 12px rgba(17, 22, 26, 0.08);
+  --veu: rgba(17, 22, 26, 0.42);
   --anel-foco: 0 0 0 3px rgba(11, 107, 93, 0.3);
   --esqueleto-base: #e9ecee;
   --esqueleto-brilho: #f5f7f8;
@@ -117,6 +119,8 @@
   --sombra-cartao: 0 1px 2px rgba(0, 0, 0, 0.3);
   --sombra-flutuante: 0 16px 32px -16px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.35);
   --sombra-destaque: 0 6px 18px -8px rgba(79, 209, 182, 0.35);
+  --sombra-sobreposicao: 0 28px 64px -20px rgba(0, 0, 0, 0.85), 0 4px 12px rgba(0, 0, 0, 0.45);
+  --veu: rgba(3, 5, 6, 0.68);
   --anel-foco: 0 0 0 3px rgba(79, 209, 182, 0.35);
   --esqueleto-base: #232a2f;
   --esqueleto-brilho: #2d353b;

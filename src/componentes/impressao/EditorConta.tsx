@@ -86,7 +86,7 @@ export function EditorConta({
             disabled={posicao === total}
             onClick={() => mover(1)}
           />
-          <BotaoIcone icone={Trash2} rotulo={`Excluir ${nomeConta}`} onClick={aoRemover} />
+          <BotaoIcone icone={Trash2} rotulo={`Excluir ${nomeConta}`} className="botao-fechar" onClick={aoRemover} />
         </div>
       </div>
 

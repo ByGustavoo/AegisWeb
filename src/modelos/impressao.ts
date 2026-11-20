@@ -107,3 +107,32 @@ export interface DocumentoImpresso {
   totalContas: number;
   paginas: PaginaImpressa[];
 }
+
+export interface CampoNovo {
+  nome: string;
+  valor: string;
+}
+
+export interface ContaNova {
+  titulo: string;
+  campos: CampoNovo[];
+}
+
+export type OrigemExportacao = 'CHROMIUM' | 'FIREFOX' | 'SAFARI' | 'OUTRA';
+
+export interface ContaImportada extends ContaNova {
+  chave: string;
+  usuario: string;
+}
+
+export type MotivoFalhaImportacao = 'VAZIO' | 'SEM_COLUNA_SENHA' | 'SEM_CONTAS' | 'NAO_E_CSV' | 'GRANDE_DEMAIS' | 'ILEGIVEL';
+
+export type ResultadoImportacao =
+  | {
+      tipo: 'LIDO';
+      origem: OrigemExportacao;
+      contas: ContaImportada[];
+      repetidasNoArquivo: number;
+      comCodigoDoisFatores: number;
+    }
+  | { tipo: 'FALHOU'; motivo: MotivoFalhaImportacao };

@@ -62,7 +62,7 @@ export function HistoricoSessao({ senhas, visivel, valorCopiado, aoCopiar, aoRem
         descricao={`As últimas ${TAMANHO_HISTORICO_SESSAO} senhas que você copiou ficam aqui até fechar ou recarregar a aba. Nada é gravado.`}
         acao={
           senhas.length > 0 ? (
-            <Botao variante="terciario" tamanho="sm" icone={Trash2} onClick={limpar}>
+            <Botao variante="terciario" tamanho="sm" icone={Trash2} className="botao-fechar" onClick={limpar}>
               Limpar
             </Botao>
           ) : null
@@ -102,7 +102,13 @@ export function HistoricoSessao({ senhas, visivel, valorCopiado, aoCopiar, aoRem
                     className={juntarClasses(copiada && estilos.copiada)}
                     onClick={() => aoCopiar(senha)}
                   />
-                  <BotaoIcone icone={Trash2} rotulo="Remover do histórico" tamanho="sm" onClick={() => remover(senha.id)} />
+                  <BotaoIcone
+                    icone={Trash2}
+                    rotulo="Remover do histórico"
+                    tamanho="sm"
+                    className="botao-fechar"
+                    onClick={() => remover(senha.id)}
+                  />
                 </span>
               </li>
             );

@@ -1,0 +1,117 @@
+.caixa {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  min-width: 0;
+  min-height: var(--alvo-toque);
+  cursor: pointer;
+}
+
+.controle {
+  position: relative;
+  display: inline-grid;
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.entrada {
+  position: absolute;
+  inset: -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.marca {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid var(--borda-controle);
+  border-radius: var(--raio-xs);
+  background-color: var(--superficie);
+  color: var(--destaque-contraste);
+  pointer-events: none;
+  transition:
+    background-color var(--duracao-rapida) var(--curva-saida),
+    border-color var(--duracao-rapida) var(--curva-saida),
+    box-shadow var(--duracao-base) var(--curva-saida);
+}
+
+.marca > svg {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity var(--duracao-rapida) var(--curva-saida),
+    transform var(--duracao-base) var(--curva-mola);
+}
+
+.entrada:checked + .marca,
+.entrada:indeterminate + .marca {
+  border-color: var(--destaque);
+  background-color: var(--destaque);
+}
+
+.entrada:checked:not(:indeterminate) + .marca .iconeMarcada,
+.entrada:indeterminate + .marca .iconeParcial {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.entrada:focus-visible + .marca {
+  box-shadow: var(--anel-foco);
+}
+
+.textos {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.rotulo {
+  overflow: hidden;
+  color: var(--texto);
+  font-size: var(--tamanho-sm);
+  font-weight: var(--peso-medio);
+  line-height: var(--altura-linha-compacta);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.descricao {
+  overflow: hidden;
+  color: var(--texto-terciario);
+  font-size: var(--tamanho-xs);
+  line-height: var(--altura-linha-compacta);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.complemento {
+  flex-shrink: 0;
+}
+
+.desabilitada {
+  cursor: not-allowed;
+}
+
+.desabilitada .marca {
+  border-color: var(--borda-forte);
+  background-color: var(--superficie-suave);
+}
+
+.desabilitada .rotulo {
+  color: var(--texto-terciario);
+}
+
+@media (hover: hover) {
+  .caixa:not(.desabilitada):hover .entrada:not(:checked):not(:indeterminate) + .marca {
+    border-color: var(--texto-secundario);
+  }
+}

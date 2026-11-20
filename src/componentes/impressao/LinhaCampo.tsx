@@ -107,7 +107,13 @@ export function LinhaCampo({
           disabled={posicao === total}
           onClick={() => mover(1)}
         />
-        <BotaoIcone icone={X} rotulo={`Remover ${descricao}`} tamanho="sm" onClick={aoRemover} />
+        <BotaoIcone
+          icone={X}
+          rotulo={`Remover ${descricao}`}
+          tamanho="sm"
+          className="botao-fechar"
+          onClick={aoRemover}
+        />
       </div>
     </li>
   );

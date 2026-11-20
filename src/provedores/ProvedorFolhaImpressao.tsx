@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { CampoCredencial, ContaCredencial, FolhaCredenciais } from '@/modelos/impressao';
+import type { CampoCredencial, ContaCredencial, ContaNova, FolhaCredenciais } from '@/modelos/impressao';
 import { contaTemDados, folhaTemDados } from '@/regras/impressao/selecao';
 
 export type RemocaoDesfazivel =
@@ -20,6 +20,8 @@ interface ValorContextoFolhaImpressao {
   definirTitulo: (titulo: string) => void;
   definirLinhasParaPreencher: (ligado: boolean) => void;
   adicionarConta: (campos?: CampoInicial[]) => ContaCredencial;
+  importarContas: (contas: ContaNova[]) => ContaCredencial[];
+  desfazerImportacao: (contaIds: string[]) => void;
   renomearConta: (contaId: string, titulo: string) => void;
   removerConta: (contaId: string) => void;
   moverConta: (contaId: string, deslocamento: number) => void;
@@ -28,7 +30,7 @@ interface ValorContextoFolhaImpressao {
   removerCampo: (contaId: string, campoId: string) => void;
   moverCampo: (contaId: string, campoId: string, deslocamento: number) => void;
   desfazerRemocao: () => void;
-  esquecerRemocao: () => void;
+  esquecerRemocao: (alvo?: RemocaoDesfazivel) => void;
   apagarTudo: () => void;
   encaminharSenha: (nome: string, valor: string) => void;
   retirarContaEncaminhada: () => string | null;
@@ -99,6 +101,23 @@ export function ProvedorFolhaImpressao({ children }: { children: ReactNode }) {
       const conta = novaConta(campos);
       alterarContas((contas) => [...contas, conta]);
       return conta;
+    },
+    [alterarContas],
+  );
+
+  const importarContas = useCallback(
+    (contas: ContaNova[]) => {
+      const novas = contas.map(({ titulo, campos }) => ({ ...novaConta(campos), titulo }));
+      alterarContas((atuais) => [...atuais, ...novas]);
+      return novas;
+    },
+    [alterarContas],
+  );
+
+  const desfazerImportacao = useCallback(
+    (contaIds: string[]) => {
+      const ids = new Set(contaIds);
+      alterarContas((contas) => contas.filter((conta) => !ids.has(conta.id)));
     },
     [alterarContas],
   );
@@ -187,7 +206,10 @@ export function ProvedorFolhaImpressao({ children }: { children: ReactNode }) {
     setRemocao(null);
   }, [alterarConta, alterarContas, remocao]);
 
-  const esquecerRemocao = useCallback(() => setRemocao(null), []);
+  const esquecerRemocao = useCallback(
+    (alvo?: RemocaoDesfazivel) => setRemocao((atual) => (!alvo || atual === alvo ? null : atual)),
+    [],
+  );
 
   const apagarTudo = useCallback(() => {
     setFolha(FOLHA_VAZIA);
@@ -217,6 +239,8 @@ export function ProvedorFolhaImpressao({ children }: { children: ReactNode }) {
       definirTitulo,
       definirLinhasParaPreencher,
       adicionarConta,
+      importarContas,
+      desfazerImportacao,
       renomearConta,
       removerConta,
       moverConta,
@@ -236,6 +260,8 @@ export function ProvedorFolhaImpressao({ children }: { children: ReactNode }) {
       definirTitulo,
       definirLinhasParaPreencher,
       adicionarConta,
+      importarContas,
+      desfazerImportacao,
       renomearConta,
       removerConta,
       moverConta,

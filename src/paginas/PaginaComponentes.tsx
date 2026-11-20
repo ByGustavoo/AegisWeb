@@ -9,6 +9,7 @@ import {
   Botao,
   BotaoIcone,
   CabecalhoPainel,
+  CaixaMarcacao,
   CampoSenha,
   ControleQuantidade,
   Esqueleto,
@@ -54,6 +55,7 @@ export default function PaginaComponentes() {
   const [aba, setAba] = useState('senha');
   const [senha, setSenha] = useState('Correto#Cavalo9');
   const [ligado, setLigado] = useState(true);
+  const [marcada, setMarcada] = useState(true);
   const [quantidade, setQuantidade] = useState(16);
   const [separador, setSeparador] = useState('-');
 
@@ -170,6 +172,15 @@ export default function PaginaComponentes() {
               aoMudar={setQuantidade}
             />
             <Interruptor rotulo="Símbolos" amostra="!@#$%&*" ligado={ligado} aoMudar={setLigado} />
+            <CaixaMarcacao marcada={marcada} aoMudar={setMarcada} descricao="ana@exemplo.com">
+              github.com
+            </CaixaMarcacao>
+            <CaixaMarcacao marcada={false} parcial aoMudar={() => undefined}>
+              Marcar todas
+            </CaixaMarcacao>
+            <CaixaMarcacao marcada={false} disabled aoMudar={() => undefined} complemento={<Selo>Já na folha</Selo>}>
+              Conta repetida
+            </CaixaMarcacao>
             <Interruptor
               rotulo="Último tipo ligado"
               ligado

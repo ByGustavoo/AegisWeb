@@ -1,0 +1,15 @@
+export type VarianteNotificacao = 'SUCESSO' | 'ERRO' | 'AVISO' | 'INFO';
+
+export const DURACAO_BASE_NOTIFICACAO_MS: Record<VarianteNotificacao, number> = {
+  SUCESSO: 5000,
+  INFO: 5000,
+  AVISO: 7000,
+  ERRO: 8000,
+};
+
+export const CARACTERES_LEITURA_BASE_NOTIFICACAO = 70;
+export const MS_POR_CARACTERE_EXTRA_NOTIFICACAO = 45;
+export const DURACAO_MAXIMA_NOTIFICACAO_MS = 12000;
+export const NOTIFICACOES_VISIVEIS_MAXIMO = 3;
+export const DURACAO_SAIDA_NOTIFICACAO_MS = 360;
+export const DISTANCIA_DESLIZE_DISPENSA_PX = 72;

@@ -99,6 +99,11 @@ imprimir.
 | I6 | Valores no PDF | Geist Mono, com números e símbolos coloridos como no visor e o zero cortado. |
 | I7 | Ocultar | Botão "Ocultar valores" para a tela toda: os valores viram pontos no editor e na prévia. O PDF sai sempre completo. |
 | I8 | Senha no PDF | Não. A criptografia disponível no navegador é fraca (RC4) e daria uma segurança falsa; o app avisa que o arquivo não tem proteção. |
+| I9 | Importar do navegador | Aprovado em 20 de novembro de 2026. Botão "Importar do navegador" lê o .csv exportado pelo gerenciador de senhas do navegador. |
+| I10 | Folha com contas | As contas importadas somam no fim da folha; as idênticas às que já estão nela (mesmo título e mesmos valores) ficam de fora. |
+| I11 | Revisão | Antes de entrar, as contas aparecem numa lista, todas marcadas, com busca por site ou usuário e "Marcar todas". |
+| I12 | Cartão importado | Título = nome do site (sem `www.`); campos E-mail ou Usuário, Senha, Site e Observação, só os que têm valor. |
+| I13 | Ordem | Alfabética pelo título, um cartão por login: dois logins do mesmo site viram dois cartões. |
 
 ## Regras da impressão
 
@@ -111,8 +116,12 @@ imprimir.
 * **Prévia:** desenhada a partir do mesmo cálculo que monta o PDF, enquanto a pessoa digita.
 * **Nome do arquivo:** exatamente o título do documento, com acentos, espaços e maiúsculas, mais `.pdf` (padrão "Minhas credenciais.pdf"). Só saem os caracteres que o sistema não aceita em nome de arquivo (`\ / : * ? " < > |`).
 * **Gerador:** o botão Imprimir leva a senha gerada a uma conta nova no fim da folha, pela memória do app. Cada campo vazio tem um botão para gerar uma senha forte (configuração Uso geral).
-* **Desfazer:** remover uma conta ou um campo com dados mostra "Desfazer" por 8 segundos.
-* **Privacidade:** o PDF é montado no navegador e salvo direto no aparelho; nenhum valor vai para a rede, o console, a URL, o `history.state` ou o armazenamento do navegador. A seção Privacidade de Configurações explica isso.
+* **Desfazer:** remover uma conta ou um campo com dados mostra uma notificação com "Desfazer" por 8 segundos, no canto inferior direito (acima da barra de abas no celular), no mesmo padrão do PrismaWeb. O resultado do download do PDF também aparece como notificação.
+* **Formatos aceitos na importação:** as colunas são reconhecidas pelo nome no cabeçalho, não pela posição. Chrome, Edge, Brave, Opera e Vivaldi exportam `name,url,username,password,note`; o Firefox, `url,username,password,httpRealm,formActionOrigin,guid,timeCreated,timePasswordChanged,timeLastUsed`; o Safari e o app Senhas, `Title,URL,Username,Password,Notes,OTPAuth`. Também valem `login_uri`, `login_username`, `login_password` e `notes`, usados por gerenciadores de senhas, e cabeçalhos separados por ponto e vírgula.
+* **Leitura do arquivo:** só arquivos `.csv` de até 5 MB. Linhas sem usuário e sem senha e linhas repetidas no arquivo ficam de fora. O usuário vira "E-mail" quando tem formato de e-mail. O site vira só a origem (`https://github.com`, sem o caminho do login); endereços de aplicativo (`android://`) não entram como site, e o título vem do nome que o navegador deu. No Safari, o " (usuário)" no fim do título é retirado.
+* **Código de duas etapas:** a coluna `OTPAuth` (Safari) e `login_totp` nunca vão para a folha, porque impressos ao lado da senha anulam a segunda etapa; a revisão avisa quantas contas tinham esse código.
+* **Depois de importar:** uma notificação com "Desfazer" (14 segundos) diz quantas contas entraram e pede para apagar o .csv do computador, e o foco vai para a primeira conta importada. O conteúdo do arquivo fica só na memória do diálogo e é descartado ao fechá-lo.
+* **Privacidade:** o PDF é montado no navegador e salvo direto no aparelho, e o .csv importado é lido no navegador; nenhum valor vai para a rede, o console, a URL, o `history.state` ou o armazenamento do navegador. A seção Privacidade de Configurações explica isso.
 
 ## Regras
 
@@ -142,7 +151,7 @@ imprimir.
 | 14 | Botão Imprimir no Gerador, levando a senha para uma conta nova da folha | Aprovada, implementada na fase 5 |
 | 15 | Opção de imprimir campos vazios como linha para preencher à mão | Aprovada, implementada na fase 5 |
 | 16 | Legenda de caracteres parecidos no rodapé do PDF | Aprovada, implementada na fase 5 |
-| 17 | Importar o CSV exportado pelo gerenciador de senhas do navegador | Não aprovada |
+| 17 | Importar o CSV exportado pelo gerenciador de senhas do navegador | Aprovada em 20 de novembro de 2026, implementada na fase 5 (ver I9 a I13) |
 | 4 | Funcionar offline / instalável (PWA) | Recusada |
 | 5 | Atalhos de teclado (`G` gerar, `C` copiar) | Não aprovada |
 
