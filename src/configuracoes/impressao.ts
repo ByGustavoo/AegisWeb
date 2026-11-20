@@ -1,4 +1,4 @@
-import type { CorImpressao, EstiloTexto, FonteImpressao } from '@/modelos/impressao';
+import type { CorImpressao, EstiloTexto, FonteImpressao, OrigemExportacao } from '@/modelos/impressao';
 import type { TipoGeracao } from '@/modelos/senha';
 import { NOME_APLICACAO, SLOGAN_APLICACAO } from './aplicacao';
 
@@ -31,6 +31,8 @@ export const NOME_CAMPO_POR_TIPO_GERADO: Record<TipoGeracao, string> = {
 };
 
 export const SEGUNDOS_PARA_DESFAZER_REMOCAO = 8;
+
+export const SEGUNDOS_PARA_AVISO_IMPORTACAO = 14;
 
 export const CORES_IMPRESSAO = {
   papel: [255, 255, 255],
@@ -273,3 +275,51 @@ export const LEGENDA_CORES: ItemLegenda[] = [
   { amostra: '123', descricao: 'números' },
   { amostra: '#@', descricao: 'símbolos' },
 ];
+
+export const TAMANHO_MAXIMO_ARQUIVO_IMPORTACAO = 5 * 1024 * 1024;
+
+export type ColunaImportacao = 'TITULO' | 'SITE' | 'USUARIO' | 'SENHA' | 'OBSERVACAO' | 'CODIGO_DOIS_FATORES';
+
+export const NOMES_COLUNA_IMPORTACAO: Record<ColunaImportacao, string[]> = {
+  TITULO: ['name', 'title', 'nome', 'titulo'],
+  SITE: ['url', 'origin', 'login_uri', 'website', 'site', 'endereco'],
+  USUARIO: ['username', 'login_username', 'login', 'user', 'usuario', 'email', 'e-mail'],
+  SENHA: ['password', 'login_password', 'senha'],
+  OBSERVACAO: ['note', 'notes', 'extra', 'comments', 'observacao', 'observacoes', 'nota'],
+  CODIGO_DOIS_FATORES: ['otpauth', 'login_totp', 'totp'],
+};
+
+export const NOMES_CAMPO_IMPORTADO = {
+  email: 'E-mail',
+  usuario: 'Usuário',
+  senha: 'Senha',
+  site: 'Site',
+  observacao: 'Observação',
+} as const;
+
+export interface DescricaoOrigemExportacao {
+  nome: string;
+  caminho: string[];
+}
+
+export const ORIGENS_EXPORTACAO: Record<Exclude<OrigemExportacao, 'OUTRA'>, DescricaoOrigemExportacao> = {
+  SAFARI: {
+    nome: 'Safari ou app Senhas',
+    caminho: ['Arquivo', 'Exportar', 'Senhas'],
+  },
+  FIREFOX: {
+    nome: 'Firefox',
+    caminho: ['Senhas', 'Menu', 'Exportar senhas'],
+  },
+  CHROMIUM: {
+    nome: 'Chrome, Edge, Brave ou Opera',
+    caminho: ['Gerenciador de senhas', 'Configurações', 'Exportar senhas'],
+  },
+};
+
+export const NOME_ORIGEM_EXPORTACAO: Record<OrigemExportacao, string> = {
+  CHROMIUM: 'Arquivo do Chrome, Edge ou Brave',
+  FIREFOX: 'Arquivo do Firefox',
+  SAFARI: 'Arquivo do Safari',
+  OUTRA: 'Arquivo de gerenciador de senhas',
+};

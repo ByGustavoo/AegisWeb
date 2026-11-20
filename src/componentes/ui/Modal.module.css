@@ -1,0 +1,200 @@
+.sobreposicao {
+  position: fixed;
+  inset: 0;
+  z-index: var(--camada-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-4);
+  background-color: var(--veu);
+  backdrop-filter: blur(3px);
+  animation: aparecerVeu var(--duracao-lenta) var(--curva-saida);
+}
+
+.painel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: calc(100dvh - var(--espaco-8));
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-xl);
+  background-color: var(--superficie-elevada);
+  box-shadow: var(--sombra-sobreposicao);
+  transform-origin: 50% 70%;
+  animation:
+    revelarPainel var(--duracao-base) var(--curva-saida),
+    assentarPainel var(--duracao-expressiva) var(--curva-saida);
+}
+
+.painel:focus {
+  outline: none;
+}
+
+.cabecalho,
+.conteudo,
+.rodape {
+  animation: revelarParte var(--duracao-lenta) var(--curva-saida) both;
+}
+
+.cabecalho {
+  animation-delay: 40ms;
+}
+
+.conteudo {
+  animation-delay: 90ms;
+}
+
+.rodape {
+  animation-delay: 140ms;
+}
+
+.saindo {
+  animation: sumirVeu var(--duracao-base) var(--curva-entrada) forwards;
+}
+
+.saindo .painel {
+  animation: sairPainel var(--duracao-base) var(--curva-entrada) forwards;
+}
+
+.sm {
+  max-width: 420px;
+}
+
+.md {
+  max-width: 560px;
+}
+
+.lg {
+  max-width: 760px;
+}
+
+.cabecalho {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-4);
+  padding: var(--espaco-5) var(--espaco-5) var(--espaco-4) var(--espaco-6);
+}
+
+.textos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  padding-top: 2px;
+}
+
+.titulo {
+  font-size: var(--tamanho-lg);
+}
+
+.descricao {
+  color: var(--texto-secundario);
+  font-size: var(--tamanho-sm);
+}
+
+.fechar {
+  margin-top: -2px;
+}
+
+.conteudo {
+  padding: var(--espaco-2) var(--espaco-6) var(--espaco-6);
+  overflow-y: auto;
+}
+
+.rodape {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4) var(--espaco-6);
+  border-top: 1px solid var(--borda);
+  border-radius: 0 0 var(--raio-xl) var(--raio-xl);
+  background-color: var(--superficie-suave);
+}
+
+@keyframes aparecerVeu {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sumirVeu {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes revelarPainel {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes assentarPainel {
+  from {
+    transform: translateY(24px) scale(0.96);
+  }
+}
+
+@keyframes revelarParte {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes sairPainel {
+  to {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+}
+
+@media (max-width: 599px) {
+  .sobreposicao {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .painel {
+    max-width: none;
+    max-height: calc(100dvh - var(--espaco-6));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-bottom: none;
+    border-radius: var(--raio-xl) var(--raio-xl) 0 0;
+    animation: subirFolha var(--duracao-expressiva) var(--curva-saida);
+  }
+
+  .saindo .painel {
+    animation: descerFolha var(--duracao-base) var(--curva-entrada) forwards;
+  }
+
+  .cabecalho {
+    padding: var(--espaco-4) var(--espaco-4) var(--espaco-3) var(--espaco-5);
+  }
+
+  .conteudo {
+    padding: var(--espaco-2) var(--espaco-5) var(--espaco-5);
+  }
+
+  .rodape {
+    flex-direction: column-reverse;
+    padding: var(--espaco-4) var(--espaco-5);
+    border-radius: 0;
+  }
+
+  .rodape > * {
+    width: 100%;
+  }
+
+  @keyframes subirFolha {
+    from {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes descerFolha {
+    to {
+      transform: translateY(100%);
+    }
+  }
+}

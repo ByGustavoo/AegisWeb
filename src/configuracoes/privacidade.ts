@@ -42,7 +42,7 @@ export const compromissosPrivacidade: CompromissoPrivacidade[] = [
     icone: Printer,
     rotulo: 'PDF para imprimir',
     descricao:
-      'A folha de impressão fica só na memória desta aba, como o histórico. O PDF é montado neste navegador e salvo direto no seu aparelho, sem senha de proteção: guarde o arquivo em local seguro e apague-o depois de imprimir.',
+      'A folha de impressão fica só na memória desta aba, como o histórico. O .csv importado do navegador é lido aqui e não é guardado. O PDF é montado neste navegador e salvo direto no seu aparelho, sem senha de proteção: guarde o arquivo em local seguro e apague-o depois de imprimir.',
   },
   {
     icone: ShieldCheck,

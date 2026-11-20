@@ -7,18 +7,12 @@ import { juntarClasses } from '@/utilitarios/juntarClasses';
 import { PaginaPrevia } from './PaginaPrevia';
 import estilos from './PainelPrevia.module.css';
 
-export type EstadoDownload =
-  | { fase: 'OCIOSO' }
-  | { fase: 'GERANDO' }
-  | { fase: 'BAIXADO'; arquivo: string }
-  | { fase: 'FALHOU' };
-
 interface PainelPreviaProps {
   id: string;
   documento: DocumentoImpresso | null;
   fase: FaseDocumento;
   valoresOcultos: boolean;
-  download: EstadoDownload;
+  gerando: boolean;
   aoBaixar: () => void;
   className?: string;
   style?: CSSProperties;
@@ -33,19 +27,11 @@ function resumo(documento: DocumentoImpresso | null): string {
   return `Papel A4 · ${plural(documento.paginas.length, 'página', 'páginas')} · ${plural(documento.totalContas, 'conta', 'contas')}`;
 }
 
-function mensagemDownload(download: EstadoDownload): string {
-  if (download.fase === 'GERANDO') return 'Montando o PDF neste navegador…';
-  if (download.fase === 'BAIXADO') return `PDF gerado como ${download.arquivo}. Confira a pasta de downloads.`;
-  if (download.fase === 'FALHOU') {
-    return 'Não foi possível gerar o PDF: as fontes do documento não carregaram. Confira a conexão e tente de novo.';
-  }
-  return '';
-}
+const PAGINAS_EM_SEQUENCIA = 6;
 
-export function PainelPrevia({ id, documento, fase, valoresOcultos, download, aoBaixar, className, style }: PainelPreviaProps) {
+export function PainelPrevia({ id, documento, fase, valoresOcultos, gerando, aoBaixar, className, style }: PainelPreviaProps) {
   const paginas = documento?.paginas ?? [];
   const temPaginas = paginas.length > 0;
-  const mensagem = mensagemDownload(download);
 
   return (
     <Painel
@@ -62,19 +48,18 @@ export function PainelPrevia({ id, documento, fase, valoresOcultos, download, ao
           tamanho="lg"
           larguraTotal
           icone={FileDown}
-          carregando={download.fase === 'GERANDO'}
+          carregando={gerando}
           disabled={!temPaginas}
           onClick={aoBaixar}
         >
-          Baixar PDF
+          {gerando ? 'Montando o PDF' : 'Baixar PDF'}
         </Botao>
-        <p
-          className={juntarClasses(estilos.estado, download.fase === 'FALHOU' && estilos.falhou)}
-          role="status"
-          aria-live="polite"
-        >
-          {download.fase === 'FALHOU' ? <TriangleAlert size={14} strokeWidth={2} aria-hidden="true" /> : null}
-          {mensagem || (temPaginas ? null : 'Preencha o valor de pelo menos um campo para liberar o download.')}
+        <p className={estilos.estado} role="status" aria-live="polite">
+          {gerando
+            ? 'Montando o PDF neste navegador…'
+            : temPaginas
+              ? null
+              : 'Preencha o valor de pelo menos um campo para liberar o download.'}
         </p>
       </div>
 
@@ -106,7 +91,11 @@ export function PainelPrevia({ id, documento, fase, valoresOcultos, download, ao
         {paginas.map((pagina, indice) => {
           const rotulo = `Página ${indice + 1} de ${paginas.length}`;
           return (
-            <figure key={indice} className={estilos.figura}>
+            <figure
+              key={indice}
+              className={estilos.figura}
+              style={{ '--ordem-pagina': Math.min(indice, PAGINAS_EM_SEQUENCIA) } as CSSProperties}
+            >
               <PaginaPrevia
                 pagina={pagina}
                 largura={documento?.largura ?? 0}

@@ -152,45 +152,17 @@
   color: var(--texto);
 }
 
-.desfazer {
-  position: fixed;
-  bottom: calc(var(--espaco-6) + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  z-index: var(--camada-notificacao);
+.acoesVazio {
   display: flex;
-  align-items: center;
-  gap: var(--espaco-4);
-  max-width: calc(100vw - var(--espaco-8));
-  padding: var(--espaco-2) var(--espaco-2) var(--espaco-2) var(--espaco-4);
-  border: 1px solid var(--borda-forte);
-  border-radius: var(--raio-lg);
-  background-color: var(--superficie-elevada);
-  box-shadow: var(--sombra-flutuante);
-  font-size: var(--tamanho-sm);
-  transform: translateX(-50%);
-  animation: surgirAviso var(--duracao-base) var(--curva-saida);
-}
-
-.desfazer > span {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.botaoDesfazer {
-  color: var(--destaque);
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--espaco-2);
 }
 
 @keyframes surgir {
   from {
     opacity: 0;
     transform: translateY(-4px);
-  }
-}
-
-@keyframes surgirAviso {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 8px);
   }
 }
 
@@ -242,9 +214,5 @@
 @media (max-width: 767px) {
   .grade {
     --respiro-painel: var(--espaco-4);
-  }
-
-  .desfazer {
-    bottom: calc(var(--altura-barra-abas) + var(--espaco-3) + env(safe-area-inset-bottom, 0px));
   }
 }

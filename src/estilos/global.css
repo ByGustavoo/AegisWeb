@@ -180,6 +180,28 @@ legend {
   }
 }
 
+button.botao-fechar {
+  transition:
+    color var(--duracao-rapida) var(--curva-saida),
+    background-color var(--duracao-rapida) var(--curva-saida),
+    border-color var(--duracao-rapida) var(--curva-saida);
+}
+
+@media (hover: hover) {
+  button.botao-fechar:hover:not(:disabled) {
+    border-color: transparent;
+    background-color: var(--erro-suave);
+    color: var(--erro);
+  }
+}
+
+@media (hover: none) {
+  button.botao-fechar:active:not(:disabled) {
+    background-color: var(--erro-suave);
+    color: var(--erro);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
